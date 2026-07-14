@@ -35,7 +35,7 @@ export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
   // 1. IP extraction for Rate Limiting
-  const ip = request.ip ?? request.headers.get('x-forwarded-for') ?? 'unknown-ip';
+  const ip = request.headers.get('x-forwarded-for') ?? 'unknown-ip';
 
   let isAllowed = true;
   if (pathname.startsWith('/api/auth')) {
