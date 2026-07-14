@@ -246,6 +246,56 @@ model OrganizationAssignment {
   createdAt    DateTime @default(now())
 }
 
+// ----------------------------------------------------
+// Content Management System (Phase 7)
+// ----------------------------------------------------
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model CmsPage {
+  id             String        @id @default(uuid())
+  title          String
+  slug           String        @unique
+  content        String        @db.Text
+  status         ContentStatus @default(DRAFT)
+  language       String        @default("en") // 'en' or 'gu'
+  
+  seoTitle       String?
+  seoDescription String?
+  seoKeywords    String?
+
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model MediaFile {
+  id             String   @id @default(uuid())
+  filename       String
+  originalName   String
+  mimeType       String
+  size           Int      // in bytes
+  url            String   // e.g., /uploads/images/file.webp
+  
+  createdAt      DateTime @default(now())
+}
+
+model FaqItem {
+  id             String        @id @default(uuid())
+  question       String
+  answer         String        @db.Text
+  category       String        @default("GENERAL")
+  order          Int           @default(0)
+  language       String        @default("en")
+  status         ContentStatus @default(PUBLISHED)
+  
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
 
 model TicketMessage {
   id           String    @id @default(uuid())
