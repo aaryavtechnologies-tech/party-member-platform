@@ -1,5 +1,6 @@
 import { InnerPageHeader } from "@/components/layout/InnerPageHeader";
 import { MembershipCTA } from "@/components/sections/MembershipCTA";
+import { MembershipPricing } from "@/components/sections/MembershipPricing";
 
 export default function MembershipPage() {
   return (
@@ -12,6 +13,7 @@ export default function MembershipPage() {
         ]}
       />
       <div className="pt-10">
+        <MembershipPricing />
         <MembershipCTA />
       </div>
     </main>
