@@ -173,7 +173,7 @@ export function Footer() {
             <p className="text-slate-400 max-w-sm mb-6">
               Building a stronger, more prosperous nation through unity, transparency, and relentless development.
             </p>
-            <Link href="/membership" className={buttonVariants({ variant: "outline", className: "bg-transparent border-white/20 text-white hover:bg-white/10 rounded-full" })}>
+            <Link href="/membership/register" className={buttonVariants({ variant: "outline", className: "bg-transparent border-white/20 text-white hover:bg-white/10 rounded-full" })}>
               Become a Member
             </Link>
           </div>

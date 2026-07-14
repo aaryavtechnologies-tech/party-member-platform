@@ -22,9 +22,11 @@ export function Header() {
         </div>
         <div className="flex items-center space-x-4">
           <LanguageSwitcher />
-          <Button className="hidden md:inline-flex bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full px-6">
-            Become Member
-          </Button>
+          <Link href="/membership/register" className="hidden md:block">
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full px-6">
+              Become Member
+            </Button>
+          </Link>
         </div>
       </div>
     </header>

@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Better Auth Relations
+  sessions      Session[]
+  accounts      Account[]
+
+  // Membership Relations
+  memberProfile MemberProfile?
+  payments      Payment[]
+  auditLogs     AuditLog[]
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                    String   @id @default(uuid())
+  userId                String
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  providerId            String
+  accountId             String
+  provider              String
+  accessToken           String?
+  refreshToken          String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model MemberProfile {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  memberId        String   @unique // e.g., RAVP000001
+  fatherName      String
+  gender          String
+  dob             DateTime
+  mobile          String   @unique // Required, even though OTP is email
+  aadhaar         String?
+  voterId         String?
+  
+  // Address
+  state           String
+  district        String
+  taluka          String
+  village         String
+  fullAddress     String
+  pincode         String
+
+  // Membership Details
+  membershipType  MembershipTier @default(PRIMARY)
+  issueDate       DateTime       @default(now())
+  
+  // Assets
+  qrCodeUrl       String?
+  
+  // Referrals
+  referralCode    String   @unique // e.g., RAVP458963
+  referredById    String?
+  referredBy      MemberProfile?  @relation("Referrals", fields: [referredById], references: [id])
+  referrals       MemberProfile[] @relation("Referrals")
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+enum MembershipTier {
+  PRIMARY
+  LIFETIME_PRIMARY
+  LIFETIME_ACTIVE
+}
+
+model Payment {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  razorpayOrderId String   @unique
+  razorpayPaymentId String? @unique
+  amount          Int      // In paise (100 = ₹1)
+  status          PaymentStatus @default(PENDING)
+  upgradeTo       MembershipTier
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  action    String
+  details   String
+  createdAt DateTime @default(now())
+}

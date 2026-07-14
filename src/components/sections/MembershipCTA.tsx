@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import { Link } from "@/i18n/routing";
 import { ShieldCheck, Users, Globe, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -40,9 +41,11 @@ export function MembershipCTA() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-accent text-slate-950 hover:bg-white text-lg font-bold rounded-full px-10 py-7 h-auto shadow-2xl shadow-accent/20 transition-all hover:scale-105">
-                Register Now
-              </Button>
+              <Link href="/membership/register">
+                <Button size="lg" className="bg-accent text-slate-950 hover:bg-white text-lg font-bold rounded-full px-10 py-7 h-auto shadow-2xl shadow-accent/20 transition-all hover:scale-105">
+                  Register Now
+                </Button>
+              </Link>
               <Button size="lg" variant="outline" className="text-white bg-transparent border-white/30 hover:bg-white/10 hover:text-white text-lg rounded-full px-10 py-7 h-auto backdrop-blur-sm">
                 Learn More
               </Button>

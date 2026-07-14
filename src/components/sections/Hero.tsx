@@ -1,6 +1,7 @@
 "use client";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/routing";
 import { ChevronDown, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -53,9 +54,11 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
-          <Button size="lg" className="h-14 px-8 text-lg rounded-full bg-primary hover:bg-primary/90 text-slate-950 w-full sm:w-auto font-semibold shadow-2xl shadow-primary/30 group">
-            Become a Member <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-          </Button>
+          <Link href="/membership/register" className="w-full sm:w-auto">
+            <Button size="lg" className="h-14 px-8 text-lg rounded-full bg-primary hover:bg-primary/90 text-slate-950 w-full sm:w-auto font-semibold shadow-2xl shadow-primary/30 group">
+              Become a Member <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </Link>
           <Button size="lg" variant="outline" className="h-14 px-8 text-lg rounded-full text-white bg-transparent border-white/20 hover:bg-white/10 hover:text-white w-full sm:w-auto backdrop-blur-sm">
             Explore Our Vision
           </Button>
