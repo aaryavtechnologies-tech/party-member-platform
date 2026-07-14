@@ -1,6 +1,5 @@
 import { getTranslations } from "next-intl/server";
 import { Users, UserPlus, Award, Crown } from "lucide-react";
-import { ReferralStats } from "./components/ReferralStats";
 import { ReferralTable } from "./components/ReferralTable";
 import { ReferralLinkGen } from "./components/ReferralLinkGen";
 
