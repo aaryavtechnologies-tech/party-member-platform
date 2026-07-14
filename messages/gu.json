@@ -36,5 +36,40 @@
     "Membership": "સભ્યપદ",
     "Contact": "સંપર્ક",
     "Become Member": "સભ્ય બનો"
+  },
+  "Membership": {
+    "title": "સભ્યપદ સ્તરો",
+    "slogan1": "એક સભ્ય – એક જવાબદારી – એક સમૃદ્ધ ભારત.",
+    "slogan2": "આજે જોડાઓ, આવતીકાલના ભારતના નિર્માતા બનો.",
+    "commitment": "રાષ્ટ્રીય અન્નદાતા વિકાસ પાર્ટી પારદર્શક, સરળ અને ટેક્નોલોજી આધારિત સભ્યપદ વ્યવસ્થા દ્વારા દેશના દરેક નાગરિકને સંગઠન સાથે જોડવાની તક આપવા માટે પ્રતિબદ્ધ છે. અમે એવો મજબૂત સભ્ય આધાર ઊભો કરવાનો સંકલ્પ કરીએ છીએ જે જનસેવા, જવાબદારી અને રાષ્ટ્ર નિર્માણમાં સક્રિય ભાગ ભજવે.",
+    "Primary Member": "પ્રાથમિક સભ્ય",
+    "Lifetime Primary Member": "આજીવન પ્રાથમિક સભ્ય",
+    "Lifetime Active Member": "આજીવન સક્રિય સભ્ય",
+    "Price Free": "₹૦",
+    "Price 100": "₹૧૦૦",
+    "Price 1000": "₹૧૦૦૦",
+    "Free Registration": "મફત નોંધણી",
+    "Unique Member ID": "અનન્ય સભ્ય આઈડી",
+    "QR Code": "ક્યૂઆર કોડ (QR Code)",
+    "Dashboard": "ડેશબોર્ડ",
+    "Digital Membership Card": "ડિજિટલ સભ્યપદ કાર્ડ",
+    "Lifetime Membership": "આજીવન સભ્યપદ",
+    "New Membership Card": "નવું સભ્યપદ કાર્ડ",
+    "Certificate": "પ્રમાણપત્ર",
+    "Active Membership": "સક્રિય સભ્યપદ",
+    "Organization Eligibility": "સંગઠન પાત્રતા",
+    "Leadership Eligibility": "નેતૃત્વ પાત્રતા",
+    "Premium Membership Card": "પ્રીમિયમ સભ્યપદ કાર્ડ",
+    "Premium Certificate": "પ્રીમિયમ પ્રમાણપત્ર",
+    "Upgrade Button": "અપગ્રેડ કરો",
+    "Upgrade Only": "માત્ર અપગ્રેડ દ્વારા."
+  },
+  "Referral": {
+    "title": "રેફરલ સિસ્ટમ",
+    "description": "દરેક સભ્યને એક અનન્ય Referral Code આપવામાં આવશે. નવો સભ્ય નોંધણી કરતી વખતે \"Referral Code (Optional)\" દાખલ કરી શકશે. જે સભ્ય દ્વારા વધુ લોકો જોડાશે તેની સંપૂર્ણ માહિતી તેના Dashboard માં ઉપલબ્ધ રહેશે.",
+    "Total Referred Members": "કુલ જોડાયેલા સભ્યો",
+    "Active Members": "Active Members",
+    "Lifetime Primary Members": "Lifetime Primary Members",
+    "Lifetime Active Members": "Lifetime Active Members"
   }
 }

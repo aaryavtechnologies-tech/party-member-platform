@@ -32,15 +32,15 @@ export async function generateMetadata({
 
   return {
     title: {
-      template: '%s | Political Organization',
+      template: '%s | Rashtriya Annadata Vikas Party',
       default: t("title"),
     },
-    description: "The official digital portal of our National Political Organization. Join us in building a better future through transparency, unity, and development.",
+    description: "The official digital portal of Rashtriya Annadata Vikas Party (RAVP). Join us in building a better future through transparency, unity, and development.",
     openGraph: {
       title: t("title"),
-      description: "The official digital portal of our National Political Organization.",
-      url: "https://example.com",
-      siteName: "Political Organization",
+      description: "The official digital portal of Rashtriya Annadata Vikas Party (RAVP).",
+      url: "https://party-member.vercel.app",
+      siteName: "Rashtriya Annadata Vikas Party",
       images: [
         {
           url: "https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1200&h=630&fit=crop",
@@ -54,14 +54,14 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: t("title"),
-      description: "The official digital portal of our National Political Organization.",
+      description: "The official digital portal of Rashtriya Annadata Vikas Party.",
       images: ["https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1200&h=630&fit=crop"],
     },
     alternates: {
-      canonical: "https://example.com",
+      canonical: "https://party-member.vercel.app",
       languages: {
-        en: "https://example.com/en",
-        gu: "https://example.com/gu",
+        en: "https://party-member.vercel.app/en",
+        gu: "https://party-member.vercel.app/gu",
       },
     },
   };
@@ -102,20 +102,20 @@ export default async function RootLayout({
             <Footer />
           </NextIntlClientProvider>
         </SmoothScrollProvider>
-        <Script
+          <Script
           id="organization-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": "Political Organization",
-              "url": "https://example.com",
-              "logo": "https://example.com/logo.png",
+              "name": "Rashtriya Annadata Vikas Party",
+              "url": "https://party-member.vercel.app",
+              "logo": "https://party-member.vercel.app/logo.png",
               "sameAs": [
-                "https://facebook.com/organization",
-                "https://twitter.com/organization",
-                "https://instagram.com/organization"
+                "https://facebook.com/ravp",
+                "https://twitter.com/ravp",
+                "https://instagram.com/ravp"
               ]
             })
           }}

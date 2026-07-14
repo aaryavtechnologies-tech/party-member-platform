@@ -36,5 +36,40 @@
     "Membership": "Membership",
     "Contact": "Contact",
     "Become Member": "Become Member"
+  },
+  "Membership": {
+    "title": "Membership Levels",
+    "slogan1": "One Member • One Responsibility • One Prosperous India",
+    "slogan2": "Join Today. Build Tomorrow's India.",
+    "commitment": "Rashtriya Annadata Vikas Party is committed to providing a transparent, simple, and technology-driven membership system that enables every citizen to participate in nation building through organized public service. We are dedicated to building a strong membership base driven by responsibility, integrity, and public service.",
+    "Primary Member": "Primary Member",
+    "Lifetime Primary Member": "Lifetime Primary Member",
+    "Lifetime Active Member": "Lifetime Active Member",
+    "Price Free": "₹0",
+    "Price 100": "₹100",
+    "Price 1000": "₹1000",
+    "Free Registration": "Free Registration",
+    "Unique Member ID": "Unique Member ID",
+    "QR Code": "QR Code",
+    "Dashboard": "Dashboard",
+    "Digital Membership Card": "Digital Membership Card",
+    "Lifetime Membership": "Lifetime Membership",
+    "New Membership Card": "New Membership Card",
+    "Certificate": "Certificate",
+    "Active Membership": "Active Membership",
+    "Organization Eligibility": "Organization Eligibility",
+    "Leadership Eligibility": "Leadership Eligibility",
+    "Premium Membership Card": "Premium Membership Card",
+    "Premium Certificate": "Premium Certificate",
+    "Upgrade Button": "Upgrade Now",
+    "Upgrade Only": "Upgrade only."
+  },
+  "Referral": {
+    "title": "Referral System",
+    "description": "Every registered member receives a unique Referral Code. While registering, a new member may optionally enter the Referral Code of the person who invited them. The referring member will be able to monitor their referral performance from the Member Dashboard.",
+    "Total Referred Members": "Total Referred Members",
+    "Active Members": "Active Members",
+    "Lifetime Primary Members": "Lifetime Primary Members",
+    "Lifetime Active Members": "Lifetime Active Members"
   }
 }

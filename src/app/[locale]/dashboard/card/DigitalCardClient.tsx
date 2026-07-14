@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, Printer, Share2, ShieldCheck } from "lucide-react";
-import { QRCodeSVG } from "qrcode.react";
+import QRCode from "react-qr-code";
 
 interface CardData {
   name: string;
@@ -113,7 +113,7 @@ export default function DigitalCardClient({ data }: { data: CardData }) {
               </div>
               <div className="w-16 h-16 bg-white p-1 rounded-lg border border-slate-200">
                 {/* Dynamically generate QR code to point to public verify page */}
-                <QRCodeSVG value={`https://party.com/verify/member/${data.memberId}`} size={54} />
+                <QRCode value={`https://party.com/verify/member/${data.memberId}`} size={54} />
               </div>
             </div>
           </div>

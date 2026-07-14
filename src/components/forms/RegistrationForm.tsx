@@ -8,8 +8,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { 
   User, Phone, Mail, Calendar, MapPin, 
-  CreditCard, ShieldCheck, ChevronRight, ChevronLeft, CheckCircle2 
+  CreditCard, ShieldCheck, ChevronRight, ChevronLeft, CheckCircle2, Loader2 
 } from "lucide-react";
+import { registerMember } from "@/actions/membership-actions";
+import { toast } from "sonner";
 
 // Strict Zod Validation Schema
 const formSchema = z.object({
@@ -48,6 +50,8 @@ export function RegistrationForm() {
   const [step, setStep] = useState(1);
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMemberId, setSuccessMemberId] = useState<string | null>(null);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -93,10 +97,45 @@ export function RegistrationForm() {
   };
 
   const onSubmit = async (data: FormData) => {
-    console.log("Form Submitted:", data);
-    // TODO: Connect to backend Server Actions
-    alert("Registration Successful!");
+    setIsSubmitting(true);
+    try {
+      // In a real app, verify OTP here first. For now, directly register.
+      const result = await registerMember(data);
+      if (result.success && result.memberId) {
+        toast.success("Registration Successful!");
+        setSuccessMemberId(result.memberId);
+      } else {
+        toast.error(result.error || "Failed to register.");
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (successMemberId) {
+    return (
+      <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl p-8 md:p-14 text-center">
+        <div className="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+          <CheckCircle2 className="w-12 h-12" />
+        </div>
+        <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Welcome to the Movement!</h2>
+        <p className="text-slate-600 dark:text-slate-400 mb-8">
+          Your membership has been successfully activated. Keep your Member ID safe.
+        </p>
+        <div className="bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 max-w-sm mx-auto mb-8">
+          <span className="text-sm font-semibold text-slate-400 block mb-1">Your Member ID</span>
+          <strong className="text-3xl text-primary font-black tracking-wider block">{successMemberId}</strong>
+        </div>
+        <a href="/dashboard/membership">
+          <Button className="h-14 px-10 rounded-full font-bold text-base bg-primary text-slate-950 hover:bg-primary/90">
+            Go to Member Dashboard
+          </Button>
+        </a>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl shadow-slate-900/10 border border-slate-100 dark:border-slate-800 p-8 md:p-14 overflow-hidden relative">
@@ -442,9 +481,11 @@ export function RegistrationForm() {
           ) : (
             <Button 
               type="submit" 
-              className="h-14 px-10 rounded-full font-bold text-base bg-accent text-slate-950 hover:bg-white shadow-2xl shadow-accent/20 w-full sm:w-auto transition-all hover:scale-105 active:scale-95"
+              disabled={isSubmitting}
+              className="h-14 px-10 rounded-full font-bold text-base bg-accent text-slate-950 hover:bg-white shadow-2xl shadow-accent/20 w-full sm:w-auto transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
             >
-              <CheckCircle2 className="w-5 h-5 mr-2" /> Complete Registration
+              {isSubmitting ? <Loader2 className="w-5 h-5 mr-2 animate-spin" /> : <CheckCircle2 className="w-5 h-5 mr-2" />} 
+              {isSubmitting ? "Registering..." : "Complete Registration"}
             </Button>
           )}
         </div>
