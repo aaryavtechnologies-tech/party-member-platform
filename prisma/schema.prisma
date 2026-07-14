@@ -127,15 +127,52 @@ model AuditLog {
 }
 
 model SupportTicket {
-  id          String   @id @default(uuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  category    String   // Technical, Membership, Payment, General
-  subject     String
-  description String
-  status      String   @default("OPEN") // OPEN, IN_PROGRESS, RESOLVED
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String    @id @default(uuid())
+  ticketNumber String    @unique // e.g., TKT-2026-000001
+  userId       String
+  user         User      @relation(fields: [userId], references: [id])
+  subject      String
+  category     String
+  priority     String    @default("LOW") // LOW, MEDIUM, HIGH, URGENT
+  status       String    @default("OPEN") // OPEN, UNDER_REVIEW, IN_PROGRESS, RESOLVED, CLOSED, REJECTED
+  description  String
+  
+  messages     TicketMessage[]
+  attachments  TicketAttachment[]
+  activityLogs TicketActivityLog[]
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  resolvedAt   DateTime?
+}
+
+model TicketMessage {
+  id           String    @id @default(uuid())
+  ticketId     String
+  ticket       SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  senderType   String    // "MEMBER" | "ADMIN"
+  senderId     String    // userId or adminId
+  message      String
+  createdAt    DateTime  @default(now())
+}
+
+model TicketAttachment {
+  id           String    @id @default(uuid())
+  ticketId     String
+  ticket       SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  fileName     String
+  fileUrl      String
+  fileType     String
+  uploadedAt   DateTime  @default(now())
+}
+
+model TicketActivityLog {
+  id           String    @id @default(uuid())
+  ticketId     String
+  ticket       SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  action       String    // "CREATED", "STATUS_CHANGED", "REPLIED"
+  performedBy  String    // userId or adminId
+  createdAt    DateTime  @default(now())
 }
 
 model Event {

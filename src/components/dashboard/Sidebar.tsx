@@ -21,7 +21,7 @@ const NAV_ITEMS = [
   { title: "News", href: "/dashboard/news", icon: Newspaper },
   { title: "Events", href: "/dashboard/events", icon: Calendar },
   { title: "Downloads", href: "/dashboard/downloads", icon: Download },
-  { title: "Support", href: "/dashboard/support", icon: LifeBuoy },
+  { title: "Complaint & Suggestions", href: "/dashboard/support", icon: LifeBuoy },
   { title: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
