@@ -4,7 +4,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -24,6 +23,7 @@ model User {
   memberProfile MemberProfile?
   payments      Payment[]
   auditLogs     AuditLog[]
+  supportTickets SupportTicket[]
 }
 
 model Session {
@@ -124,4 +124,43 @@ model AuditLog {
   action    String
   details   String
   createdAt DateTime @default(now())
+}
+
+model SupportTicket {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  category    String   // Technical, Membership, Payment, General
+  subject     String
+  description String
+  status      String   @default("OPEN") // OPEN, IN_PROGRESS, RESOLVED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  date        DateTime
+  location    String
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+}
+
+model News {
+  id          String   @id @default(uuid())
+  title       String
+  content     String
+  category    String
+  imageUrl    String?
+  publishedAt DateTime @default(now())
+}
+
+model DownloadableAsset {
+  id          String   @id @default(uuid())
+  title       String
+  category    String   // Policy, Form, Guideline
+  fileUrl     String
+  createdAt   DateTime @default(now())
 }
