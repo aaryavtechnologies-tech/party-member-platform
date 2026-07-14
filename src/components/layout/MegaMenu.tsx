@@ -12,96 +12,99 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { useTranslations } from "next-intl";
 
 const aboutLinks = [
-  { title: "About Us", href: "/about" },
-  { title: "Our Journey", href: "/about/journey" },
-  { title: "Founder Message", href: "/about/founder-message" },
-  { title: "25 Resolutions", href: "/about/25-resolutions" },
-  { title: "Vision 2047", href: "/about/vision-2047" },
-  { title: "Mission", href: "/about/mission" },
-  { title: "Core Values", href: "/about/core-values" },
-  { title: "Objectives", href: "/about/objectives" },
+  { titleKey: "About Us", href: "/about" },
+  { titleKey: "Our Journey", href: "/about/journey" },
+  { titleKey: "Founder Message", href: "/about/founder-message" },
+  { titleKey: "25 Resolutions", href: "/about/25-resolutions" },
+  { titleKey: "Vision 2047", href: "/about/vision-2047" },
+  { titleKey: "Mission", href: "/about/mission" },
+  { titleKey: "Core Values", href: "/about/core-values" },
+  { titleKey: "Objectives", href: "/about/objectives" },
 ];
 
 const policyLinks = [
-  { title: "Farmer", href: "/policies/farmer" },
-  { title: "Youth", href: "/policies/youth" },
-  { title: "Women", href: "/policies/women" },
-  { title: "MSME", href: "/policies/business-msme" },
-  { title: "Education", href: "/policies/education" },
-  { title: "Health", href: "/policies/health" },
-  { title: "Rural Development", href: "/policies/rural-development" },
-  { title: "Environment", href: "/policies/environment" },
+  { titleKey: "Farmer", href: "/policies/farmer" },
+  { titleKey: "Youth", href: "/policies/youth" },
+  { titleKey: "Women", href: "/policies/women" },
+  { titleKey: "MSME", href: "/policies/business-msme" },
+  { titleKey: "Education", href: "/policies/education" },
+  { titleKey: "Health", href: "/policies/health" },
+  { titleKey: "Rural Development", href: "/policies/rural-development" },
+  { titleKey: "Environment", href: "/policies/environment" },
 ];
 
 const orgLinks = [
-  { title: "Structure", href: "/organization/structure" },
-  { title: "National Team", href: "/organization/national" },
-  { title: "State Team", href: "/organization/state" },
-  { title: "District Team", href: "/organization/district" },
-  { title: "Taluka Team", href: "/organization/taluka" },
-  { title: "Village Team", href: "/organization/village" },
+  { titleKey: "Structure", href: "/organization/structure" },
+  { titleKey: "National Team", href: "/organization/national" },
+  { titleKey: "State Team", href: "/organization/state" },
+  { titleKey: "District Team", href: "/organization/district" },
+  { titleKey: "Taluka Team", href: "/organization/taluka" },
+  { titleKey: "Village Team", href: "/organization/village" },
 ];
 
 const mediaLinks = [
-  { title: "News", href: "/media/news" },
-  { title: "Press Releases", href: "/media/press-release" },
-  { title: "Photo Gallery", href: "/media/photo-gallery" },
-  { title: "Video Gallery", href: "/media/video-gallery" },
+  { titleKey: "News", href: "/media/news" },
+  { titleKey: "Press Releases", href: "/media/press-release" },
+  { titleKey: "Photo Gallery", href: "/media/photo-gallery" },
+  { titleKey: "Video Gallery", href: "/media/video-gallery" },
 ];
 
 export function MegaMenu() {
+  const t = useTranslations("Navigation");
+
   return (
     <NavigationMenu className="hidden lg:flex">
       <NavigationMenuList>
         <NavigationMenuItem>
           <Link href="/" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Home
+              {t("Home")}
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuTrigger>About Us</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{t("About Us")}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-white dark:bg-slate-950">
               {aboutLinks.map((link) => (
-                <ListItem key={link.title} title={link.title} href={link.href} />
+                <ListItem key={link.titleKey} title={t(link.titleKey as any)} href={link.href} />
               ))}
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Policies</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{t("Policies")}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-white dark:bg-slate-950">
               {policyLinks.map((link) => (
-                <ListItem key={link.title} title={link.title} href={link.href} />
+                <ListItem key={link.titleKey} title={t(link.titleKey as any)} href={link.href} />
               ))}
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Organization</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{t("Organization")}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-white dark:bg-slate-950">
               {orgLinks.map((link) => (
-                <ListItem key={link.title} title={link.title} href={link.href} />
+                <ListItem key={link.titleKey} title={t(link.titleKey as any)} href={link.href} />
               ))}
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Media</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{t("Media")}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[300px] gap-3 p-4 md:w-[400px] md:grid-cols-2 bg-white dark:bg-slate-950">
               {mediaLinks.map((link) => (
-                <ListItem key={link.title} title={link.title} href={link.href} />
+                <ListItem key={link.titleKey} title={t(link.titleKey as any)} href={link.href} />
               ))}
             </ul>
           </NavigationMenuContent>
@@ -110,7 +113,7 @@ export function MegaMenu() {
         <NavigationMenuItem>
           <Link href="/membership" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Membership
+              {t("Membership")}
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
@@ -118,7 +121,7 @@ export function MegaMenu() {
         <NavigationMenuItem>
           <Link href="/contact" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Contact
+              {t("Contact")}
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>

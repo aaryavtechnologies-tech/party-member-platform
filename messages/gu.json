@@ -1,5 +1,40 @@
 {
   "Index": {
-    "title": "મજબૂત, સમૃદ્ધ અને સમાવેશી ભારતનું નિર્માણ"
+    "title": "હોમ"
+  },
+  "Navigation": {
+    "Home": "હોમ",
+    "About Us": "અમારા વિશે",
+    "Our Journey": "અમારી યાત્રા",
+    "Founder Message": "સ્થાપકનો સંદેશ",
+    "25 Resolutions": "૨૫ સંકલ્પો",
+    "Vision 2047": "વિઝન ૨૦૪૭",
+    "Mission": "મિશન",
+    "Core Values": "મુખ્ય મૂલ્યો",
+    "Objectives": "ઉદ્દેશ્યો",
+    "Policies": "નીતિઓ",
+    "Farmer": "ખેડૂત",
+    "Youth": "યુવા",
+    "Women": "મહિલા",
+    "MSME": "એમએસએમઈ (MSME)",
+    "Education": "શિક્ષણ",
+    "Health": "આરોગ્ય",
+    "Rural Development": "ગ્રામીણ વિકાસ",
+    "Environment": "પર્યાવરણ",
+    "Organization": "સંગઠન",
+    "Structure": "માળખું",
+    "National Team": "રાષ્ટ્રીય ટીમ",
+    "State Team": "રાજ્ય ટીમ",
+    "District Team": "જિલ્લા ટીમ",
+    "Taluka Team": "તાલુકા ટીમ",
+    "Village Team": "ગ્રામ્ય ટીમ",
+    "Media": "મીડિયા",
+    "News": "સમાચાર",
+    "Press Releases": "પ્રેસ રિલીઝ",
+    "Photo Gallery": "ફોટો ગેલેરી",
+    "Video Gallery": "વિડિયો ગેલેરી",
+    "Membership": "સભ્યપદ",
+    "Contact": "સંપર્ક",
+    "Become Member": "સભ્ય બનો"
   }
 }

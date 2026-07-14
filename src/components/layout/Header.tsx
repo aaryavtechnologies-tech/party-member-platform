@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { MegaMenu } from "./MegaMenu";
 
 export function Header() {
-  const t = useTranslations("Index");
+  const t = useTranslations("Navigation");
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -24,7 +24,7 @@ export function Header() {
           <LanguageSwitcher />
           <Link href="/membership/register" className="hidden md:block">
             <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full px-6">
-              Become Member
+              {t("Become Member")}
             </Button>
           </Link>
         </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins, Hind_Vadodara } from "next/font/google";
+import { Inter, Noto_Sans_Gujarati } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -10,16 +10,16 @@ import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvide
 import Script from "next/script";
 import "../globals.css";
 
-const poppins = Poppins({
-  variable: "--font-poppins",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700", "900"],
 });
 
-const hindVadodara = Hind_Vadodara({
-  variable: "--font-hind-vadodara",
-  subsets: ["gujarati", "latin"],
-  weight: ["300", "400", "500", "600", "700"],
+const notoGujarati = Noto_Sans_Gujarati({
+  variable: "--font-noto-gujarati",
+  subsets: ["gujarati"],
+  weight: ["300", "400", "500", "600", "700", "900"],
 });
 
 export async function generateMetadata({
@@ -85,12 +85,12 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={`${poppins.variable} ${hindVadodara.variable} h-full antialiased`}
+      className={`${inter.variable} ${notoGujarati.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body
         className={`min-h-full flex flex-col ${
-          locale === "gu" ? "font-hind" : "font-poppins"
+          locale === "gu" ? "font-gujarati" : "font-inter"
         }`}
       >
         <SmoothScrollProvider>

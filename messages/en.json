@@ -1,5 +1,40 @@
 {
   "Index": {
-    "title": "Building a Strong, Prosperous & Inclusive India"
+    "title": "Home"
+  },
+  "Navigation": {
+    "Home": "Home",
+    "About Us": "About Us",
+    "Our Journey": "Our Journey",
+    "Founder Message": "Founder Message",
+    "25 Resolutions": "25 Resolutions",
+    "Vision 2047": "Vision 2047",
+    "Mission": "Mission",
+    "Core Values": "Core Values",
+    "Objectives": "Objectives",
+    "Policies": "Policies",
+    "Farmer": "Farmer",
+    "Youth": "Youth",
+    "Women": "Women",
+    "MSME": "MSME",
+    "Education": "Education",
+    "Health": "Health",
+    "Rural Development": "Rural Development",
+    "Environment": "Environment",
+    "Organization": "Organization",
+    "Structure": "Structure",
+    "National Team": "National Team",
+    "State Team": "State Team",
+    "District Team": "District Team",
+    "Taluka Team": "Taluka Team",
+    "Village Team": "Village Team",
+    "Media": "Media",
+    "News": "News",
+    "Press Releases": "Press Releases",
+    "Photo Gallery": "Photo Gallery",
+    "Video Gallery": "Video Gallery",
+    "Membership": "Membership",
+    "Contact": "Contact",
+    "Become Member": "Become Member"
   }
 }
