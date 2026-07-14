@@ -88,8 +88,22 @@ model MemberProfile {
   referredBy      MemberProfile?  @relation("Referrals", fields: [referredById], references: [id])
   referrals       MemberProfile[] @relation("Referrals")
 
+  // Status & Assignment
+  status          MemberStatus @default(ACTIVE)
+  assignedTeam    String?
+  assignedPost    String?
+  deletedAt       DateTime?
+
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+}
+
+enum MemberStatus {
+  PENDING_VERIFICATION
+  ACTIVE
+  SUSPENDED
+  BLOCKED
+  ARCHIVED
 }
 
 enum MembershipTier {
