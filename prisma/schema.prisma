@@ -93,6 +93,8 @@ model MemberProfile {
   assignedTeam    String?
   assignedPost    String?
   deletedAt       DateTime?
+  
+  organizationAssignments OrganizationAssignment[]
 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -160,6 +162,60 @@ model SupportTicket {
   updatedAt    DateTime  @updatedAt
   resolvedAt   DateTime?
 }
+
+// ----------------------------------------------------
+// Organization Management (Phase 5)
+// ----------------------------------------------------
+
+enum OrgLevel {
+  NATIONAL
+  STATE
+  DISTRICT
+  TALUKA
+  VILLAGE
+}
+
+model OrganizationUnit {
+  id          String   @id @default(uuid())
+  name        String   // e.g., "Gujarat", "Ahmedabad"
+  level       OrgLevel
+  
+  parentId    String?
+  parent      OrganizationUnit?  @relation("UnitHierarchy", fields: [parentId], references: [id])
+  children    OrganizationUnit[] @relation("UnitHierarchy")
+
+  assignments OrganizationAssignment[]
+}
+
+model OrganizationPosition {
+  id          String   @id @default(uuid())
+  title       String
+  level       OrgLevel
+  isActive    Boolean  @default(true)
+
+  assignments OrganizationAssignment[]
+}
+
+model OrganizationAssignment {
+  id           String   @id @default(uuid())
+  
+  memberId     String
+  member       MemberProfile @relation(fields: [memberId], references: [id])
+  
+  unitId       String
+  unit         OrganizationUnit @relation(fields: [unitId], references: [id])
+  
+  positionId   String
+  position     OrganizationPosition @relation(fields: [positionId], references: [id])
+
+  startDate    DateTime @default(now())
+  endDate      DateTime?
+  status       String   @default("ACTIVE") // ACTIVE, EXPIRED, REVOKED
+  remarks      String?
+
+  createdAt    DateTime @default(now())
+}
+
 
 model TicketMessage {
   id           String    @id @default(uuid())
