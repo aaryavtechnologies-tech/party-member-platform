@@ -99,7 +99,7 @@ export default async function SupportDashboardPage() {
                   </td>
                 </tr>
               ) : (
-                tickets.map((ticket) => (
+                tickets.map((ticket: any) => (
                   <tr key={ticket.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30 transition-colors group">
                     <td className="p-4">
                       <p className="font-mono text-sm font-bold text-slate-900 dark:text-white">{ticket.ticketNumber}</p>
