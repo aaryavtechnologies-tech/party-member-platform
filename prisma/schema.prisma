@@ -274,11 +274,14 @@ model CmsPage {
 
 model MediaFile {
   id             String   @id @default(uuid())
-  filename       String
+  filename       String   @unique
   originalName   String
+  filePath       String?  // Made optional for backwards compat if needed
   mimeType       String
+  extension      String?
   size           Int      // in bytes
   url            String   // e.g., /uploads/images/file.webp
+  folder         String?  // e.g. "gallery", "news"
   
   createdAt      DateTime @default(now())
 }
