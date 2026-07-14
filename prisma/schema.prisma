@@ -124,14 +124,44 @@ model Payment {
   status          PaymentStatus @default(PENDING)
   upgradeTo       MembershipTier
   
+  currency        String   @default("INR")
+  paymentMethod   String?  // e.g., "UPI", "CARD", "NETBANKING"
+  tax             Int      @default(0) // in paise
+  errorMessage    String?
+  
+  invoice         Invoice?
+  receipt         Receipt?
+
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
 
 enum PaymentStatus {
   PENDING
+  PROCESSING
   SUCCESS
   FAILED
+  CANCELLED
+}
+
+model Invoice {
+  id            String   @id @default(uuid())
+  invoiceNumber String   @unique // e.g., INV-2026-000001
+  paymentId     String   @unique
+  payment       Payment  @relation(fields: [paymentId], references: [id])
+  
+  fileUrl       String?
+  createdAt     DateTime @default(now())
+}
+
+model Receipt {
+  id            String   @id @default(uuid())
+  receiptNumber String   @unique // e.g., REC-2026-000001
+  paymentId     String   @unique
+  payment       Payment  @relation(fields: [paymentId], references: [id])
+  
+  fileUrl       String?
+  createdAt     DateTime @default(now())
 }
 
 model AuditLog {
