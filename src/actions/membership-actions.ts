@@ -4,7 +4,9 @@ import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
 const formSchema = z.object({
-  fullName: z.string().min(3),
+  firstName: z.string().min(2),
+  middleName: z.string().optional(),
+  lastName: z.string().min(2),
   fatherName: z.string().min(3),
   gender: z.string().min(1),
   dob: z.string().min(1),
@@ -67,9 +69,13 @@ export async function registerMember(data: RegistrationData) {
 
     const newUser = await prisma.$transaction(async (tx) => {
       // Create Base User
+      const fullName = [validatedData.firstName, validatedData.middleName, validatedData.lastName]
+        .filter(Boolean)
+        .join(" ");
+
       const user = await tx.user.create({
         data: {
-          name: validatedData.fullName,
+          name: fullName,
           email: validatedData.email,
           emailVerified: true, // Auto-verified for this flow context
         }

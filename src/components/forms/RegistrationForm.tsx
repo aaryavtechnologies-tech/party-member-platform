@@ -16,7 +16,9 @@ import { toast } from "sonner";
 // Strict Zod Validation Schema
 const formSchema = z.object({
   // Step 1: Personal Info
-  fullName: z.string().min(3, "Full name must be at least 3 characters").max(50),
+  firstName: z.string().min(2, "First name is required").max(50),
+  middleName: z.string().max(50).optional(),
+  lastName: z.string().min(2, "Last name is required").max(50),
   fatherName: z.string().min(3, "Father/Husband name is required").max(50),
   gender: z.string().min(1, "Gender is required"),
   dob: z.string().min(1, "Date of birth is required"),
@@ -56,7 +58,9 @@ export function RegistrationForm() {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: "",
+      firstName: "",
+      middleName: "",
+      lastName: "",
       fatherName: "",
       gender: "",
       dob: "",
@@ -77,7 +81,7 @@ export function RegistrationForm() {
   const nextStep = async () => {
     let isValid = false;
     if (step === 1) {
-      isValid = await form.trigger(["fullName", "fatherName", "gender", "dob", "mobile", "email", "aadhaar", "voterId"]);
+      isValid = await form.trigger(["firstName", "middleName", "lastName", "fatherName", "gender", "dob", "mobile", "email", "aadhaar", "voterId"]);
     } else if (step === 2) {
       isValid = await form.trigger(["state", "district", "taluka", "village", "fullAddress", "pincode"]);
     } else if (step === 3) {
@@ -191,13 +195,24 @@ export function RegistrationForm() {
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
+                <div className="space-y-2 md:col-span-2">
                   <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Full Name *</label>
-                  <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                    <input {...form.register("fullName")} className="w-full h-14 pl-12 pr-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="E.g. Ramesh Kumar" />
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div className="relative">
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                      <input {...form.register("firstName")} className="w-full h-14 pl-12 pr-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="First Name" />
+                      {form.formState.errors.firstName && <p className="text-red-500 text-xs font-medium mt-1">{form.formState.errors.firstName.message}</p>}
+                    </div>
+                    <div className="relative">
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                      <input {...form.register("middleName")} className="w-full h-14 pl-12 pr-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Middle Name" />
+                    </div>
+                    <div className="relative">
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                      <input {...form.register("lastName")} className="w-full h-14 pl-12 pr-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Last Name" />
+                      {form.formState.errors.lastName && <p className="text-red-500 text-xs font-medium mt-1">{form.formState.errors.lastName.message}</p>}
+                    </div>
                   </div>
-                  {form.formState.errors.fullName && <p className="text-red-500 text-xs font-medium">{form.formState.errors.fullName.message}</p>}
                 </div>
 
                 <div className="space-y-2">
@@ -426,7 +441,7 @@ export function RegistrationForm() {
                 <div className="grid sm:grid-cols-2 gap-y-6 gap-x-8">
                   <div>
                     <span className="text-sm font-semibold text-slate-400 block mb-1">Full Name</span>
-                    <strong className="text-lg text-slate-900 dark:text-white block">{form.getValues("fullName")}</strong>
+                    <strong className="text-lg text-slate-900 dark:text-white block">{`${form.getValues("firstName")} ${form.getValues("middleName") || ''} ${form.getValues("lastName")}`.trim().replace(/\s+/g, ' ')}</strong>
                   </div>
                   <div>
                     <span className="text-sm font-semibold text-slate-400 block mb-1">Contact</span>
