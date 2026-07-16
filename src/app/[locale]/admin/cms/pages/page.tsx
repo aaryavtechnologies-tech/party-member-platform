@@ -6,6 +6,7 @@ import { Link } from "@/i18n/routing";
 
 export default async function CMSPagesTable() {
   const pages = await prisma.cmsPage.findMany({
+    include: { translations: true },
     orderBy: { updatedAt: 'desc' }
   });
 
@@ -84,23 +85,25 @@ export default async function CMSPagesTable() {
                   </td>
                 </tr>
               ) : (
-                pages.map((page: CmsPage) => (
+                pages.map((page) => {
+                  const primaryTranslation = page.translations.find(t => t.language === 'en') || page.translations[0];
+                  return (
                   <tr key={page.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30 transition-colors group">
                     <td className="p-4">
-                      <p className="font-bold text-slate-900 dark:text-white text-sm">{page.title}</p>
+                      <p className="font-bold text-slate-900 dark:text-white text-sm">{primaryTranslation?.title || 'Untitled'}</p>
                       <div className="flex items-center gap-2 mt-1">
-                        {page.seoTitle && <span className="px-1.5 py-0.5 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 rounded text-[9px] font-bold uppercase">SEO Optimized</span>}
+                        {primaryTranslation?.seoTitle && <span className="px-1.5 py-0.5 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 rounded text-[9px] font-bold uppercase">SEO Optimized</span>}
                       </div>
                     </td>
                     <td className="p-4">
                       <div className="flex items-center gap-1.5 text-slate-500 text-sm font-mono">
                         <Globe className="w-3.5 h-3.5" />
-                        /{page.slug}
+                        /{primaryTranslation?.slug || 'no-slug'}
                       </div>
                     </td>
                     <td className="p-4">
                       <span className="text-sm font-medium text-slate-700 dark:text-slate-300 uppercase">
-                        {page.language === 'en' ? 'English' : page.language === 'gu' ? 'Gujarati' : page.language}
+                        {page.translations.map(t => t.language === 'en' ? 'English' : t.language === 'gu' ? 'Gujarati' : t.language).join(', ')}
                       </span>
                     </td>
                     <td className="p-4">
@@ -124,7 +127,8 @@ export default async function CMSPagesTable() {
                       </div>
                     </td>
                   </tr>
-                ))
+                  );
+                })
               )}
             </tbody>
           </table>
