@@ -25,7 +25,7 @@ export function Hero() {
           className="mb-8 inline-block"
         >
           <div className="text-primary font-bold text-xl md:text-2xl uppercase tracking-widest px-4 py-2 border border-primary/30 rounded-full bg-primary/10 backdrop-blur-md">
-            National Political Organization
+            Rashtriya Annadata Vikas Party (RAVP)
           </div>
         </motion.div>
 

@@ -167,8 +167,11 @@ export function Footer() {
       <div className="container mx-auto px-4 py-12 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2 lg:col-span-2">
-            <Link href="/" className="inline-block font-bold text-3xl text-white mb-6">
-              LOGO
+            <Link href="/" className="flex items-center space-x-3 mb-6">
+              <img src="/logo.jpg" alt="RAVP Logo" className="w-16 h-16 rounded-full bg-white p-1" />
+              <span className="font-bold text-2xl text-white">
+                રાષ્ટ્રીય અન્નદાતા વિકાસ પાર્ટી (RAVP)
+              </span>
             </Link>
             <p className="text-slate-400 max-w-sm mb-6">
               Building a stronger, more prosperous nation through unity, transparency, and relentless development.
@@ -208,7 +211,7 @@ export function Footer() {
         
         <div className="pt-8 border-t border-slate-800 text-center flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm">
-            © {new Date().getFullYear()} Political Organization. All rights reserved.
+            © {new Date().getFullYear()} Rashtriya Annadata Vikas Party (RAVP). All rights reserved.
           </p>
           <div className="flex gap-4 text-sm">
             <span className="flex items-center"><MapPin size={14} className="mr-1"/> India</span>

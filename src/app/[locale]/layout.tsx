@@ -111,7 +111,7 @@ export default async function RootLayout({
               "@type": "Organization",
               "name": "Rashtriya Annadata Vikas Party",
               "url": "https://party-member.vercel.app",
-              "logo": "https://party-member.vercel.app/logo.png",
+              "logo": "https://party-member.vercel.app/logo.jpg",
               "sameAs": [
                 "https://facebook.com/ravp",
                 "https://twitter.com/ravp",

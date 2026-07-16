@@ -14,8 +14,9 @@ export function Header() {
       <div className="container mx-auto px-4 flex h-20 items-center justify-between">
         <div className="flex gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="inline-block font-bold text-2xl text-primary">
-              LOGO
+            <img src="/logo.jpg" alt="RAVP Logo" className="w-12 h-12 rounded-full" />
+            <span className="hidden lg:inline-block font-bold text-lg text-primary leading-tight">
+              રાષ્ટ્રીય અન્નદાતા વિકાસ પાર્ટી<br/><span className="text-sm text-muted-foreground">RAVP</span>
             </span>
           </Link>
           <MegaMenu />
