@@ -20,7 +20,7 @@ const formSchema = z.object({
 });
 
 export function Footer() {
-  const t = useTranslations("Index");
+  const t = useTranslations("Navigation");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -177,16 +177,16 @@ export function Footer() {
               Building a stronger, more prosperous nation through unity, transparency, and relentless development.
             </p>
             <Link href="/membership/register" className={buttonVariants({ variant: "outline", className: "bg-transparent border-white/20 text-white hover:bg-white/10 rounded-full" })}>
-              Become a Member
+              {t("become_member")}
             </Link>
           </div>
           <div>
-            <h4 className="text-white font-semibold mb-4 text-lg">About</h4>
+            <h4 className="text-white font-semibold mb-4 text-lg">{t("about")}</h4>
             <ul className="space-y-3">
-              <li><Link href="/about/journey" className="hover:text-primary transition-colors">Our Journey</Link></li>
-              <li><Link href="/about/vision-2047" className="hover:text-primary transition-colors">Vision 2047</Link></li>
-              <li><Link href="/about/25-resolutions" className="hover:text-primary transition-colors">25 Resolutions</Link></li>
-              <li><Link href="/about/mission" className="hover:text-primary transition-colors">Mission & Values</Link></li>
+              <li><Link href="/about/journey" className="hover:text-primary transition-colors">{t("our_journey")}</Link></li>
+              <li><Link href="/about/vision-2047" className="hover:text-primary transition-colors">{t("vision_2047")}</Link></li>
+              <li><Link href="/about/25-resolutions" className="hover:text-primary transition-colors">{t("resolutions_25")}</Link></li>
+              <li><Link href="/about/mission" className="hover:text-primary transition-colors">{t("mission")} & {t("core_values")}</Link></li>
             </ul>
           </div>
           <div>

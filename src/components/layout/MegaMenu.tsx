@@ -15,41 +15,41 @@ import {
 import { useTranslations } from "next-intl";
 
 const aboutLinks = [
-  { titleKey: "About Us", href: "/about" },
-  { titleKey: "Our Journey", href: "/about/journey" },
-  { titleKey: "Founder Message", href: "/about/founder-message" },
-  { titleKey: "25 Resolutions", href: "/about/25-resolutions" },
-  { titleKey: "Vision 2047", href: "/about/vision-2047" },
-  { titleKey: "Mission", href: "/about/mission" },
-  { titleKey: "Core Values", href: "/about/core-values" },
-  { titleKey: "Objectives", href: "/about/objectives" },
+  { titleKey: "about", href: "/about" },
+  { titleKey: "our_journey", href: "/about/journey" },
+  { titleKey: "founder_message", href: "/about/founder-message" },
+  { titleKey: "resolutions_25", href: "/about/25-resolutions" },
+  { titleKey: "vision_2047", href: "/about/vision-2047" },
+  { titleKey: "mission", href: "/about/mission" },
+  { titleKey: "core_values", href: "/about/core-values" },
+  { titleKey: "objectives", href: "/about/objectives" },
 ];
 
 const policyLinks = [
-  { titleKey: "Farmer", href: "/policies/farmer" },
-  { titleKey: "Youth", href: "/policies/youth" },
-  { titleKey: "Women", href: "/policies/women" },
-  { titleKey: "MSME", href: "/policies/business-msme" },
-  { titleKey: "Education", href: "/policies/education" },
-  { titleKey: "Health", href: "/policies/health" },
-  { titleKey: "Rural Development", href: "/policies/rural-development" },
-  { titleKey: "Environment", href: "/policies/environment" },
+  { titleKey: "farmer", href: "/policies/farmer" },
+  { titleKey: "youth", href: "/policies/youth" },
+  { titleKey: "women", href: "/policies/women" },
+  { titleKey: "msme", href: "/policies/business-msme" },
+  { titleKey: "education", href: "/policies/education" },
+  { titleKey: "health", href: "/policies/health" },
+  { titleKey: "rural_development", href: "/policies/rural-development" },
+  { titleKey: "environment", href: "/policies/environment" },
 ];
 
 const orgLinks = [
-  { titleKey: "Structure", href: "/organization/structure" },
-  { titleKey: "National Team", href: "/organization/national" },
-  { titleKey: "State Team", href: "/organization/state" },
-  { titleKey: "District Team", href: "/organization/district" },
-  { titleKey: "Taluka Team", href: "/organization/taluka" },
-  { titleKey: "Village Team", href: "/organization/village" },
+  { titleKey: "structure", href: "/organization/structure" },
+  { titleKey: "national_team", href: "/organization/national" },
+  { titleKey: "state_team", href: "/organization/state" },
+  { titleKey: "district_team", href: "/organization/district" },
+  { titleKey: "taluka_team", href: "/organization/taluka" },
+  { titleKey: "village_team", href: "/organization/village" },
 ];
 
 const mediaLinks = [
-  { titleKey: "News", href: "/media/news" },
-  { titleKey: "Press Releases", href: "/media/press-release" },
-  { titleKey: "Photo Gallery", href: "/media/photo-gallery" },
-  { titleKey: "Video Gallery", href: "/media/video-gallery" },
+  { titleKey: "news", href: "/media/news" },
+  { titleKey: "press_releases", href: "/media/press-release" },
+  { titleKey: "photo_gallery", href: "/media/photo-gallery" },
+  { titleKey: "video_gallery", href: "/media/video-gallery" },
 ];
 
 export function MegaMenu() {
@@ -61,13 +61,13 @@ export function MegaMenu() {
         <NavigationMenuItem>
           <Link href="/" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              {t("Home")}
+              {t("home")}
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuTrigger>{t("About Us")}</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{t("about")}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-white dark:bg-slate-950">
               {aboutLinks.map((link) => (
@@ -78,7 +78,7 @@ export function MegaMenu() {
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuTrigger>{t("Policies")}</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{t("policies")}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-white dark:bg-slate-950">
               {policyLinks.map((link) => (
@@ -89,7 +89,7 @@ export function MegaMenu() {
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuTrigger>{t("Organization")}</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{t("organization")}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-white dark:bg-slate-950">
               {orgLinks.map((link) => (
@@ -100,7 +100,7 @@ export function MegaMenu() {
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuTrigger>{t("Media")}</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{t("media")}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[300px] gap-3 p-4 md:w-[400px] md:grid-cols-2 bg-white dark:bg-slate-950">
               {mediaLinks.map((link) => (
@@ -113,7 +113,7 @@ export function MegaMenu() {
         <NavigationMenuItem>
           <Link href="/membership" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              {t("Membership")}
+              {t("membership")}
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
@@ -121,7 +121,7 @@ export function MegaMenu() {
         <NavigationMenuItem>
           <Link href="/contact" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              {t("Contact")}
+              {t("contact")}
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>

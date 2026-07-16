@@ -18,8 +18,22 @@ export function LanguageSwitcher() {
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
 
-  const changeLanguage = (nextLocale: "en" | "gu") => {
+  const changeLanguage = async (nextLocale: "en" | "gu") => {
     if (nextLocale === locale) return;
+    
+    // Set cookie for middleware/next-intl
+    document.cookie = `NEXT_LOCALE=${nextLocale}; path=/; max-age=31536000; SameSite=Lax`;
+    
+    // Optional: Call API to update user preferredLanguage if authenticated
+    try {
+      await fetch('/api/user/language', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ language: nextLocale })
+      });
+    } catch (e) {
+      // Ignore if not logged in or endpoint doesn't exist
+    }
     
     startTransition(() => {
       router.replace(pathname, { locale: nextLocale });

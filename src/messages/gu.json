@@ -1,0 +1,50 @@
+{
+  "navigation": {
+    "home": "હોમ",
+    "about": "અમારા વિશે",
+    "policies": "નીતિઓ",
+    "organization": "સંગઠન",
+    "membership": "સભ્યપદ",
+    "media": "મીડિયા",
+    "contact": "સંપર્ક",
+    "become_member": "સભ્ય બનો",
+    "our_journey": "અમારી યાત્રા",
+    "founder_message": "સ્થાપકનો સંદેશ",
+    "resolutions_25": "25 સંકલ્પ",
+    "vision_2047": "વિઝન 2047",
+    "mission": "લક્ષ્ય",
+    "core_values": "મૂળભૂત મૂલ્યો",
+    "objectives": "ઉદ્દેશ્યો",
+    "farmer": "ખેડૂત",
+    "youth": "યુવા",
+    "women": "મહિલા",
+    "msme": "MSME",
+    "education": "શિક્ષણ",
+    "health": "આરોગ્ય",
+    "rural_development": "ગ્રામીણ વિકાસ",
+    "environment": "પર્યાવરણ",
+    "structure": "માળખું",
+    "national_team": "રાષ્ટ્રીય ટીમ",
+    "state_team": "રાજ્ય ટીમ",
+    "district_team": "જિલ્લા ટીમ",
+    "taluka_team": "તાલુકા ટીમ",
+    "village_team": "ગ્રામ ટીમ",
+    "news": "સમાચાર",
+    "press_releases": "પ્રેસ રિલીઝ",
+    "photo_gallery": "ફોટો ગેલેરી",
+    "video_gallery": "વિડિયો ગેલેરી"
+  },
+  "homepage": {
+    "title": "રાષ્ટ્રીય અન્નદાતા વિકાસ પાર્ટીમાં આપનું સ્વાગત છે",
+    "subtitle": "એક મજબૂત, વધુ સમૃદ્ધ રાષ્ટ્રનું નિર્માણ."
+  },
+  "forms": {
+    "submit": "સબમિટ કરો",
+    "cancel": "રદ કરો",
+    "save": "સાચવો"
+  },
+  "admin": {
+    "dashboard": "ડેશબોર્ડ",
+    "users": "વપરાશકર્તાઓ"
+  }
+}

@@ -25,7 +25,7 @@ export function Header() {
           <LanguageSwitcher />
           <Link href="/membership/register" className="hidden md:block">
             <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full px-6">
-              {t("Become Member")}
+              {t("become_member")}
             </Button>
           </Link>
         </div>

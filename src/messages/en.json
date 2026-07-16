@@ -1,0 +1,50 @@
+{
+  "navigation": {
+    "home": "Home",
+    "about": "About Us",
+    "policies": "Policies",
+    "organization": "Organization",
+    "membership": "Membership",
+    "media": "Media",
+    "contact": "Contact",
+    "become_member": "Become Member",
+    "our_journey": "Our Journey",
+    "founder_message": "Founder Message",
+    "resolutions_25": "25 Resolutions",
+    "vision_2047": "Vision 2047",
+    "mission": "Mission",
+    "core_values": "Core Values",
+    "objectives": "Objectives",
+    "farmer": "Farmer",
+    "youth": "Youth",
+    "women": "Women",
+    "msme": "MSME",
+    "education": "Education",
+    "health": "Health",
+    "rural_development": "Rural Development",
+    "environment": "Environment",
+    "structure": "Structure",
+    "national_team": "National Team",
+    "state_team": "State Team",
+    "district_team": "District Team",
+    "taluka_team": "Taluka Team",
+    "village_team": "Village Team",
+    "news": "News",
+    "press_releases": "Press Releases",
+    "photo_gallery": "Photo Gallery",
+    "video_gallery": "Video Gallery"
+  },
+  "homepage": {
+    "title": "Welcome to Rashtriya Annadata Vikas Party",
+    "subtitle": "Building a stronger, more prosperous nation."
+  },
+  "forms": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "users": "Users"
+  }
+}
