@@ -20,7 +20,8 @@ const formSchema = z.object({
 });
 
 export function Footer() {
-  const t = useTranslations("Navigation");
+  const tNav = useTranslations("Navigation");
+  const t = useTranslations("footer");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,9 +54,9 @@ export function Footer() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold text-white mb-6">Get in Touch</h2>
+            <h2 className="text-4xl font-bold text-white mb-6">{t("get_in_touch")}</h2>
             <p className="text-slate-400 text-lg mb-10 max-w-md">
-              We are here to listen. Whether you have a suggestion, a grievance, or simply want to volunteer, reach out to us.
+              {t("get_in_touch_desc")}
             </p>
 
             <div className="space-y-8 mb-12">
@@ -64,8 +65,8 @@ export function Footer() {
                   <MapPin size={20} />
                 </div>
                 <div>
-                  <h4 className="text-white font-semibold mb-1">National Headquarters</h4>
-                  <p className="text-slate-400 leading-relaxed">123 Democracy Avenue, New Delhi, India 110001</p>
+                  <h4 className="text-white font-semibold mb-1">{t("hq")}</h4>
+                  <p className="text-slate-400 leading-relaxed">{t("hq_address")}</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
@@ -73,7 +74,7 @@ export function Footer() {
                   <Phone size={20} />
                 </div>
                 <div>
-                  <h4 className="text-white font-semibold mb-1">Toll-Free Number</h4>
+                  <h4 className="text-white font-semibold mb-1">{t("toll_free")}</h4>
                   <p className="text-slate-400">1800-123-4567</p>
                 </div>
               </div>
@@ -82,7 +83,7 @@ export function Footer() {
                   <Mail size={20} />
                 </div>
                 <div>
-                  <h4 className="text-white font-semibold mb-1">Email Support</h4>
+                  <h4 className="text-white font-semibold mb-1">{t("email_support")}</h4>
                   <p className="text-slate-400">contact@organization.in</p>
                 </div>
               </div>
@@ -111,12 +112,12 @@ export function Footer() {
             viewport={{ once: true }}
             className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-sm"
           >
-            <h3 className="text-2xl font-bold text-white mb-6">Send a Message</h3>
+            <h3 className="text-2xl font-bold text-white mb-6">{t("send_message")}</h3>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Input 
-                    placeholder="Full Name" 
+                    placeholder={t("form.name")} 
                     className="bg-white/5 border-white/10 focus-visible:ring-primary text-white placeholder:text-slate-500 h-12" 
                     {...form.register("name")} 
                   />
@@ -124,7 +125,7 @@ export function Footer() {
                 </div>
                 <div>
                   <Input 
-                    placeholder="Mobile Number" 
+                    placeholder={t("form.mobile")} 
                     className="bg-white/5 border-white/10 focus-visible:ring-primary text-white placeholder:text-slate-500 h-12" 
                     {...form.register("mobile")} 
                   />
@@ -133,7 +134,7 @@ export function Footer() {
               </div>
               <div>
                 <Input 
-                  placeholder="Email Address" 
+                  placeholder={t("form.email")} 
                   className="bg-white/5 border-white/10 focus-visible:ring-primary text-white placeholder:text-slate-500 h-12" 
                   {...form.register("email")} 
                 />
@@ -141,7 +142,7 @@ export function Footer() {
               </div>
               <div>
                 <Input 
-                  placeholder="Subject" 
+                  placeholder={t("form.subject")} 
                   className="bg-white/5 border-white/10 focus-visible:ring-primary text-white placeholder:text-slate-500 h-12" 
                   {...form.register("subject")} 
                 />
@@ -149,14 +150,14 @@ export function Footer() {
               </div>
               <div>
                 <Textarea 
-                  placeholder="Your Message" 
+                  placeholder={t("form.message")} 
                   className="bg-white/5 border-white/10 focus-visible:ring-primary text-white placeholder:text-slate-500 min-h-[120px] resize-none" 
                   {...form.register("message")} 
                 />
                 {form.formState.errors.message && <p className="text-xs text-red-500 mt-1">{form.formState.errors.message.message}</p>}
               </div>
               <Button type="submit" className="w-full h-12 text-base font-semibold rounded-lg bg-primary hover:bg-primary/90 text-slate-950">
-                Send Message
+                {t("form.submit")}
               </Button>
             </form>
           </motion.div>
@@ -174,44 +175,44 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-slate-400 max-w-sm mb-6">
-              Building a stronger, more prosperous nation through unity, transparency, and relentless development.
+              {t("desc")}
             </p>
             <Link href="/membership/register" className={buttonVariants({ variant: "outline", className: "bg-transparent border-white/20 text-white hover:bg-white/10 rounded-full" })}>
-              {t("become_member")}
+              {tNav("become_member")}
             </Link>
           </div>
           <div>
-            <h4 className="text-white font-semibold mb-4 text-lg">{t("about")}</h4>
+            <h4 className="text-white font-semibold mb-4 text-lg">{tNav("about")}</h4>
             <ul className="space-y-3">
-              <li><Link href="/about/journey" className="hover:text-primary transition-colors">{t("our_journey")}</Link></li>
-              <li><Link href="/about/vision-2047" className="hover:text-primary transition-colors">{t("vision_2047")}</Link></li>
-              <li><Link href="/about/25-resolutions" className="hover:text-primary transition-colors">{t("resolutions_25")}</Link></li>
-              <li><Link href="/about/mission" className="hover:text-primary transition-colors">{t("mission")} & {t("core_values")}</Link></li>
+              <li><Link href="/about/journey" className="hover:text-primary transition-colors">{tNav("our_journey")}</Link></li>
+              <li><Link href="/about/vision-2047" className="hover:text-primary transition-colors">{tNav("vision_2047")}</Link></li>
+              <li><Link href="/about/25-resolutions" className="hover:text-primary transition-colors">{tNav("resolutions_25")}</Link></li>
+              <li><Link href="/about/mission" className="hover:text-primary transition-colors">{tNav("mission")} & {tNav("core_values")}</Link></li>
             </ul>
           </div>
           <div>
-            <h4 className="text-white font-semibold mb-4 text-lg">Quick Links</h4>
+            <h4 className="text-white font-semibold mb-4 text-lg">{t("quick_links")}</h4>
             <ul className="space-y-3">
-              <li><Link href="/policies" className="hover:text-primary transition-colors">Our Policies</Link></li>
-              <li><Link href="/organization/structure" className="hover:text-primary transition-colors">Organization</Link></li>
-              <li><Link href="/media/news" className="hover:text-primary transition-colors">Latest News</Link></li>
-              <li><Link href="/faq" className="hover:text-primary transition-colors">FAQ</Link></li>
+              <li><Link href="/policies" className="hover:text-primary transition-colors">{t("our_policies")}</Link></li>
+              <li><Link href="/organization/structure" className="hover:text-primary transition-colors">{t("organization")}</Link></li>
+              <li><Link href="/media/news" className="hover:text-primary transition-colors">{t("latest_news")}</Link></li>
+              <li><Link href="/faq" className="hover:text-primary transition-colors">{t("faq")}</Link></li>
             </ul>
           </div>
           <div>
-            <h4 className="text-white font-semibold mb-4 text-lg">Legal</h4>
+            <h4 className="text-white font-semibold mb-4 text-lg">{t("legal")}</h4>
             <ul className="space-y-3">
-              <li><Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link></li>
-              <li><Link href="/cookies" className="hover:text-primary transition-colors">Cookie Policy</Link></li>
-              <li><Link href="/sitemap" className="hover:text-primary transition-colors">Sitemap</Link></li>
+              <li><Link href="/privacy" className="hover:text-primary transition-colors">{t("privacy")}</Link></li>
+              <li><Link href="/terms" className="hover:text-primary transition-colors">{t("terms")}</Link></li>
+              <li><Link href="/cookies" className="hover:text-primary transition-colors">{t("cookies")}</Link></li>
+              <li><Link href="/sitemap" className="hover:text-primary transition-colors">{t("sitemap")}</Link></li>
             </ul>
           </div>
         </div>
         
         <div className="pt-8 border-t border-slate-800 text-center flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm">
-            © {new Date().getFullYear()} Rashtriya Annadata Vikas Party (RAVP). All rights reserved.
+            {t("copyright").replace("{year}", new Date().getFullYear().toString())}
           </p>
           <div className="flex gap-4 text-sm">
             <span className="flex items-center"><MapPin size={14} className="mr-1"/> India</span>

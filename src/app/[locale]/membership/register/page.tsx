@@ -1,14 +1,17 @@
 import { InnerPageHeader } from "@/components/layout/InnerPageHeader";
 import { RegistrationForm } from "@/components/forms/RegistrationForm";
+import { useTranslations } from "next-intl";
 
 export default function RegisterPage() {
+  const tNav = useTranslations("Navigation");
+  const t = useTranslations("MembershipPage");
   return (
     <main>
       <InnerPageHeader 
-        title="Become a Member" 
-        description="Join our movement to build a stronger, prosperous, and inclusive nation. Registration is free for all citizens."
+        title={t("title")} 
+        description={t("desc")}
         breadcrumbs={[
-          { label: "Membership", href: "/membership" },
+          { label: tNav("membership"), href: "/membership" },
           { label: "Register", href: "/membership/register" }
         ]}
       />

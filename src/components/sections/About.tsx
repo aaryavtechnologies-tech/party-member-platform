@@ -3,8 +3,11 @@ import { motion } from "framer-motion";
 import { ArrowRight, History, MessageSquareQuote } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export function About() {
+  const t = useTranslations("homepage.about");
+
   return (
     <section className="py-24 bg-white dark:bg-slate-950">
       <div className="container mx-auto px-4">
@@ -15,7 +18,7 @@ export function About() {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-bold text-primary mb-4"
           >
-            About Us
+            {t("title")}
           </motion.h2>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -41,13 +44,13 @@ export function About() {
               <div className="h-16 w-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6">
                 <History size={32} />
               </div>
-              <h3 className="text-3xl font-bold mb-4">Our Journey</h3>
+              <h3 className="text-3xl font-bold mb-4">{t("journey_title")}</h3>
               <p className="text-slate-600 dark:text-slate-300 text-lg leading-relaxed mb-8">
-                From a small group of passionate citizens to a nationwide movement, our journey has been driven by a singular focus: the progress and prosperity of our great nation.
+                {t("journey_desc")}
               </p>
               <Link href="/about/journey" className={buttonVariants({ variant: "ghost", className: "group/btn text-primary hover:text-primary hover:bg-primary/5" })}>
                 <span className="flex items-center">
-                  Read Full Journey
+                  {t("journey_btn")}
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
                 </span>
               </Link>
@@ -69,13 +72,13 @@ export function About() {
               <div className="h-16 w-16 bg-white/10 rounded-2xl flex items-center justify-center mb-6">
                 <MessageSquareQuote size={32} />
               </div>
-              <h3 className="text-3xl font-bold mb-4 text-accent">Founder's Message</h3>
+              <h3 className="text-3xl font-bold mb-4 text-accent">{t("founder_title")}</h3>
               <p className="text-white/90 text-lg leading-relaxed mb-8">
-                "Our strength lies in our unity and our unwavering commitment to the values that define us. Together, we can build a future that honors our past and secures our children's tomorrow."
+                {t("founder_desc")}
               </p>
               <Link href="/about/founder-message" className={buttonVariants({ variant: "outline", className: "group/btn border-white/30 text-primary hover:bg-white/10 hover:text-slate-950 bg-white/90" })}>
                 <span className="flex items-center">
-                  Read Message
+                  {t("founder_btn")}
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
                 </span>
               </Link>

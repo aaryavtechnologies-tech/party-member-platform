@@ -6,7 +6,7 @@ import { ChevronDown, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export function Hero() {
-  const t = useTranslations("Index");
+  const t = useTranslations("homepage");
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 1000], [0, 400]);
 
@@ -25,7 +25,7 @@ export function Hero() {
           className="mb-8 inline-block"
         >
           <div className="text-primary font-bold text-xl md:text-2xl uppercase tracking-widest px-4 py-2 border border-primary/30 rounded-full bg-primary/10 backdrop-blur-md">
-            Rashtriya Annadata Vikas Party (RAVP)
+            {t("hero.party_name")}
           </div>
         </motion.div>
 
@@ -35,8 +35,8 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight tracking-tight max-w-6xl mx-auto"
         >
-          Building a Stronger, <br className="hidden md:block"/>
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-primary">Developed Nation</span>
+          {t("hero.heading_1")} <br className="hidden md:block"/>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-primary">{t("hero.heading_2")}</span>
         </motion.h1>
 
         <motion.p
@@ -56,11 +56,11 @@ export function Hero() {
         >
           <Link href="/membership/register" className="w-full sm:w-auto">
             <Button size="lg" className="h-14 px-8 text-lg rounded-full bg-primary hover:bg-primary/90 text-slate-950 w-full sm:w-auto font-semibold shadow-2xl shadow-primary/30 group">
-              Become a Member <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              {t("hero.become_member")} <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
           <Button size="lg" variant="outline" className="h-14 px-8 text-lg rounded-full text-white bg-transparent border-white/20 hover:bg-white/10 hover:text-white w-full sm:w-auto backdrop-blur-sm">
-            Explore Our Vision
+            {t("hero.explore_vision")}
           </Button>
         </motion.div>
       </div>
@@ -71,7 +71,7 @@ export function Hero() {
         transition={{ delay: 1.5, duration: 1 }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center text-white/50"
       >
-        <span className="text-sm font-medium tracking-widest uppercase mb-2">Scroll</span>
+        <span className="text-sm font-medium tracking-widest uppercase mb-2">{t("hero.scroll")}</span>
         <motion.div 
           animate={{ y: [0, 10, 0] }} 
           transition={{ repeat: Infinity, duration: 2 }}

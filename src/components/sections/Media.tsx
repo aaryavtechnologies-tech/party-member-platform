@@ -3,11 +3,14 @@ import { motion } from "framer-motion";
 import { ArrowRight, Play, Image as ImageIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export function Media() {
+  const t = useTranslations("homepage.media");
+  
   const news = [
-    { type: "Press Release", date: "Oct 12, 2024", title: "National Committee announces new rural development initiative.", img: "https://images.unsplash.com/photo-1577563908411-5077b6dc7624?q=80&w=2070" },
-    { type: "News", date: "Oct 10, 2024", title: "Millions gather for the historic unified sankalp rally in capital.", img: "https://images.unsplash.com/photo-1541872526845-8120e2a9e525?q=80&w=2069" },
+    { type: t("news.1.type"), date: t("news.1.date"), title: t("news.1.title"), img: "https://images.unsplash.com/photo-1577563908411-5077b6dc7624?q=80&w=2070" },
+    { type: t("news.2.type"), date: t("news.2.date"), title: t("news.2.title"), img: "https://images.unsplash.com/photo-1541872526845-8120e2a9e525?q=80&w=2069" },
   ];
 
   return (
@@ -21,7 +24,7 @@ export function Media() {
               viewport={{ once: true }}
               className="text-4xl md:text-5xl font-bold text-primary mb-4"
             >
-              Latest Media & Updates
+              {t("title")}
             </motion.h2>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
@@ -30,7 +33,7 @@ export function Media() {
               transition={{ delay: 0.1 }}
               className="text-lg text-slate-600 dark:text-slate-400"
             >
-              Stay informed with our latest news, press releases, and galleries.
+              {t("desc")}
             </motion.p>
           </div>
           <motion.div
@@ -40,10 +43,10 @@ export function Media() {
             className="mt-6 md:mt-0 flex gap-4"
           >
             <Link href="/media/photo-gallery" className={buttonVariants({ variant: "outline", className: "rounded-full" })}>
-              <ImageIcon className="mr-2 h-4 w-4" /> Photos
+              <ImageIcon className="mr-2 h-4 w-4" /> {t("photos")}
             </Link>
             <Link href="/media/video-gallery" className={buttonVariants({ variant: "outline", className: "rounded-full" })}>
-              <Play className="mr-2 h-4 w-4" /> Videos
+              <Play className="mr-2 h-4 w-4" /> {t("videos")}
             </Link>
           </motion.div>
         </div>
@@ -61,18 +64,18 @@ export function Media() {
             
             <div className="relative z-10 p-10 md:p-12 w-full">
               <div className="bg-accent text-primary px-4 py-1.5 rounded-full text-xs font-bold w-fit mb-4 uppercase tracking-widest">
-                Featured Article
+                {t("featured_badge")}
               </div>
               <h3 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight group-hover:text-accent transition-colors">
-                How the new education policy is shaping the future of young minds.
+                {t("featured_title")}
               </h3>
               <div className="flex items-center text-white/80 gap-4 mb-6">
-                <span>Oct 05, 2024</span>
+                <span>{t("featured_meta").split("•")[0]}</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-white/50" />
-                <span>5 min read</span>
+                <span>{t("featured_meta").split("•")[1]}</span>
               </div>
               <div className="text-white font-semibold flex items-center group-hover:translate-x-2 transition-transform">
-                Read Full Article <ArrowRight className="ml-2 h-5 w-5" />
+                {t("read_article")} <ArrowRight className="ml-2 h-5 w-5" />
               </div>
             </div>
           </motion.div>
@@ -98,7 +101,7 @@ export function Media() {
                   <div className="text-xs text-slate-500 mb-2 font-medium uppercase tracking-widest">{item.date}</div>
                   <h3 className="text-xl font-bold mb-4 line-clamp-3 group-hover:text-primary transition-colors">{item.title}</h3>
                   <div className="text-primary text-sm font-semibold flex items-center group-hover:text-accent mt-auto">
-                    Read More <ArrowRight className="ml-1.5 h-4 w-4" />
+                    {t("read_more")} <ArrowRight className="ml-1.5 h-4 w-4" />
                   </div>
                 </div>
               </motion.div>
@@ -108,7 +111,7 @@ export function Media() {
         
         <div className="mt-12 text-center">
           <Link href="/media" className={buttonVariants({ variant: "outline", size: "lg", className: "rounded-full px-8 border-slate-200 hover:bg-primary hover:text-white transition-colors" })}>
-            View All News & Updates
+            {t("view_all")}
           </Link>
         </div>
       </div>

@@ -2,12 +2,16 @@
 import { motion } from "framer-motion";
 import { Target } from "lucide-react";
 
+import { useTranslations } from "next-intl";
+
 export function Vision() {
+  const t = useTranslations("homepage.vision");
+  
   const milestones = [
-    { year: "2025", title: "Digital Inclusion", desc: "100% broadband connectivity in all villages." },
-    { year: "2030", title: "Green Economy", desc: "Achieving 40% non-fossil fuel energy capacity." },
-    { year: "2035", title: "Global Manufacturing", desc: "Becoming the top 3 global manufacturing hubs." },
-    { year: "2047", title: "Developed Nation", desc: "A prosperous, inclusive, and technologically advanced society." },
+    { year: "2025", title: t("milestones.2025.title"), desc: t("milestones.2025.desc") },
+    { year: "2030", title: t("milestones.2030.title"), desc: t("milestones.2030.desc") },
+    { year: "2035", title: t("milestones.2035.title"), desc: t("milestones.2035.desc") },
+    { year: "2047", title: t("milestones.2047.title"), desc: t("milestones.2047.desc") },
   ];
 
   return (
@@ -28,7 +32,7 @@ export function Vision() {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-bold text-primary mb-6"
           >
-            Vision 2047
+            {t("title")}
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -37,7 +41,7 @@ export function Vision() {
             transition={{ delay: 0.1 }}
             className="text-lg text-slate-600 dark:text-slate-400"
           >
-            A centenary of independence marked by unprecedented growth, equality, and global leadership.
+            {t("desc")}
           </motion.p>
         </div>
 

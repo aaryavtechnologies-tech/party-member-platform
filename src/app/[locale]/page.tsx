@@ -13,7 +13,7 @@ import { Media } from "@/components/sections/Media";
 import { FAQ } from "@/components/sections/FAQ";
 
 export default function Home() {
-  const t = useTranslations("Index");
+  const t = useTranslations("homepage");
 
   return (
     <>

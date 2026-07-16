@@ -2,8 +2,10 @@
 
 import { Bell, Menu, Search, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 export function Topbar({ setIsOpen }: { setIsOpen: (val: boolean) => void }) {
+  const t = useTranslations("dashboard.topbar");
   return (
     <header className="h-20 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 flex items-center justify-between px-4 lg:px-8">
       <div className="flex items-center gap-4 flex-1">
@@ -20,7 +22,7 @@ export function Topbar({ setIsOpen }: { setIsOpen: (val: boolean) => void }) {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
           <input 
             type="text" 
-            placeholder="Search news, events, payments..." 
+            placeholder={t("search")} 
             className="w-full h-11 pl-10 pr-4 bg-slate-100 dark:bg-slate-900 border-none rounded-full focus:ring-2 focus:ring-primary outline-none transition-all"
           />
         </div>

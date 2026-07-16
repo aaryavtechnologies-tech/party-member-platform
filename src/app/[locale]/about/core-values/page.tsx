@@ -1,15 +1,18 @@
 import { InnerPageHeader } from "@/components/layout/InnerPageHeader";
 import { CoreValues as CoreValuesSection } from "@/components/sections/CoreValues";
+import { useTranslations } from "next-intl";
 
 export default function CoreValuesPage() {
+  const tNav = useTranslations("Navigation");
+  const t = useTranslations("aboutUs.core_values");
   return (
     <main>
       <InnerPageHeader 
-        title="Core Values" 
-        description="The foundational principles that guide every decision, policy, and action we take."
+        title={t("title")} 
+        description={t("desc")}
         breadcrumbs={[
-          { label: "About Us", href: "/about" },
-          { label: "Core Values", href: "/about/core-values" }
+          { label: tNav("about"), href: "/about" },
+          { label: t("title"), href: "/about/core-values" }
         ]}
       />
       <div className="pt-20">

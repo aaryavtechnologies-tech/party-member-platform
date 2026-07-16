@@ -1,14 +1,24 @@
 "use client";
 import { motion } from "framer-motion";
-import { faqs } from "@/data/mock";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useTranslations } from "next-intl";
 
 export function FAQ() {
+  const t = useTranslations("homepage.faq");
+  
+  // Create an array of 4 items for the FAQ
+  const faqs = [
+    { question: t("items.0.question"), answer: t("items.0.answer") },
+    { question: t("items.1.question"), answer: t("items.1.answer") },
+    { question: t("items.2.question"), answer: t("items.2.answer") },
+    { question: t("items.3.question"), answer: t("items.3.answer") }
+  ];
+
   return (
     <section className="py-24 bg-white dark:bg-slate-950">
       <div className="container mx-auto px-4">
@@ -19,7 +29,7 @@ export function FAQ() {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-bold text-primary mb-6"
           >
-            Frequently Asked Questions
+            {t("title")}
           </motion.h2>
         </div>
 

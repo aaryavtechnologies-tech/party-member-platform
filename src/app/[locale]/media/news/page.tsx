@@ -1,19 +1,22 @@
 import { InnerPageHeader } from "@/components/layout/InnerPageHeader";
+import { useTranslations } from "next-intl";
 
 export default function NewsPage() {
+  const tNav = useTranslations("Navigation");
+  const t = useTranslations("mediaPage");
   return (
     <main>
       <InnerPageHeader 
-        title="News & Updates" 
-        description="The latest news, announcements, and coverage from our initiatives nationwide."
+        title={t("subpages.news.title")} 
+        description={t("subpages.news.desc")}
         breadcrumbs={[
-          { label: "Media", href: "/media" },
-          { label: "News", href: "/media/news" }
+          { label: tNav("media"), href: "/media" },
+          { label: t("subpages.news.title"), href: "/media/news" }
         ]}
       />
       <div className="py-32 bg-slate-50 dark:bg-slate-900/50">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-xl text-slate-500">News archive will be displayed here.</p>
+          <p className="text-xl text-slate-500">{t("subpages.news.content")}</p>
         </div>
       </div>
     </main>

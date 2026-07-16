@@ -2,8 +2,10 @@
 import { motion } from "framer-motion";
 import { statistics } from "@/data/mock";
 import { Users, HandHeart, Map, Home, Flag } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function Stats() {
+  const t = useTranslations("homepage.stats");
   const iconMap: Record<string, React.ReactNode> = {
     Users: <Users size={32} />,
     HandHeart: <HandHeart size={32} />,
@@ -37,7 +39,7 @@ export function Stats() {
               >
                 {stat.value >= 1000000 ? `${(stat.value / 1000000).toFixed(1)}M+` : stat.value >= 1000 ? `${(stat.value / 1000).toFixed(0)}k+` : `${stat.value}+`}
               </motion.h3>
-              <p className="text-sm md:text-base font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{stat.labelKey}</p>
+              <p className="text-sm md:text-base font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t(stat.labelKey as any)}</p>
             </motion.div>
           ))}
         </div>

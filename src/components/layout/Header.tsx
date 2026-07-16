@@ -16,7 +16,7 @@ export function Header() {
           <Link href="/" className="flex items-center space-x-2">
             <img src="/logo.jpg" alt="RAVP Logo" className="w-12 h-12 rounded-full" />
             <span className="hidden lg:inline-block font-bold text-lg text-primary leading-tight">
-              રાષ્ટ્રીય અન્નદાતા વિકાસ પાર્ટી<br/><span className="text-sm text-muted-foreground">RAVP</span>
+              {t("party_name_full")}<br/><span className="text-sm text-muted-foreground">RAVP</span>
             </span>
           </Link>
           <MegaMenu />

@@ -1,14 +1,17 @@
 import { InnerPageHeader } from "@/components/layout/InnerPageHeader";
 import { Policies } from "@/components/sections/Policies";
+import { useTranslations } from "next-intl";
 
 export default function PoliciesPage() {
+  const tNav = useTranslations("Navigation");
+  const t = useTranslations("policiesPage");
   return (
     <main>
       <InnerPageHeader 
-        title="National Policies" 
-        description="Comprehensive frameworks designed to foster growth, ensure equity, and protect our future."
+        title={t("title")} 
+        description={t("desc")}
         breadcrumbs={[
-          { label: "Policies", href: "/policies" }
+          { label: tNav("policies"), href: "/policies" }
         ]}
       />
       <div className="pt-10">

@@ -5,8 +5,11 @@ import { Wheat, GraduationCap, UserCircle, BookOpen, Activity, Leaf, ArrowRight 
 import { Link } from "@/i18n/routing";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { buttonVariants } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 export function Policies() {
+  const t = useTranslations("homepage.policies");
+  
   const iconMap: Record<string, React.ReactNode> = {
     Wheat: <Wheat size={24} />,
     GraduationCap: <GraduationCap size={24} />,
@@ -26,7 +29,7 @@ export function Policies() {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-bold text-primary mb-6"
           >
-            Policy Highlights
+            {t("title")}
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -35,7 +38,7 @@ export function Policies() {
             transition={{ delay: 0.1 }}
             className="text-lg text-slate-600 dark:text-slate-400"
           >
-            Comprehensive frameworks designed to uplift every sector of our society.
+            {t("desc")}
           </motion.p>
         </div>
 
@@ -54,7 +57,7 @@ export function Policies() {
                   className="data-[state=active]:bg-primary data-[state=active]:text-slate-950 data-[state=active]:shadow-lg rounded-full px-6 py-3 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 hover:bg-slate-50 transition-all flex items-center gap-2"
                 >
                   {iconMap[policy.icon]}
-                  <span className="font-semibold">{policy.titleKey}</span>
+                  <span className="font-semibold">{t(`items.${policy.titleKey}` as any)}</span>
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -70,23 +73,23 @@ export function Policies() {
                       <div className="w-16 h-16 bg-white dark:bg-slate-800 text-primary rounded-2xl flex items-center justify-center mb-6 shadow-sm">
                         {iconMap[policy.icon]}
                       </div>
-                      <h3 className="text-3xl font-bold mb-4">{policy.titleKey}</h3>
-                      <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">{policy.descriptionKey}</p>
+                      <h3 className="text-3xl font-bold mb-4">{t(`items.${policy.titleKey}` as any)}</h3>
+                      <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">{t(`items.${policy.descriptionKey}` as any)}</p>
                       
                       <div className="space-y-4 mb-8">
                         <div className="flex items-center text-slate-700 dark:text-slate-300">
-                          <div className="w-2 h-2 rounded-full bg-accent mr-3" /> Comprehensive Support Framework
+                          <div className="w-2 h-2 rounded-full bg-accent mr-3" /> {t("support_framework")}
                         </div>
                         <div className="flex items-center text-slate-700 dark:text-slate-300">
-                          <div className="w-2 h-2 rounded-full bg-accent mr-3" /> Direct Benefits Transfer
+                          <div className="w-2 h-2 rounded-full bg-accent mr-3" /> {t("dbt")}
                         </div>
                         <div className="flex items-center text-slate-700 dark:text-slate-300">
-                          <div className="w-2 h-2 rounded-full bg-accent mr-3" /> Localized Implementation
+                          <div className="w-2 h-2 rounded-full bg-accent mr-3" /> {t("localized")}
                         </div>
                       </div>
                       
                       <Link href={policy.href} className={buttonVariants({ size: "lg", className: "rounded-full px-8" })}>
-                        Read Full Policy <ArrowRight className="ml-2 h-4 w-4" />
+                        {t("read_full")} <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
                     </div>
                     

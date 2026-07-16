@@ -1,8 +1,11 @@
 "use client";
 import { motion } from "framer-motion";
 import { ShieldCheck, Heart, TrendingUp } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function Mission() {
+  const t = useTranslations("homepage.mission");
+  
   return (
     <section className="py-24 bg-slate-50 dark:bg-slate-900/50 overflow-hidden">
       <div className="container mx-auto px-4">
@@ -13,9 +16,9 @@ export function Mission() {
             viewport={{ once: true }}
             className="space-y-8"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-primary">Our Mission</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-primary">{t("title")}</h2>
             <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-              We are dedicated to building a resilient and self-reliant nation through inclusive development, technological advancement, and the empowerment of every citizen regardless of their background.
+              {t("desc")}
             </p>
             
             <div className="space-y-6 pt-4">
@@ -24,8 +27,8 @@ export function Mission() {
                   <ShieldCheck size={28} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold mb-1">Integrity First</h4>
-                  <p className="text-slate-600 dark:text-slate-400">Upholding the highest standards of transparency and honesty in public service.</p>
+                  <h4 className="text-xl font-bold mb-1">{t("features.integrity.title")}</h4>
+                  <p className="text-slate-600 dark:text-slate-400">{t("features.integrity.desc")}</p>
                 </div>
               </div>
               <div className="flex gap-4">
@@ -33,8 +36,8 @@ export function Mission() {
                   <Heart size={28} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold mb-1">Service to All</h4>
-                  <p className="text-slate-600 dark:text-slate-400">Ensuring our policies and actions reach the most vulnerable in society.</p>
+                  <h4 className="text-xl font-bold mb-1">{t("features.service.title")}</h4>
+                  <p className="text-slate-600 dark:text-slate-400">{t("features.service.desc")}</p>
                 </div>
               </div>
               <div className="flex gap-4">
@@ -42,8 +45,8 @@ export function Mission() {
                   <TrendingUp size={28} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold mb-1">Continuous Development</h4>
-                  <p className="text-slate-600 dark:text-slate-400">Relentless pursuit of progress through innovation and hard work.</p>
+                  <h4 className="text-xl font-bold mb-1">{t("features.development.title")}</h4>
+                  <p className="text-slate-600 dark:text-slate-400">{t("features.development.desc")}</p>
                 </div>
               </div>
             </div>

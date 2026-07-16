@@ -2,8 +2,11 @@
 import { motion } from "framer-motion";
 import { coreValues } from "@/data/mock";
 import { Eye, Users, Heart, ShieldCheck, Lightbulb, Zap } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function CoreValues() {
+  const t = useTranslations("homepage.core_values");
+  
   const iconMap: Record<string, React.ReactNode> = {
     Eye: <Eye size={32} />,
     Users: <Users size={32} />,
@@ -22,7 +25,7 @@ export function CoreValues() {
           viewport={{ once: true }}
           className="text-4xl md:text-5xl font-bold mb-16 text-accent"
         >
-          Our Core Values
+          {t("title")}
         </motion.h2>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-8 lg:gap-12 max-w-5xl mx-auto">
@@ -38,7 +41,7 @@ export function CoreValues() {
               <div className="w-20 h-20 bg-white/10 rounded-3xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-accent group-hover:text-primary group-hover:scale-110 shadow-lg">
                 {iconMap[val.icon]}
               </div>
-              <h3 className="text-xl font-semibold tracking-wide">{val.titleKey}</h3>
+              <h3 className="text-xl font-semibold tracking-wide">{t(val.titleKey as any)}</h3>
             </motion.div>
           ))}
         </div>

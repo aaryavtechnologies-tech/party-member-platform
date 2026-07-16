@@ -2,15 +2,18 @@ import { InnerPageHeader } from "@/components/layout/InnerPageHeader";
 import { MembershipCTA } from "@/components/sections/MembershipCTA";
 import { MembershipPricing } from "@/components/sections/MembershipPricing";
 import { ReferralPromo } from "@/components/sections/ReferralPromo";
+import { useTranslations } from "next-intl";
 
 export default function MembershipPage() {
+  const tNav = useTranslations("Navigation");
+  const t = useTranslations("MembershipPage");
   return (
     <main>
       <InnerPageHeader 
-        title="Membership" 
-        description="Join millions of citizens working together to build a stronger, developed nation."
+        title={t("title")} 
+        description={t("desc")}
         breadcrumbs={[
-          { label: "Membership", href: "/membership" }
+          { label: tNav("membership"), href: "/membership" }
         ]}
       />
       <div className="pt-10">

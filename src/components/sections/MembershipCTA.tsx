@@ -3,13 +3,16 @@ import { motion } from "framer-motion";
 import { Link } from "@/i18n/routing";
 import { ShieldCheck, Users, Globe, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 export function MembershipCTA() {
+  const t = useTranslations("homepage.membershipCTA");
+  
   const benefits = [
-    { title: "Digital ID Card", icon: <ShieldCheck size={24} /> },
-    { title: "Leadership Roles", icon: <Award size={24} /> },
-    { title: "Volunteer Network", icon: <Users size={24} /> },
-    { title: "Policy Discussions", icon: <Globe size={24} /> },
+    { title: t("benefits.id"), icon: <ShieldCheck size={24} /> },
+    { title: t("benefits.leadership"), icon: <Award size={24} /> },
+    { title: t("benefits.volunteer"), icon: <Users size={24} /> },
+    { title: t("benefits.policy"), icon: <Globe size={24} /> },
   ];
 
   return (
@@ -30,24 +33,24 @@ export function MembershipCTA() {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-accent font-semibold text-sm mb-8 uppercase tracking-widest">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-              Join 1.5 Million+ Members
+              {t("tag")}
             </div>
             
             <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 text-white leading-tight">
-              Be a Part of the <span className="text-accent">Change</span>
+              {t("title")} <span className="text-accent">{t("title_highlight")}</span>
             </h2>
             <p className="text-xl md:text-2xl text-white/80 mb-10 leading-relaxed max-w-xl font-light">
-              Join millions of citizens working together to build a stronger, more prosperous nation. Your voice and your action matters.
+              {t("desc")}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/membership/register">
                 <Button size="lg" className="bg-accent text-slate-950 hover:bg-white text-lg font-bold rounded-full px-10 py-7 h-auto shadow-2xl shadow-accent/20 transition-all hover:scale-105">
-                  Register Now
+                  {t("register")}
                 </Button>
               </Link>
               <Button size="lg" variant="outline" className="text-white bg-transparent border-white/30 hover:bg-white/10 hover:text-white text-lg rounded-full px-10 py-7 h-auto backdrop-blur-sm">
-                Learn More
+                {t("learn_more")}
               </Button>
             </div>
           </motion.div>

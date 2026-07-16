@@ -2,20 +2,22 @@
 import { motion } from "framer-motion";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export function Resolutions() {
+  const t = useTranslations("homepage.resolutions");
   // Mocking 10 out of 25 for the grid demonstration
   const resolutions = [
-    { title: "Universal Healthcare", desc: "Top-tier medical facilities in every taluka." },
-    { title: "Quality Education", desc: "Modernizing schools with digital infrastructure." },
-    { title: "Farmer Empowerment", desc: "Fair prices and modern tools for agriculture." },
-    { title: "Women Safety", desc: "Strict policies and support systems nationwide." },
-    { title: "Youth Employment", desc: "Creating 10 million jobs in emerging sectors." },
-    { title: "Green Energy", desc: "50% power grid to renewables by 2030." },
-    { title: "Digital India", desc: "100% broadband connectivity in rural areas." },
-    { title: "Water Security", desc: "Clean drinking water for every household." },
-    { title: "Infrastructure", desc: "World-class roads and bullet trains." },
-    { title: "Global Economy", desc: "Top 3 global manufacturing hubs." },
+    { title: t("items.1.title"), desc: t("items.1.desc") },
+    { title: t("items.2.title"), desc: t("items.2.desc") },
+    { title: t("items.3.title"), desc: t("items.3.desc") },
+    { title: t("items.4.title"), desc: t("items.4.desc") },
+    { title: t("items.5.title"), desc: t("items.5.desc") },
+    { title: t("items.6.title"), desc: t("items.6.desc") },
+    { title: t("items.7.title"), desc: t("items.7.desc") },
+    { title: t("items.8.title"), desc: t("items.8.desc") },
+    { title: t("items.9.title"), desc: t("items.9.desc") },
+    { title: t("items.10.title"), desc: t("items.10.desc") },
   ];
 
   return (
@@ -29,7 +31,7 @@ export function Resolutions() {
               viewport={{ once: true }}
               className="text-4xl md:text-5xl font-bold text-primary mb-4"
             >
-              Our 25 National Resolutions
+              {t("title")}
             </motion.h2>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
@@ -38,7 +40,7 @@ export function Resolutions() {
               transition={{ delay: 0.1 }}
               className="text-lg text-slate-600 dark:text-slate-400"
             >
-              The 25 pillars of our commitment to building a completely developed nation by 2047.
+              {t("desc")}
             </motion.p>
           </div>
           <motion.div
@@ -48,7 +50,7 @@ export function Resolutions() {
             className="mt-6 md:mt-0"
           >
             <Link href="/about/25-resolutions" className="flex items-center text-primary font-semibold hover:text-secondary transition-colors group">
-              View All 25 Resolutions <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              {t("view_all")} <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Link>
           </motion.div>
         </div>

@@ -10,23 +10,29 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const NAV_ITEMS = [
-  { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { title: "My Profile", href: "/dashboard/profile", icon: User },
-  { title: "Membership", href: "/dashboard/membership", icon: Shield },
-  { title: "Digital Card", href: "/dashboard/card", icon: Award },
-  { title: "Certificate", href: "/dashboard/certificate", icon: QrCode },
-  { title: "Referrals", href: "/dashboard/referrals", icon: Users },
-  { title: "Payments", href: "/dashboard/payments", icon: CreditCard },
-  { title: "News", href: "/dashboard/news", icon: Newspaper },
-  { title: "Events", href: "/dashboard/events", icon: Calendar },
-  { title: "Downloads", href: "/dashboard/downloads", icon: Download },
-  { title: "Complaint & Suggestions", href: "/dashboard/support", icon: LifeBuoy },
-  { title: "Settings", href: "/dashboard/settings", icon: Settings },
-];
+import { useTranslations } from "next-intl";
+
+// Note: Moved NAV_ITEMS into the component to use translations
+
 
 export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (val: boolean) => void }) {
   const pathname = usePathname();
+  const t = useTranslations("dashboard.sidebar");
+
+  const NAV_ITEMS = [
+    { title: t("dashboard"), href: "/dashboard", icon: LayoutDashboard },
+    { title: t("profile"), href: "/dashboard/profile", icon: User },
+    { title: t("membership"), href: "/dashboard/membership", icon: Shield },
+    { title: t("digitalCard"), href: "/dashboard/card", icon: Award },
+    { title: t("certificate"), href: "/dashboard/certificate", icon: QrCode },
+    { title: t("referrals"), href: "/dashboard/referrals", icon: Users },
+    { title: t("payments"), href: "/dashboard/payments", icon: CreditCard },
+    { title: t("news"), href: "/dashboard/news", icon: Newspaper },
+    { title: t("events"), href: "/dashboard/events", icon: Calendar },
+    { title: t("downloads"), href: "/dashboard/downloads", icon: Download },
+    { title: t("support"), href: "/dashboard/support", icon: LifeBuoy },
+    { title: t("settings"), href: "/dashboard/settings", icon: Settings },
+  ];
 
   return (
     <>
@@ -78,7 +84,7 @@ export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (va
         <div className="p-4 border-t border-slate-200 dark:border-slate-800">
           <button className="flex items-center gap-3 w-full px-4 py-3 rounded-xl font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors">
             <LogOut className="w-5 h-5" />
-            Logout
+            {t("logout")}
           </button>
         </div>
       </aside>

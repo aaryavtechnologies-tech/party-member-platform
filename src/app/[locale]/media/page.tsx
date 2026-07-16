@@ -1,14 +1,17 @@
 import { InnerPageHeader } from "@/components/layout/InnerPageHeader";
 import { Media } from "@/components/sections/Media";
+import { useTranslations } from "next-intl";
 
 export default function MediaPage() {
+  const tNav = useTranslations("Navigation");
+  const t = useTranslations("mediaPage");
   return (
     <main>
       <InnerPageHeader 
-        title="Media & News" 
-        description="Stay updated with the latest announcements, press releases, and galleries."
+        title={t("title")} 
+        description={t("desc")}
         breadcrumbs={[
-          { label: "Media", href: "/media" }
+          { label: tNav("media"), href: "/media" }
         ]}
       />
       <div className="pt-10">

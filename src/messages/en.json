@@ -1,5 +1,5 @@
 {
-  "navigation": {
+  "Navigation": {
     "home": "Home",
     "about": "About Us",
     "policies": "Policies",
@@ -32,11 +32,174 @@
     "news": "News",
     "press_releases": "Press Releases",
     "photo_gallery": "Photo Gallery",
-    "video_gallery": "Video Gallery"
+    "video_gallery": "Video Gallery",
+    "party_name_full": "Rashtriya Annadata Vikas Party"
   },
   "homepage": {
     "title": "Welcome to Rashtriya Annadata Vikas Party",
-    "subtitle": "Building a stronger, more prosperous nation."
+    "subtitle": "Building a stronger, more prosperous nation.",
+    "hero": {
+      "party_name": "Rashtriya Annadata Vikas Party (RAVP)",
+      "heading_1": "Building a Stronger,",
+      "heading_2": "Developed Nation",
+      "become_member": "Become a Member",
+      "explore_vision": "Explore Our Vision",
+      "scroll": "Scroll"
+    },
+    "about": {
+      "title": "About Us",
+      "journey_title": "Our Journey",
+      "journey_desc": "From a small group of passionate citizens to a nationwide movement, our journey has been driven by a singular focus: the progress and prosperity of our great nation.",
+      "journey_btn": "Read Full Journey",
+      "founder_title": "Founder's Message",
+      "founder_desc": "\"Our strength lies in our unity and our unwavering commitment to the values that define us. Together, we can build a future that honors our past and secures our children's tomorrow.\"",
+      "founder_btn": "Read Message"
+    },
+    "vision": {
+      "title": "Vision 2047",
+      "desc": "A centenary of independence marked by unprecedented growth, equality, and global leadership.",
+      "milestones": {
+        "2025": {
+          "title": "Digital Inclusion",
+          "desc": "100% broadband connectivity in all villages."
+        },
+        "2030": {
+          "title": "Green Economy",
+          "desc": "Achieving 40% non-fossil fuel energy capacity."
+        },
+        "2035": {
+          "title": "Global Manufacturing",
+          "desc": "Becoming the top 3 global manufacturing hubs."
+        },
+        "2047": {
+          "title": "Developed Nation",
+          "desc": "A prosperous, inclusive, and technologically advanced society."
+        }
+      }
+    },
+    "mission": {
+      "title": "Our Mission",
+      "desc": "We are dedicated to building a resilient and self-reliant nation through inclusive development, technological advancement, and the empowerment of every citizen regardless of their background.",
+      "features": {
+        "integrity": {
+          "title": "Integrity First",
+          "desc": "Upholding the highest standards of transparency and honesty in public service."
+        },
+        "service": {
+          "title": "Service to All",
+          "desc": "Ensuring our policies and actions reach the most vulnerable in society."
+        },
+        "development": {
+          "title": "Continuous Development",
+          "desc": "Relentless pursuit of progress through innovation and hard work."
+        }
+      }
+    },
+    "core_values": {
+      "title": "Our Core Values",
+      "Transparency": "Transparency",
+      "Unity": "Unity",
+      "Service": "Service",
+      "Integrity": "Integrity",
+      "Innovation": "Innovation",
+      "Empowerment": "Empowerment"
+    },
+    "resolutions": {
+      "title": "Our 25 National Resolutions",
+      "desc": "The 25 pillars of our commitment to building a completely developed nation by 2047.",
+      "view_all": "View All 25 Resolutions",
+      "items": {
+        "1": { "title": "Universal Healthcare", "desc": "Top-tier medical facilities in every taluka." },
+        "2": { "title": "Quality Education", "desc": "Modernizing schools with digital infrastructure." },
+        "3": { "title": "Farmer Empowerment", "desc": "Fair prices and modern tools for agriculture." },
+        "4": { "title": "Women Safety", "desc": "Strict policies and support systems nationwide." },
+        "5": { "title": "Youth Employment", "desc": "Creating 10 million jobs in emerging sectors." },
+        "6": { "title": "Green Energy", "desc": "50% power grid to renewables by 2030." },
+        "7": { "title": "Digital India", "desc": "100% broadband connectivity in rural areas." },
+        "8": { "title": "Water Security", "desc": "Clean drinking water for every household." },
+        "9": { "title": "Infrastructure", "desc": "World-class roads and bullet trains." },
+        "10": { "title": "Global Economy", "desc": "Top 3 global manufacturing hubs." }
+      }
+    },
+    "policies": {
+      "title": "Policy Highlights",
+      "desc": "Comprehensive frameworks designed to uplift every sector of our society.",
+      "support_framework": "Comprehensive Support Framework",
+      "dbt": "Direct Benefits Transfer",
+      "localized": "Localized Implementation",
+      "read_full": "Read Full Policy",
+      "items": {
+        "Farmer Policy": "Farmer Policy",
+        "Empowering agriculture and rural development.": "Empowering agriculture and rural development.",
+        "Youth Policy": "Youth Policy",
+        "Creating opportunities for the next generation.": "Creating opportunities for the next generation.",
+        "Women Policy": "Women Policy",
+        "Ensuring equality and empowerment.": "Ensuring equality and empowerment.",
+        "Education Policy": "Education Policy",
+        "Quality education for every citizen.": "Quality education for every citizen.",
+        "Health Policy": "Health Policy",
+        "Accessible healthcare facilities nationwide.": "Accessible healthcare facilities nationwide.",
+        "Environment Policy": "Environment Policy",
+        "Sustainable growth and green initiatives.": "Sustainable growth and green initiatives."
+      }
+    },
+    "stats": {
+      "Members": "Members",
+      "Volunteers": "Volunteers",
+      "Districts": "Districts",
+      "Villages": "Villages",
+      "Campaigns": "Campaigns"
+    },
+    "organization": {
+      "title": "Organizational Structure",
+      "desc": "A robust, democratic, and deeply connected structure reaching every corner of the nation.",
+      "levels": {
+        "1": { "title": "National Committee", "count": "Top Leadership", "desc": "Setting the vision and national agenda." },
+        "2": { "title": "State Committees", "count": "29 States", "desc": "Executing strategies at the state level." },
+        "3": { "title": "District Units", "count": "750+ Districts", "desc": "Coordinating regional development." },
+        "4": { "title": "Taluka/Block Units", "count": "5000+ Blocks", "desc": "Empowering local leadership." },
+        "5": { "title": "Village Committees", "count": "600,000+ Villages", "desc": "The grassroots foundation of our movement." }
+      }
+    },
+    "membershipCTA": {
+      "tag": "Join 1.5 Million+ Members",
+      "title": "Be a Part of the",
+      "title_highlight": "Change",
+      "desc": "Join millions of citizens working together to build a stronger, more prosperous nation. Your voice and your action matters.",
+      "register": "Register Now",
+      "learn_more": "Learn More",
+      "benefits": {
+        "id": "Digital ID Card",
+        "leadership": "Leadership Roles",
+        "volunteer": "Volunteer Network",
+        "policy": "Policy Discussions"
+      }
+    },
+    "media": {
+      "title": "Latest Media & Updates",
+      "desc": "Stay informed with our latest news, press releases, and galleries.",
+      "photos": "Photos",
+      "videos": "Videos",
+      "featured_badge": "Featured Article",
+      "featured_title": "How the new education policy is shaping the future of young minds.",
+      "featured_meta": "Oct 05, 2024 • 5 min read",
+      "read_article": "Read Full Article",
+      "read_more": "Read More",
+      "view_all": "View All News & Updates",
+      "news": {
+        "1": { "type": "Press Release", "date": "Oct 12, 2024", "title": "National Committee announces new rural development initiative." },
+        "2": { "type": "News", "date": "Oct 10, 2024", "title": "Millions gather for the historic unified sankalp rally in capital." }
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "items": {
+        "0": { "question": "How can I join the organization?", "answer": "You can join by clicking on the 'Become Member' button and filling out the registration form." },
+        "1": { "question": "Are there any membership fees?", "answer": "Basic membership is free for all citizens who share our vision." },
+        "2": { "question": "How can I volunteer in my district?", "answer": "Once registered, you will be assigned to your local district committee based on your pin code." },
+        "3": { "question": "What is Vision 2047?", "answer": "Vision 2047 is our comprehensive roadmap to make India a developed nation by the 100th year of independence." }
+      }
+    }
   },
   "forms": {
     "submit": "Submit",
@@ -46,5 +209,248 @@
   "admin": {
     "dashboard": "Dashboard",
     "users": "Users"
+  },
+  "footer": {
+    "get_in_touch": "Get in Touch",
+    "get_in_touch_desc": "We are here to listen. Whether you have a suggestion, a grievance, or simply want to volunteer, reach out to us.",
+    "hq": "National Headquarters",
+    "hq_address": "123 Democracy Avenue, New Delhi, India 110001",
+    "toll_free": "Toll-Free Number",
+    "email_support": "Email Support",
+    "send_message": "Send a Message",
+    "form": {
+      "name": "Full Name",
+      "mobile": "Mobile Number",
+      "email": "Email Address",
+      "subject": "Subject",
+      "message": "Your Message",
+      "submit": "Send Message"
+    },
+    "desc": "Building a stronger, more prosperous nation through unity, transparency, and relentless development.",
+    "quick_links": "Quick Links",
+    "legal": "Legal",
+    "our_policies": "Our Policies",
+    "organization": "Organization",
+    "latest_news": "Latest News",
+    "faq": "FAQ",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "cookies": "Cookie Policy",
+    "sitemap": "Sitemap"
+  },
+  "aboutUs": {
+    "title": "About Us",
+    "desc": "Learn about our history, our vision for a developed nation, and the core values that drive our movement forward.",
+    "journey": {
+      "title": "Our Journey",
+      "desc": "A timeline of our struggle, triumphs, and unwavering dedication to the people.",
+      "history": "A History of Service",
+      "history_desc": "From grassroots movements to national leadership, our journey has always been powered by the people.",
+      "history_placeholder": "Detailed historical timeline and interactive journey map will be rendered here, highlighting key milestones, election victories, and major policy implementations over the decades."
+    },
+    "founder_message": {
+      "title": "Founder's Message",
+      "desc": "A direct address from our leadership on the future of our nation.",
+      "heading": "A Pledge to the Nation",
+      "p1": "\"When we began this journey, it was with a singular vision: to see a prosperous, united, and dominant nation. Today, that vision is closer than ever, but the final leap requires absolute dedication.\"",
+      "p2": "\"We do not promise miracles. We promise hard work, transparent governance, and policies that put the citizen first. Our strength is not in our leaders, but in our millions of dedicated workers and volunteers across the country.\"",
+      "signature": "- Party President"
+    },
+    "resolutions": {
+      "title": "25 Resolutions",
+      "desc": "Our comprehensive 25-point agenda to secure, develop, and elevate the nation on the global stage."
+    },
+    "vision_2047": {
+      "title": "Vision 2047",
+      "desc": "Our comprehensive roadmap to transforming India into a developed nation by our 100th year of independence.",
+      "p1": "Vision 2047 is not just a document; it is a solemn pledge to the people of this great nation. By the 100th anniversary of our independence, we envision a country that leads the world in innovation, sustainability, and human development.",
+      "p2": "Through robust infrastructure development, deep investments in our youth, and a relentless commitment to transparent governance, we are laying the foundation for a golden era. This roadmap touches every sector—from agriculture and MSMEs to space exploration and global diplomacy."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "desc": "Empowering every citizen through equitable growth, uncompromising security, and technological advancement.",
+      "action_plan": "Action Plan & Execution",
+      "p1": "Our mission goes beyond promises. We operate on strict, measurable action plans designed to create immediate and long-term impact. We believe that true development is visible, accessible, and measurable at the grassroots level.",
+      "li1_strong": "Zero Tolerance for Corruption:",
+      "li1": " Implementing absolute digital transparency in all government contracts and public spending.",
+      "li2_strong": "Last-Mile Delivery:",
+      "li2": " Ensuring that welfare schemes reach the most vulnerable citizens without bureaucratic friction.",
+      "li3_strong": "Economic Sovereignty:",
+      "li3": " Boosting local manufacturing to reduce import dependency and create millions of jobs."
+    },
+    "core_values": {
+      "title": "Core Values",
+      "desc": "The foundational principles that guide every decision, policy, and action we take."
+    },
+    "objectives": {
+      "title": "Our Objectives",
+      "desc": "Clear, measurable targets for national development.",
+      "objective": "Objective {num}",
+      "list": {
+        "0": "Eradicate absolute poverty by 2030",
+        "1": "100% literacy rate across all states",
+        "2": "Universal healthcare coverage",
+        "3": "Net-zero carbon emissions by 2070",
+        "4": "Self-reliance in defense manufacturing",
+        "5": "Digital infrastructure in every village"
+      }
+    }
+  },
+  "policiesPage": {
+    "title": "National Policies",
+    "desc": "Comprehensive frameworks designed to foster growth, ensure equity, and protect our future.",
+    "subpages": {
+      "farmer": "Farmer Welfare Policy",
+      "youth": "Youth Empowerment Policy",
+      "women": "Women Empowerment Policy",
+      "education": "Education Policy",
+      "health": "Healthcare Policy",
+      "environment": "Environment Policy",
+      "rural_development": "Rural Development Policy",
+      "business_msme": "Business & MSME Policy",
+      "content": "Detailed policy documentation will be published here soon."
+    }
+  },
+  "organizationPage": {
+    "title": "Our Organization",
+    "desc": "A robust, democratic, and deeply connected structure reaching every corner of the nation.",
+    "structure": {
+      "title": "Organizational Structure",
+      "desc": "How we operate from the grassroots village committees up to the national leadership."
+    },
+    "subpages": {
+      "national": "National Team",
+      "state": "State Team",
+      "district": "District Team",
+      "taluka": "Taluka Team",
+      "village": "Village Team",
+      "content": "Detailed team structure and members will be updated here."
+    }
+  },
+  "MembershipPage": {
+    "title": "Membership",
+    "desc": "Join millions of citizens working together to build a stronger, developed nation."
+  },
+  "Membership": {
+    "title": "Membership Plans",
+    "slogan1": "Join the Movement",
+    "slogan2": "Choose the membership that best fits your commitment.",
+    "commitment": "We are committed to building a transparent and democratic organization.",
+    "Primary Member": "Primary Member",
+    "Price Free": "Free",
+    "Free Registration": "Free Registration",
+    "Unique Member ID": "Unique Member ID",
+    "QR Code": "QR Code Profile",
+    "Dashboard": "Member Dashboard",
+    "Digital Membership Card": "Digital Membership Card",
+    "Lifetime Primary Member": "Lifetime Primary Member",
+    "Price 100": "₹100",
+    "Lifetime Membership": "Lifetime Membership",
+    "New Membership Card": "New Membership Card",
+    "Certificate": "Membership Certificate",
+    "Upgrade Button": "Upgrade",
+    "Upgrade Only": "Requires Primary Membership",
+    "Lifetime Active Member": "Lifetime Active Member",
+    "Price 1000": "₹1000",
+    "Active Membership": "Active Membership",
+    "Organization Eligibility": "Eligible for Organization Roles",
+    "Leadership Eligibility": "Eligible for Leadership Roles",
+    "Premium Membership Card": "Premium Membership Card",
+    "Premium Certificate": "Premium Certificate"
+  },
+  "Referral": {
+    "title": "Refer & Grow",
+    "description": "Invite others to join the party and grow our strength. Track your referrals on your dashboard.",
+    "Total Referred Members": "Total Referred Members",
+    "Active Members": "Active Members",
+    "Lifetime Active Members": "Lifetime Active Members"
+  },
+  "mediaPage": {
+    "title": "Media & News",
+    "desc": "Stay updated with the latest announcements, press releases, and galleries.",
+    "subpages": {
+      "news": {
+        "title": "News & Updates",
+        "desc": "The latest news, announcements, and coverage from our initiatives nationwide.",
+        "content": "News archive will be displayed here."
+      },
+      "photo": {
+        "title": "Photo Gallery",
+        "desc": "Visual highlights from our campaigns, events, and community service.",
+        "content": "Photo masonry grid will be displayed here."
+      },
+      "video": {
+        "title": "Video Gallery",
+        "desc": "Watch our latest speeches, event coverage, and documentary shorts.",
+        "content": "Video gallery will be displayed here."
+      },
+      "press": {
+        "title": "Press Releases",
+        "desc": "Official statements and press releases from the national committee.",
+        "content": "Press releases will be displayed here."
+      }
+    }
+  },
+  "contactPage": {
+    "title": "Contact Us",
+    "desc": "We are here to listen. Reach out to our national headquarters or find your local representatives.",
+    "heading": "Get in Touch",
+    "info": "For direct inquiries, please use the contact form located in the footer of this website. Our dedicated support team responds to all queries within 48 hours.",
+    "hq": {
+      "title": "Headquarters",
+      "address": "123 National Assembly Marg<br />New Delhi, India 110001"
+    },
+    "helpline": {
+      "title": "Toll-Free Helpline",
+      "number": "1800-XXX-XXXX<br />Available 8AM - 8PM"
+    },
+    "media": {
+      "title": "Media Enquiries",
+      "emails": "media@organization.in<br />press@organization.in"
+    }
+  },
+  "dashboard": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "profile": "My Profile",
+      "membership": "Membership",
+      "digitalCard": "Digital Card",
+      "certificate": "Certificate",
+      "referrals": "Referrals",
+      "payments": "Payments",
+      "news": "News",
+      "events": "Events",
+      "downloads": "Downloads",
+      "support": "Complaint & Suggestions",
+      "settings": "Settings",
+      "logout": "Logout"
+    },
+    "topbar": {
+      "search": "Search news, events, payments..."
+    },
+    "home": {
+      "goodMorning": "Good Morning,",
+      "welcomeBack": "Welcome back, {name}!",
+      "status": "Membership Status",
+      "statusActive": "Active",
+      "totalReferrals": "Total Referrals",
+      "referralsTrend": "+{count} this month",
+      "totalPayments": "Total Payments",
+      "upcomingEvents": "Upcoming Events",
+      "recentActivity": "Recent Activity",
+      "viewAll": "View All",
+      "quickActions": "Quick Actions",
+      "upgradeMembership": "Upgrade Membership",
+      "upgradeMembershipDesc": "Become a Lifetime Active Member",
+      "digitalCardTitle": "Digital Card",
+      "digitalCardDesc": "View or download",
+      "inviteFriends": "Invite Friends",
+      "inviteFriendsDesc": "Share your referral code",
+      "activities": {
+        "login": "Logged in from {device}",
+        "download": "Downloaded Membership Card",
+        "upgrade": "Upgraded to Lifetime Primary"
+      }
+    }
   }
 }

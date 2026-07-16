@@ -1,14 +1,17 @@
 "use client";
 import { motion } from "framer-motion";
 import { Network, ArrowDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function Organization() {
+  const t = useTranslations("homepage.organization");
+  
   const levels = [
-    { title: "National Committee", count: "Top Leadership", desc: "Setting the vision and national agenda.", delay: 0.1 },
-    { title: "State Committees", count: "29 States", desc: "Executing strategies at the state level.", delay: 0.2 },
-    { title: "District Units", count: "750+ Districts", desc: "Coordinating regional development.", delay: 0.3 },
-    { title: "Taluka/Block Units", count: "5000+ Blocks", desc: "Empowering local leadership.", delay: 0.4 },
-    { title: "Village Committees", count: "600,000+ Villages", desc: "The grassroots foundation of our movement.", delay: 0.5 },
+    { title: t("levels.1.title"), count: t("levels.1.count"), desc: t("levels.1.desc"), delay: 0.1 },
+    { title: t("levels.2.title"), count: t("levels.2.count"), desc: t("levels.2.desc"), delay: 0.2 },
+    { title: t("levels.3.title"), count: t("levels.3.count"), desc: t("levels.3.desc"), delay: 0.3 },
+    { title: t("levels.4.title"), count: t("levels.4.count"), desc: t("levels.4.desc"), delay: 0.4 },
+    { title: t("levels.5.title"), count: t("levels.5.count"), desc: t("levels.5.desc"), delay: 0.5 },
   ];
 
   return (
@@ -21,7 +24,7 @@ export function Organization() {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-bold text-primary mb-6"
           >
-            Organizational Structure
+            {t("title")}
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -30,7 +33,7 @@ export function Organization() {
             transition={{ delay: 0.1 }}
             className="text-lg text-slate-600 dark:text-slate-400"
           >
-            A robust, democratic, and deeply connected structure reaching every corner of the nation.
+            {t("desc")}
           </motion.p>
         </div>
 

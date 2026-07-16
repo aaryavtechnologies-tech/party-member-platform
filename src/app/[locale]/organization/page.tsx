@@ -1,14 +1,17 @@
 import { InnerPageHeader } from "@/components/layout/InnerPageHeader";
 import { Organization as OrgSection } from "@/components/sections/Organization";
+import { useTranslations } from "next-intl";
 
 export default function OrganizationPage() {
+  const tNav = useTranslations("Navigation");
+  const t = useTranslations("organizationPage");
   return (
     <main>
       <InnerPageHeader 
-        title="Our Organization" 
-        description="A robust, democratic, and deeply connected structure reaching every corner of the nation."
+        title={t("title")} 
+        description={t("desc")}
         breadcrumbs={[
-          { label: "Organization", href: "/organization" }
+          { label: tNav("organization"), href: "/organization" }
         ]}
       />
       <div className="pt-10">
