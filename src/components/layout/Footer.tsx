@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from "@/i18n/routing";
-import { MapPin, Mail, Phone } from "lucide-react";
+import { MapPin, Mail, Phone, Lock } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -214,10 +214,17 @@ export function Footer() {
         
         <div className="pt-8 border-t border-slate-800 text-center flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm">
-            {t("copyright").replace("{year}", new Date().getFullYear().toString())}
+            {t("copyright", { year: new Date().getFullYear() })}
           </p>
-          <div className="flex gap-4 text-sm">
+          <div className="flex items-center gap-6 text-sm">
             <span className="flex items-center"><MapPin size={14} className="mr-1"/> India</span>
+            <Link
+              href="/admin/dashboard"
+              className="flex items-center gap-1.5 text-slate-600 hover:text-slate-400 transition-colors text-xs"
+            >
+              <Lock size={11} />
+              Admin Login
+            </Link>
           </div>
         </div>
       </div>

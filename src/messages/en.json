@@ -168,18 +168,18 @@
       "localized": "Localized Implementation",
       "read_full": "Read Full Policy",
       "items": {
-        "Farmer Policy": "Farmer Policy",
-        "Empowering agriculture and rural development.": "Empowering agriculture and rural development.",
-        "Youth Policy": "Youth Policy",
-        "Creating opportunities for the next generation.": "Creating opportunities for the next generation.",
-        "Women Policy": "Women Policy",
-        "Ensuring equality and empowerment.": "Ensuring equality and empowerment.",
-        "Education Policy": "Education Policy",
-        "Quality education for every citizen.": "Quality education for every citizen.",
-        "Health Policy": "Health Policy",
-        "Accessible healthcare facilities nationwide.": "Accessible healthcare facilities nationwide.",
-        "Environment Policy": "Environment Policy",
-        "Sustainable growth and green initiatives.": "Sustainable growth and green initiatives."
+        "farmer_title": "Farmer Policy",
+        "farmer_desc": "Empowering agriculture and rural development",
+        "youth_title": "Youth Policy",
+        "youth_desc": "Creating opportunities for the next generation",
+        "women_title": "Women Policy",
+        "women_desc": "Ensuring equality and empowerment",
+        "education_title": "Education Policy",
+        "education_desc": "Quality education for every citizen",
+        "health_title": "Health Policy",
+        "health_desc": "Accessible healthcare facilities nationwide",
+        "environment_title": "Environment Policy",
+        "environment_desc": "Sustainable growth and green initiatives"
       }
     },
     "stats": {
@@ -315,7 +315,8 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "cookies": "Cookie Policy",
-    "sitemap": "Sitemap"
+    "sitemap": "Sitemap",
+    "copyright": "© {year} Rashtriya Annadata Vikas Party (RAVP). All rights reserved."
   },
   "aboutUs": {
     "title": "About Us",

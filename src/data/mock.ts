@@ -28,12 +28,12 @@ export const coreValues: CoreValue[] = [
 ];
 
 export const policies: Policy[] = [
-  { id: '1', titleKey: 'Farmer Policy', descriptionKey: 'Empowering agriculture and rural development.', icon: 'Wheat', href: '/policies/farmer' },
-  { id: '2', titleKey: 'Youth Policy', descriptionKey: 'Creating opportunities for the next generation.', icon: 'GraduationCap', href: '/policies/youth' },
-  { id: '3', titleKey: 'Women Policy', descriptionKey: 'Ensuring equality and empowerment.', icon: 'UserCircle', href: '/policies/women' },
-  { id: '4', titleKey: 'Education Policy', descriptionKey: 'Quality education for every citizen.', icon: 'BookOpen', href: '/policies/education' },
-  { id: '5', titleKey: 'Health Policy', descriptionKey: 'Accessible healthcare facilities nationwide.', icon: 'Activity', href: '/policies/health' },
-  { id: '6', titleKey: 'Environment Policy', descriptionKey: 'Sustainable growth and green initiatives.', icon: 'Leaf', href: '/policies/environment' },
+  { id: '1', titleKey: 'farmer_title', descriptionKey: 'farmer_desc', icon: 'Wheat', href: '/policies/farmer' },
+  { id: '2', titleKey: 'youth_title', descriptionKey: 'youth_desc', icon: 'GraduationCap', href: '/policies/youth' },
+  { id: '3', titleKey: 'women_title', descriptionKey: 'women_desc', icon: 'UserCircle', href: '/policies/women' },
+  { id: '4', titleKey: 'education_title', descriptionKey: 'education_desc', icon: 'BookOpen', href: '/policies/education' },
+  { id: '5', titleKey: 'health_title', descriptionKey: 'health_desc', icon: 'Activity', href: '/policies/health' },
+  { id: '6', titleKey: 'environment_title', descriptionKey: 'environment_desc', icon: 'Leaf', href: '/policies/environment' },
 ];
 
 export const faqs = [

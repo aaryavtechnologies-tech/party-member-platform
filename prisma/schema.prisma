@@ -50,6 +50,7 @@ model Account {
   providerId            String
   accountId             String
   provider              String
+  password              String?  // hashed password for credential provider
   accessToken           String?
   refreshToken          String?
   accessTokenExpiresAt  DateTime?

@@ -168,18 +168,18 @@
       "localized": "સ્થાનિક અમલીકરણ",
       "read_full": "સંપૂર્ણ નીતિ વાંચો",
       "items": {
-        "Farmer Policy": "ખેડૂત નીતિ",
-        "Empowering agriculture and rural development.": "કૃષિ અને ગ્રામીણ વિકાસનું સશક્તિકરણ.",
-        "Youth Policy": "યુવા નીતિ",
-        "Creating opportunities for the next generation.": "આગામી પેઢી માટે તકોનું સર્જન.",
-        "Women Policy": "મહિલા નીતિ",
-        "Ensuring equality and empowerment.": "સમાનતા અને સશક્તિકરણની ખાતરી.",
-        "Education Policy": "શિક્ષણ નીતિ",
-        "Quality education for every citizen.": "દરેક નાગરિક માટે ગુણવત્તાયુક્ત શિક્ષણ.",
-        "Health Policy": "આરોગ્ય નીતિ",
-        "Accessible healthcare facilities nationwide.": "દેશભરમાં સુલભ આરોગ્ય સુવિધાઓ.",
-        "Environment Policy": "પર્યાવરણ નીતિ",
-        "Sustainable growth and green initiatives.": "ટકાઉ વિકાસ અને ગ્રીન પહેલ."
+        "farmer_title": "ખેડૂત નીતિ",
+        "farmer_desc": "કૃષિ અને ગ્રામ વિકાસ",
+        "youth_title": "યુવા નીતિ",
+        "youth_desc": "નવી પેઢી માટે તકો",
+        "women_title": "મહિલા નીતિ",
+        "women_desc": "સમાનતા અને સશક્તિકરણ",
+        "education_title": "શિક્ષણ નીતિ",
+        "education_desc": "દરેક નાગરિક માટે ગુણવત્તાયુક્ત શિક્ષણ",
+        "health_title": "આરોગ્ય નીતિ",
+        "health_desc": "સ્વાસ્થ્ય સુવિધાઓ સૌ માટે",
+        "environment_title": "પર્યાવરણ નીતિ",
+        "environment_desc": "ટકાઉ વિકાસ અને હરિત ઉત્ક્રાંતિ"
       }
     },
     "stats": {
@@ -315,7 +315,8 @@
     "privacy": "ગોપનીયતા નીતિ",
     "terms": "સેવાની શરતો",
     "cookies": "કૂકી નીતિ",
-    "sitemap": "સાઇટમેપ"
+    "sitemap": "સાઇટમેપ",
+    "copyright": "© {year} રાષ્ટ્રીય અન્નદાતા વિકાસ પાર્ટી (RAVP). સર્વ હકો સુરક્ષિત."
   },
   "aboutUs": {
     "title": "અમારા વિશે",

@@ -8,10 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { 
   User, Phone, Mail, Calendar, MapPin, 
-  CreditCard, ShieldCheck, ChevronRight, ChevronLeft, CheckCircle2, Loader2 
+  CreditCard, ShieldCheck, ChevronRight, ChevronLeft, CheckCircle2, Loader2, RefreshCw 
 } from "lucide-react";
 import { registerMember } from "@/actions/membership-actions";
 import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
 
 // Strict Zod Validation Schema
 const formSchema = z.object({
@@ -51,7 +52,10 @@ const STEPS = [
 export function RegistrationForm() {
   const [step, setStep] = useState(1);
   const [isOtpSent, setIsOtpSent] = useState(false);
+  const [isOtpVerified, setIsOtpVerified] = useState(false);
   const [otp, setOtp] = useState("");
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMemberId, setSuccessMemberId] = useState<string | null>(null);
 
@@ -85,13 +89,53 @@ export function RegistrationForm() {
     } else if (step === 2) {
       isValid = await form.trigger(["state", "district", "taluka", "village", "fullAddress", "pincode"]);
     } else if (step === 3) {
-      // If OTP is verified, move to step 4
-      isValid = true; // Bypassing actual OTP logic for UI purposes
+      if (!isOtpVerified) {
+        toast.error("Please verify your email OTP before proceeding.");
+        return;
+      }
+      isValid = true;
     }
 
     if (isValid) {
       setStep((prev) => Math.min(prev + 1, 4));
       window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const handleSendOtp = async () => {
+    const email = form.getValues("email");
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast.error("Please enter a valid email address in Step 1 first.");
+      return;
+    }
+    setIsSendingOtp(true);
+    try {
+      await authClient.emailOtp.sendVerificationOtp({ email, type: "email-verification" });
+      setIsOtpSent(true);
+      setOtp("");
+      toast.success(`OTP sent to ${email}`);
+    } catch (err: any) {
+      toast.error(err?.message || "Failed to send OTP. Please try again.");
+    } finally {
+      setIsSendingOtp(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    const email = form.getValues("email");
+    if (otp.length !== 6) {
+      toast.error("Please enter the 6-digit OTP.");
+      return;
+    }
+    setIsVerifyingOtp(true);
+    try {
+      await authClient.emailOtp.verifyEmail({ email, otp });
+      setIsOtpVerified(true);
+      toast.success("Email verified successfully!");
+    } catch (err: any) {
+      toast.error(err?.message || "Invalid OTP. Please try again.");
+    } finally {
+      setIsVerifyingOtp(false);
     }
   };
 
@@ -101,9 +145,13 @@ export function RegistrationForm() {
   };
 
   const onSubmit = async (data: FormData) => {
+    if (!isOtpVerified) {
+      toast.error("Email OTP verification is required to complete registration.");
+      setStep(3);
+      return;
+    }
     setIsSubmitting(true);
     try {
-      // In a real app, verify OTP here first. For now, directly register.
       const result = await registerMember(data);
       if (result.success && result.memberId) {
         toast.success("Registration Successful!");
@@ -382,35 +430,67 @@ export function RegistrationForm() {
                   <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-[50px] -mr-10 -mt-10" />
                   
                   <div className="relative z-10 text-center">
-                    <Mail className="w-12 h-12 text-primary mx-auto mb-4" />
-                    <h3 className="font-bold text-2xl text-slate-900 dark:text-white mb-2">Verify Your Email</h3>
-                    <p className="text-slate-600 dark:text-slate-400 mb-6">
-                      A one-time password will be sent to <br/>
-                      <strong className="text-slate-900 dark:text-white border-b border-primary/30 pb-1">{form.getValues("email")}</strong>
-                    </p>
-                    
-                    {!isOtpSent ? (
-                      <Button 
-                        type="button" 
-                        onClick={() => setIsOtpSent(true)}
-                        className="w-full sm:w-auto h-14 px-8 rounded-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 font-bold text-lg"
-                      >
-                        Send OTP Code
-                      </Button>
-                    ) : (
-                      <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4">
-                        <div className="flex gap-4 max-w-sm mx-auto">
-                          <input 
-                            type="text" 
-                            value={otp}
-                            onChange={(e) => setOtp(e.target.value)}
-                            className="h-14 w-full text-center text-2xl font-bold tracking-[0.5em] rounded-2xl border-2 border-primary/50 bg-white dark:bg-slate-900 focus:ring-4 focus:ring-primary/20 focus:border-primary outline-none transition-all" 
-                            placeholder="------" 
-                            maxLength={6}
-                          />
-                        </div>
-                        <p className="text-sm text-slate-500">Didn't receive it? <button type="button" className="text-primary font-bold hover:underline">Resend OTP</button></p>
+
+                    {/* Verified state */}
+                    {isOtpVerified ? (
+                      <div className="flex flex-col items-center gap-3">
+                        <CheckCircle2 className="w-16 h-16 text-green-500" />
+                        <h3 className="font-bold text-2xl text-slate-900 dark:text-white">Email Verified!</h3>
+                        <p className="text-slate-500">Your email <strong>{form.getValues("email")}</strong> has been successfully verified.</p>
+                        <p className="text-sm text-green-600 font-semibold">You may now proceed to the next step.</p>
                       </div>
+                    ) : (
+                      <>
+                        <Mail className="w-12 h-12 text-primary mx-auto mb-4" />
+                        <h3 className="font-bold text-2xl text-slate-900 dark:text-white mb-2">Verify Your Email</h3>
+                        <p className="text-slate-600 dark:text-slate-400 mb-6">
+                          A one-time password will be sent to <br/>
+                          <strong className="text-slate-900 dark:text-white border-b border-primary/30 pb-1">{form.getValues("email")}</strong>
+                        </p>
+                        
+                        {!isOtpSent ? (
+                          <Button 
+                            type="button" 
+                            onClick={handleSendOtp}
+                            disabled={isSendingOtp}
+                            className="w-full sm:w-auto h-14 px-8 rounded-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 font-bold text-lg"
+                          >
+                            {isSendingOtp ? <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Sending...</> : "Send OTP Code"}
+                          </Button>
+                        ) : (
+                          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4">
+                            <div className="flex gap-4 max-w-sm mx-auto">
+                              <input 
+                                type="text" 
+                                value={otp}
+                                onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                                className="h-14 w-full text-center text-2xl font-bold tracking-[0.5em] rounded-2xl border-2 border-primary/50 bg-white dark:bg-slate-900 focus:ring-4 focus:ring-primary/20 focus:border-primary outline-none transition-all" 
+                                placeholder="------" 
+                                maxLength={6}
+                              />
+                            </div>
+                            <Button
+                              type="button"
+                              onClick={handleVerifyOtp}
+                              disabled={isVerifyingOtp || otp.length !== 6}
+                              className="w-full sm:w-auto h-12 px-8 rounded-full bg-primary text-slate-950 font-bold hover:bg-primary/90"
+                            >
+                              {isVerifyingOtp ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Verifying...</> : "Verify OTP"}
+                            </Button>
+                            <p className="text-sm text-slate-500">
+                              Didn't receive it?{" "}
+                              <button 
+                                type="button" 
+                                onClick={handleSendOtp}
+                                disabled={isSendingOtp}
+                                className="text-primary font-bold hover:underline inline-flex items-center gap-1"
+                              >
+                                <RefreshCw className="w-3 h-3" /> Resend OTP
+                              </button>
+                            </p>
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>

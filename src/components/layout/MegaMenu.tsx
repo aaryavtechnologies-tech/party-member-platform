@@ -69,11 +69,12 @@ export function MegaMenu() {
     <NavigationMenu className="hidden lg:flex">
       <NavigationMenuList>
         <NavigationMenuItem>
-          <Link href="/" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              {t("home")}
-            </NavigationMenuLink>
-          </Link>
+          <NavigationMenuLink
+            render={<Link href="/" />}
+            className={navigationMenuTriggerStyle()}
+          >
+            {t("home")}
+          </NavigationMenuLink>
         </NavigationMenuItem>
 
         <NavigationMenuItem>
@@ -150,20 +151,18 @@ export function MegaMenu() {
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a"> & { href: string; title: string }
->(({ className, title, href, ...props }, ref) => {
+>(({ className, title, href }, ref) => {
   return (
     <li>
-      <Link href={href as any} legacyBehavior passHref>
-        <NavigationMenuLink
-          className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-100 hover:text-primary focus:bg-slate-100 focus:text-primary dark:hover:bg-slate-800 dark:focus:bg-slate-800",
-            className
-          )}
-          {...props}
-        >
-          <div className="text-sm font-medium leading-none">{title}</div>
-        </NavigationMenuLink>
-      </Link>
+      <NavigationMenuLink
+        render={<Link href={href as any} />}
+        className={cn(
+          "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-100 hover:text-primary focus:bg-slate-100 focus:text-primary dark:hover:bg-slate-800 dark:focus:bg-slate-800",
+          className
+        )}
+      >
+        <div className="text-sm font-medium leading-none">{title}</div>
+      </NavigationMenuLink>
     </li>
   );
 });

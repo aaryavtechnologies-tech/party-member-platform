@@ -5,6 +5,7 @@ import { Resend } from "resend";
 import { emailOTP } from "better-auth/plugins";
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
+const FROM_EMAIL = process.env.EMAIL_FROM || "RAVP <noreply@playvia.in>";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -14,14 +15,18 @@ export const auth = betterAuth({
     enabled: true,
   },
   emailVerification: {
-    sendOnSignUp: true,
-    sendVerificationEmail: async ({ user, url, token }) => {
+    sendOnSignUp: false,
+    sendVerificationEmail: async ({ user, url }) => {
       await resend.emails.send({
-        from: "Acme <onboarding@resend.dev>",
+        from: FROM_EMAIL,
         to: user.email,
-        subject: "Verify your email address",
-        html: `<p>Click the link below to verify your email address:</p>
-               <a href="${url}">Verify Email</a>`,
+        subject: "Verify your email address – RAVP",
+        html: `<div style="font-family:sans-serif;max-width:480px;margin:auto">
+          <h2 style="color:#166534">Rashtriya Annadata Vikas Party</h2>
+          <p>Click the link below to verify your email address:</p>
+          <a href="${url}" style="display:inline-block;background:#166534;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold">Verify Email</a>
+          <p style="color:#6b7280;font-size:12px;margin-top:24px">If you did not register on RAVP, please ignore this email.</p>
+        </div>`,
       });
     },
   },
@@ -29,13 +34,19 @@ export const auth = betterAuth({
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
         await resend.emails.send({
-          from: "Party Platform <onboarding@resend.dev>",
+          from: FROM_EMAIL,
           to: email,
-          subject: "Your OTP Verification Code",
-          html: `<p>Your one-time password is: <strong>${otp}</strong></p>
-                 <p>It will expire in 5 minutes.</p>`,
+          subject: "Your OTP Verification Code – RAVP",
+          html: `<div style="font-family:sans-serif;max-width:480px;margin:auto">
+            <h2 style="color:#166534">Rashtriya Annadata Vikas Party</h2>
+            <p>Your one-time password (OTP) for verification is:</p>
+            <div style="font-size:36px;font-weight:bold;letter-spacing:8px;color:#166534;background:#f0fdf4;padding:20px;border-radius:8px;text-align:center;margin:16px 0">${otp}</div>
+            <p>This OTP will expire in <strong>5 minutes</strong>.</p>
+            <p style="color:#6b7280;font-size:12px;margin-top:24px">If you did not request this, please ignore this email.</p>
+          </div>`,
         });
       },
     }),
   ],
 });
+
