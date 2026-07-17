@@ -182,30 +182,32 @@ export function Footer() {
             </Link>
           </div>
           <div>
-            <h4 className="text-white font-semibold mb-4 text-lg">{tNav("about")}</h4>
+            <h4 className="text-white font-semibold mb-4 text-lg">{t("quick_links")} 1</h4>
             <ul className="space-y-3">
-              <li><Link href="/about/journey" className="hover:text-primary transition-colors">{tNav("our_journey")}</Link></li>
+              <li><Link href="/" className="hover:text-primary transition-colors">{tNav("home")}</Link></li>
+              <li><Link href="/about" className="hover:text-primary transition-colors">{tNav("about")}</Link></li>
               <li><Link href="/about/vision-2047" className="hover:text-primary transition-colors">{tNav("vision_2047")}</Link></li>
-              <li><Link href="/about/25-resolutions" className="hover:text-primary transition-colors">{tNav("resolutions_25")}</Link></li>
-              <li><Link href="/about/mission" className="hover:text-primary transition-colors">{tNav("mission")} & {tNav("core_values")}</Link></li>
+              <li><Link href="/about/mission" className="hover:text-primary transition-colors">{tNav("mission")}</Link></li>
+              <li><Link href="/policies" className="hover:text-primary transition-colors">{tNav("policies")}</Link></li>
             </ul>
           </div>
           <div>
-            <h4 className="text-white font-semibold mb-4 text-lg">{t("quick_links")}</h4>
+            <h4 className="text-white font-semibold mb-4 text-lg">{t("quick_links")} 2</h4>
             <ul className="space-y-3">
-              <li><Link href="/policies" className="hover:text-primary transition-colors">{t("our_policies")}</Link></li>
-              <li><Link href="/organization/structure" className="hover:text-primary transition-colors">{t("organization")}</Link></li>
-              <li><Link href="/media/news" className="hover:text-primary transition-colors">{t("latest_news")}</Link></li>
-              <li><Link href="/faq" className="hover:text-primary transition-colors">{t("faq")}</Link></li>
+              <li><Link href="/membership/register" className="hover:text-primary transition-colors">{tNav("membership")}</Link></li>
+              <li><Link href="/volunteer" className="hover:text-primary transition-colors">{tNav("volunteer")}</Link></li>
+              <li><Link href="/media/news" className="hover:text-primary transition-colors">{tNav("news")}</Link></li>
+              <li><Link href="/media/photo-gallery" className="hover:text-primary transition-colors">{tNav("gallery")}</Link></li>
+              <li><Link href="/contact" className="hover:text-primary transition-colors">{tNav("contact")}</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="text-white font-semibold mb-4 text-lg">{t("legal")}</h4>
             <ul className="space-y-3">
-              <li><Link href="/privacy" className="hover:text-primary transition-colors">{t("privacy")}</Link></li>
-              <li><Link href="/terms" className="hover:text-primary transition-colors">{t("terms")}</Link></li>
-              <li><Link href="/cookies" className="hover:text-primary transition-colors">{t("cookies")}</Link></li>
-              <li><Link href="/sitemap" className="hover:text-primary transition-colors">{t("sitemap")}</Link></li>
+              <li><Link href="/privacy" className="hover:text-primary transition-colors">{tNav("privacy_policy")}</Link></li>
+              <li><Link href="/terms" className="hover:text-primary transition-colors">{tNav("terms_conditions")}</Link></li>
+              <li><Link href="/disclaimer" className="hover:text-primary transition-colors">{tNav("disclaimer")}</Link></li>
+              <li><Link href="/contact/faq" className="hover:text-primary transition-colors">{tNav("faq")}</Link></li>
             </ul>
           </div>
         </div>

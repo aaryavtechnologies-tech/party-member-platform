@@ -33,26 +33,35 @@
     "press_releases": "Press Releases",
     "photo_gallery": "Photo Gallery",
     "video_gallery": "Video Gallery",
-    "party_name_full": "Rashtriya Annadata Vikas Party"
+    "party_name_full": "Rashtriya Annadata Vikas Party",
+    "contact_us": "Contact Us",
+    "faq": "FAQ",
+    "member_registration": "Member Registration",
+    "member_login": "Member Login",
+    "disclaimer": "Disclaimer",
+    "privacy_policy": "Privacy Policy",
+    "terms_conditions": "Terms & Conditions",
+    "volunteer": "Volunteer",
+    "gallery": "Gallery"
   },
   "homepage": {
-    "title": "Welcome to Rashtriya Annadata Vikas Party",
-    "subtitle": "Building a stronger, more prosperous nation.",
+    "title": "A warm welcome to Rashtriya Annadata Vikas Party.",
+    "subtitle": "A national political party dedicated to the honor, rights, and development of India's food providers, hard workers, and common citizens welcomes you warmly.",
     "hero": {
       "party_name": "Rashtriya Annadata Vikas Party (RAVP)",
-      "heading_1": "Building a Stronger,",
-      "heading_2": "Developed Nation",
+      "heading_1": "Farmers Prosper -",
+      "heading_2": "India Prospers",
       "become_member": "Become a Member",
       "explore_vision": "Explore Our Vision",
       "scroll": "Scroll"
     },
     "about": {
       "title": "About Us",
-      "journey_title": "Our Journey",
-      "journey_desc": "From a small group of passionate citizens to a nationwide movement, our journey has been driven by a singular focus: the progress and prosperity of our great nation.",
-      "journey_btn": "Read Full Journey",
-      "founder_title": "Founder's Message",
-      "founder_desc": "\"Our strength lies in our unity and our unwavering commitment to the values that define us. Together, we can build a future that honors our past and secures our children's tomorrow.\"",
+      "journey_title": "Introduction",
+      "journey_desc": "India is an agricultural country. The livelihood of a large population of the country is connected with agriculture, animal husbandry, and rural economy. Yet even today, many farmers have to face difficulties in getting fair compensation for their hard work. There are still many challenges of basic facilities, employment, education, health, and development in rural areas. The purpose of establishing the Rashtriya Annadata Vikas Party is to create such a political alternative which formulates policies keeping the interests of farmers, laborers, youth, women, businessmen, and common citizens at the center and prioritizes transparency, accountability, and development in public life.",
+      "journey_btn": "Read More",
+      "founder_title": "Our Belief",
+      "founder_desc": "\"The development of the country is possible only when the food provider gets respect, the common citizen gets justice, and the youth get opportunities.\"",
       "founder_btn": "Read Message"
     },
     "vision": {
@@ -78,8 +87,8 @@
       }
     },
     "mission": {
-      "title": "Our Mission",
-      "desc": "We are dedicated to building a resilient and self-reliant nation through inclusive development, technological advancement, and the empowerment of every citizen regardless of their background.",
+      "title": "Our Goal",
+      "desc": "To make India a nation where— farmers get fair compensation, every youth gets opportunities, women become safe and self-reliant, trade and industry get a favorable environment, education and health become accessible to all, transparency and accountability in public life increase, and the development gap between village and city decreases.",
       "features": {
         "integrity": {
           "title": "Integrity First",
@@ -96,29 +105,59 @@
       }
     },
     "core_values": {
-      "title": "Our Core Values",
-      "Transparency": "Transparency",
-      "Unity": "Unity",
-      "Service": "Service",
-      "Integrity": "Integrity",
-      "Innovation": "Innovation",
-      "Empowerment": "Empowerment"
+      "title": "Our Commitment",
+      "Transparency": "Transparent Governance",
+      "Unity": "Faith in Democracy",
+      "Service": "Holistic Rural Development",
+      "Integrity": "Farmer and Agriculture",
+      "Innovation": "Quality in Education & Health",
+      "Empowerment": "Women Empowerment"
     },
     "resolutions": {
-      "title": "Our 25 National Resolutions",
-      "desc": "The 25 pillars of our commitment to building a completely developed nation by 2047.",
-      "view_all": "View All 25 Resolutions",
+      "title": "Our Main Issues",
+      "desc": "The key focus areas of the Rashtriya Annadata Vikas Party.",
+      "view_all": "View All Issues",
       "items": {
-        "1": { "title": "Universal Healthcare", "desc": "Top-tier medical facilities in every taluka." },
-        "2": { "title": "Quality Education", "desc": "Modernizing schools with digital infrastructure." },
-        "3": { "title": "Farmer Empowerment", "desc": "Fair prices and modern tools for agriculture." },
-        "4": { "title": "Women Safety", "desc": "Strict policies and support systems nationwide." },
-        "5": { "title": "Youth Employment", "desc": "Creating 10 million jobs in emerging sectors." },
-        "6": { "title": "Green Energy", "desc": "50% power grid to renewables by 2030." },
-        "7": { "title": "Digital India", "desc": "100% broadband connectivity in rural areas." },
-        "8": { "title": "Water Security", "desc": "Clean drinking water for every household." },
-        "9": { "title": "Infrastructure", "desc": "World-class roads and bullet trains." },
-        "10": { "title": "Global Economy", "desc": "Top 3 global manufacturing hubs." }
+        "1": {
+          "title": "Farmer Welfare",
+          "desc": "Fair compensation for farmers' hard work."
+        },
+        "2": {
+          "title": "Water & Irrigation",
+          "desc": "Sufficient water for irrigation."
+        },
+        "3": {
+          "title": "Electricity for Farming",
+          "desc": "Uninterrupted electricity for agriculture."
+        },
+        "4": {
+          "title": "Healthcare",
+          "desc": "Accessible healthcare for everyone."
+        },
+        "5": {
+          "title": "Education",
+          "desc": "Improvement in the quality of education."
+        },
+        "6": {
+          "title": "Employment",
+          "desc": "Opportunities for every youth to progress."
+        },
+        "7": {
+          "title": "Trade & Industry",
+          "desc": "Favorable environment for trade and industry."
+        },
+        "8": {
+          "title": "Environment Protection",
+          "desc": "Protection of the environment."
+        },
+        "9": {
+          "title": "Rural Development",
+          "desc": "Bridging the development gap between villages and cities."
+        },
+        "10": {
+          "title": "Transparent Governance",
+          "desc": "Increasing transparency and accountability in public life."
+        }
       }
     },
     "policies": {
@@ -154,19 +193,39 @@
       "title": "Organizational Structure",
       "desc": "A robust, democratic, and deeply connected structure reaching every corner of the nation.",
       "levels": {
-        "1": { "title": "National Committee", "count": "Top Leadership", "desc": "Setting the vision and national agenda." },
-        "2": { "title": "State Committees", "count": "29 States", "desc": "Executing strategies at the state level." },
-        "3": { "title": "District Units", "count": "750+ Districts", "desc": "Coordinating regional development." },
-        "4": { "title": "Taluka/Block Units", "count": "5000+ Blocks", "desc": "Empowering local leadership." },
-        "5": { "title": "Village Committees", "count": "600,000+ Villages", "desc": "The grassroots foundation of our movement." }
+        "1": {
+          "title": "National Committee",
+          "count": "Top Leadership",
+          "desc": "Setting the vision and national agenda."
+        },
+        "2": {
+          "title": "State Committees",
+          "count": "29 States",
+          "desc": "Executing strategies at the state level."
+        },
+        "3": {
+          "title": "District Units",
+          "count": "750+ Districts",
+          "desc": "Coordinating regional development."
+        },
+        "4": {
+          "title": "Taluka/Block Units",
+          "count": "5000+ Blocks",
+          "desc": "Empowering local leadership."
+        },
+        "5": {
+          "title": "Village Committees",
+          "count": "600,000+ Villages",
+          "desc": "The grassroots foundation of our movement."
+        }
       }
     },
     "membershipCTA": {
-      "tag": "Join 1.5 Million+ Members",
-      "title": "Be a Part of the",
+      "tag": "Our Appeal",
+      "title": "Join the Journey of",
       "title_highlight": "Change",
-      "desc": "Join millions of citizens working together to build a stronger, more prosperous nation. Your voice and your action matters.",
-      "register": "Register Now",
+      "desc": "If you also want to build an India where the food provider gets respect, youth get opportunities, women remain safe, common citizens get justice, and development reaches everyone, then join this campaign of Rashtriya Annadata Vikas Party. Become a member today and participate in the journey of change.",
+      "register": "Become a Member Today",
       "learn_more": "Learn More",
       "benefits": {
         "id": "Digital ID Card",
@@ -187,17 +246,37 @@
       "read_more": "Read More",
       "view_all": "View All News & Updates",
       "news": {
-        "1": { "type": "Press Release", "date": "Oct 12, 2024", "title": "National Committee announces new rural development initiative." },
-        "2": { "type": "News", "date": "Oct 10, 2024", "title": "Millions gather for the historic unified sankalp rally in capital." }
+        "1": {
+          "type": "Press Release",
+          "date": "Oct 12, 2024",
+          "title": "National Committee announces new rural development initiative."
+        },
+        "2": {
+          "type": "News",
+          "date": "Oct 10, 2024",
+          "title": "Millions gather for the historic unified sankalp rally in capital."
+        }
       }
     },
     "faq": {
       "title": "Frequently Asked Questions",
       "items": {
-        "0": { "question": "How can I join the organization?", "answer": "You can join by clicking on the 'Become Member' button and filling out the registration form." },
-        "1": { "question": "Are there any membership fees?", "answer": "Basic membership is free for all citizens who share our vision." },
-        "2": { "question": "How can I volunteer in my district?", "answer": "Once registered, you will be assigned to your local district committee based on your pin code." },
-        "3": { "question": "What is Vision 2047?", "answer": "Vision 2047 is our comprehensive roadmap to make India a developed nation by the 100th year of independence." }
+        "0": {
+          "question": "How can I join the organization?",
+          "answer": "You can join by clicking on the 'Become Member' button and filling out the registration form."
+        },
+        "1": {
+          "question": "Are there any membership fees?",
+          "answer": "Basic membership is free for all citizens who share our vision."
+        },
+        "2": {
+          "question": "How can I volunteer in my district?",
+          "answer": "Once registered, you will be assigned to your local district committee based on your pin code."
+        },
+        "3": {
+          "question": "What is Vision 2047?",
+          "answer": "Vision 2047 is our comprehensive roadmap to make India a developed nation by the 100th year of independence."
+        }
       }
     }
   },
@@ -226,7 +305,7 @@
       "message": "Your Message",
       "submit": "Send Message"
     },
-    "desc": "Building a stronger, more prosperous nation through unity, transparency, and relentless development.",
+    "desc": "Farmers Prosper - India Prospers • Honor of the Food Provider - Honor of the Nation • Strong Village means Strong Country • Public Welfare • Development • Transparency",
     "quick_links": "Quick Links",
     "legal": "Legal",
     "our_policies": "Our Policies",
@@ -452,5 +531,1193 @@
         "upgrade": "Upgraded to Lifetime Primary"
       }
     }
+  },
+  "aboutPageContent": {
+    "title": "About Us",
+    "desc": "Farmer's development is the nation's development",
+    "heading": "Rashtriya Annadata Vikas Party (RAVP)",
+    "slogan": "\"Farmer's development is the nation's development\"",
+    "intro_p1": "Rashtriya Annadata Vikas Party (RAVP) is a political party formed keeping the interests of farmers, laborers, youth, women, traders, and common citizens of India at the center. We believe that India's true strength lies in its villages, farmers, and hardworking people.",
+    "intro_p2": "India is one of the largest agricultural countries in the world. The livelihood of millions of families in the country depends on agriculture and allied professions. Yet, many farmers face difficulties in getting fair prices for their produce, access to markets, irrigation, storage, and other facilities. There is also a need for improvement in education, health, employment, and infrastructure in rural areas.",
+    "intro_p3": "Keeping this situation in mind, the Rashtriya Annadata Vikas Party was established. Our aim is not just to contest elections, but to work towards developmental, transparent, and accountable governance with public participation.",
+    "belief_title": "Our Belief",
+    "belief_desc": "We believe that—",
+    "beliefs": [
+      "The honor of the food provider is the honor of the nation.",
+      "The progress of villages is essential for the country's development.",
+      "Every citizen should get equal opportunities.",
+      "Public policies should be made keeping the public interest at the center.",
+      "Upholding constitutional values, democracy, and the rule of law is the responsibility of every institution."
+    ],
+    "dream_title": "What India do we dream of?",
+    "dream_desc": "We envision an India—",
+    "dreams": [
+      "Where farmers can live with dignity.",
+      "Where youth get opportunities to progress according to their capabilities.",
+      "Where women become safe and empowered.",
+      "Where trade and industry flourish and employment increases.",
+      "Where education and health reach everyone.",
+      "Where the benefits of development are shared equally by both villages and cities."
+    ],
+    "values_title": "Our Values",
+    "values_desc": "Rashtriya Annadata Vikas Party is committed to working on the following values:",
+    "values": [
+      "Honesty",
+      "Transparency",
+      "Accountability",
+      "Public Participation",
+      "Equality",
+      "Social Justice",
+      "Rural Development",
+      "National Unity",
+      "Responsibility towards the Environment",
+      "Equal application of the law"
+    ],
+    "resolution_title": "Our Resolution",
+    "resolution_p1": "We resolve to give a new direction of development by taking every citizen of India along. The purpose of our policies is to promote the balanced development of the entire society, not just one class.",
+    "resolution_p2": "We believe that a strong democracy is only possible when the government remains accountable to the people, public funds are used transparently, and every citizen gets an equal opportunity to express their views.",
+    "invitation_title": "Invitation to You",
+    "invitation_p1": "If you also desire an India where farmers get respect, youth get employment opportunities, women become safe and empowered, traders get a favorable environment for development, and the common citizen receives effective government services, we warmly invite you to join this mass movement of Rashtriya Annadata Vikas Party.",
+    "invitation_p2": "Come, let us participate together in building a prosperous, responsible, and developing India."
+  },
+  "journeyPageContent": {
+    "title": "Our Journey",
+    "desc": "Our Journey - From Struggle to Resolution",
+    "heading": "Our Journey - From Struggle to Resolution",
+    "intro_p1": "Every great change begins with a thought. The beginning of the Rashtriya Annadata Vikas Party also started from one such thought—a thought that India's development is only possible when the country's food providers, hard workers, youth, women, traders, and common citizens are equally connected to the mainstream of development.",
+    "intro_p2": "For years, issues of farmers, rural families, and common citizens from various regions of the country kept coming up. Somewhere farmers were not getting a fair price for their produce, somewhere there were difficulties in access to irrigation, electricity, and markets. In many areas, people faced challenges related to basic facilities, employment, education, and health.",
+    "intro_p3": "In this situation, continuous discussions took place among many aware citizens, farmer leaders, youth, and social workers. One question kept coming up repeatedly—can such a developmental alternative be created where the voice of the common citizen reaches policy-making more effectively?",
+    "intro_p4": "Inspired by these thoughts, the decision to form the Rashtriya Annadata Vikas Party was taken.",
+    "intro_p5": "Our journey is not a journey of personal ambition; it is an organized effort based on the ideas of public participation, public accountability, and development.",
+    "intro_p6": "From the very beginning, the party decided that it would not be limited only to elections, but would stay among the people to understand their problems, conduct public discussions, and strive for solutions through constitutional and democratic processes.",
+    "intro_p7": "We believe that a strong nation is built by strong villages, prosperous farmers, educated youth, safe women, developed industries, and accountable governance.",
+    "intro_p8": "This journey is still in its early stages. Reaching every state, every district, every taluka, and every village of the country and building a strong organization with public participation is our next goal.",
+    "intro_p9": "We invite every citizen to be a part of this journey through their thoughts, suggestions, and cooperation.",
+    "intro_p10": "This is not just our party's journey—this is a journey of building a more empowered, prosperous, and responsible India through public participation.",
+    "why_founded_title": "Why was the party founded?",
+    "why_founded_subtitle": "Why was Rashtriya Annadata Vikas Party created?",
+    "why_founded_slogan": "\"Honor of the Food Provider - Honor of the Nation\"",
+    "why_founded_p1": "India is one of the largest democracies in the world. Farmers, laborers, youth, women, traders, and common citizens play an important role in the progress of the country. Yet many people still face problems that affect their lives, employment, and development.",
+    "why_founded_p2": "Keeping this situation in mind, the resolution to establish the Rashtriya Annadata Vikas Party was taken.",
+    "why_founded_p3": "We believe that in a democracy, the voice of the people should reach policy-making effectively, and public policies should be made keeping the public interest at the center.",
+    "need_title": "Why did we feel the need to form this party?",
+    "needs": [
+      {
+        "title": "1. Fair price to the farmer for the produce",
+        "desc": "Many farmers believe that maintaining a balance between crop prices and farming costs is becoming difficult. Our party will strive for reforms in the agricultural market system and more equitable compensation for farmers."
+      },
+      {
+        "title": "2. Increasing cost of farming",
+        "desc": "Costs including seeds, fertilizers, medicines, labor, diesel, and electricity can be challenging for farmers. Policy reforms are necessary to reduce production costs."
+      },
+      {
+        "title": "3. Land and Public Projects",
+        "desc": "When land is used for roads, power lines, or other public projects, affected people must receive fair compensation, a transparent process, and protection of legal rights."
+      },
+      {
+        "title": "4. Rural Development",
+        "desc": "Many villages need improvements in water, roads, health, education, and digital facilities. The development of villages is essential for the country's development."
+      },
+      {
+        "title": "5. Employment",
+        "desc": "It is necessary to provide youth with quality education along with more employment and self-employment opportunities."
+      },
+      {
+        "title": "6. Inflation",
+        "desc": "The increase in the prices of essential commodities affects the budget of common families. An effort is needed to bring relief through economic stability and effective policies."
+      },
+      {
+        "title": "7. Transparency against corruption",
+        "desc": "Transparency in public life, accountability, and equal application of laws strengthen people's trust. We are supporters of accountable and transparent governance."
+      },
+      {
+        "title": "8. Public Participation",
+        "desc": "We believe that better policies can be formulated through continuous dialogue and public participation between the government and citizens."
+      }
+    ],
+    "resolution_title": "Our Resolution",
+    "resolution_p1": "Rashtriya Annadata Vikas Party expresses its commitment to work not for any one person or class, but for the balanced development of the whole of India.",
+    "resolution_p2": "We want to build an India where:",
+    "resolution_points": [
+      "Farmers get dignity and justice.",
+      "Youth get opportunities.",
+      "Women become safe and empowered.",
+      "Traders and industries get a favorable environment for development.",
+      "Both villages and cities develop equally.",
+      "Democracy, the constitution, and the rule of law are strengthened."
+    ],
+    "final_message_title": "Final Message",
+    "final_message_p1": "Rashtriya Annadata Vikas Party is committed to moving forward on the path of public participation, transparency, and development. We invite every citizen to join this journey, so that together a more prosperous, equitable, and responsible India can be built.",
+    "ideology_title": "Our Ideology",
+    "ideology_slogan": "\"The nation's development is only possible when the food provider, the hard worker, and the common citizen develop.\"",
+    "ideology_p1": "Rashtriya Annadata Vikas Party (RAVP) is not just a political party, but a mass movement for the honor, rights, and development of India's farmers, youth, women, laborers, traders, and common citizens.",
+    "ideology_p2": "The foundation of our ideology is the Constitution of India, democracy, justice, equality, transparency, and public participation. We believe that power is an instrument not for an individual, but for serving the people.",
+    "ideologies": [
+      {
+        "title": "1. Food Provider is Paramount",
+        "desc": "India's farmer is not just a food producer; he is the pillar of the country's economy and food security. Giving respect, security, and development to farmers is the first step in the nation's development."
+      },
+      {
+        "title": "2. Commitment to Democracy and the Constitution",
+        "desc": "We have full faith in the values of justice, liberty, equality, and fraternity enshrined in the Constitution of India. Every decision must be taken through constitutional and democratic processes."
+      },
+      {
+        "title": "3. Transparent and Accountable Governance",
+        "desc": "The government is of the people and for the people. Responsible use of public funds, a transparent decision-making process, and accountability are our fundamental principles."
+      },
+      {
+        "title": "4. Zero Tolerance against Corruption",
+        "desc": "We believe that corruption is a major obstacle to the country's development. Therefore, continuous efforts must be made to increase transparency, strong institutions, and accountability."
+      },
+      {
+        "title": "5. Holistic Development of Villages",
+        "desc": "India's development starts from villages. Facilities like roads, water, health, education, internet, and employment must reach every village."
+      },
+      {
+        "title": "6. Opportunities for Youth",
+        "desc": "Youth is India's greatest strength. Enhancing quality education, skill development, and employment opportunities is our priority."
+      },
+      {
+        "title": "7. Women Empowerment",
+        "desc": "Policies will be encouraged so that women get safety, equal opportunities, education, and economic independence."
+      },
+      {
+        "title": "8. Development of Trade and Industry",
+        "desc": "Accelerating employment and economic development by promoting small traders, MSMEs, and industries."
+      },
+      {
+        "title": "9. Education and Health",
+        "desc": "Every child should get quality education and every citizen should get accessible healthcare services."
+      },
+      {
+        "title": "10. Environment and Natural Resources",
+        "desc": "Promoting sustainable development in areas like water conservation, tree plantation, soil fertility, and clean energy."
+      },
+      {
+        "title": "11. Equal Opportunity",
+        "desc": "Every citizen should get equal opportunities without discrimination of religion, caste, language, region, or economic status."
+      },
+      {
+        "title": "12. Public Participation",
+        "desc": "Democracy is not limited to voting. More effective policies and stronger governance become possible with citizen participation."
+      }
+    ],
+    "final_resolution_title": "Our Resolution",
+    "final_resolution_p1": "We want to build an India—",
+    "final_resolutions": [
+      "Where the farmer lives with dignity.",
+      "Where youth get opportunities to realize their dreams.",
+      "Where women become safe and empowered.",
+      "Where trade and industry flourish.",
+      "Where every child gets good education.",
+      "Where health services reach everyone.",
+      "Where transparency and accountability become the basis of public life."
+    ],
+    "final_slogan_title": "Our Slogan",
+    "final_slogans": [
+      "\"Farmers Prosper - India Prospers\"",
+      "\"Honor of the Food Provider - Honor of the Nation\"",
+      "\"Democracy • Transparency • Development • Public Welfare\""
+    ]
+  },
+  "founderMessageContent": {
+    "title": "Founder's Message",
+    "desc": "Message from the Founder of Rashtriya Annadata Vikas Party (RAVP)",
+    "founder_name": "Mansukhbhai Muljibhai Bhalodiya",
+    "founder_title": "Founder",
+    "party_name": "Rashtriya Annadata Vikas Party (RAVP)",
+    "greeting": "Dear Fellow Indians,",
+    "salutation": "Jai Hind.",
+    "intro_p1": "I, Mansukhbhai Muljibhai Bhalodiya, from village Govindpar, Taluka Paddhari, District Rajkot, extend my warmest greetings to you all on behalf of Rashtriya Annadata Vikas Party.",
+    "intro_p2": "I am not associated with any political family. I come from a common farming family. I have closely observed agriculture, village life, and the hard work of farmers. For years, I had the opportunity to understand the difficulties of farmers, their struggles, and the actual conditions of their lives.",
+    "intro_p3": "Looking closely at the conditions and problems of farmers in various regions of the country during the year 2026, a question constantly arose in my mind—why does the farmer who provides food to the country not get proper respect and fair compensation for his hard work?",
+    "intro_p4": "This very question inspired me to think in a new direction, and from there the resolution to start the Rashtriya Annadata Vikas Party was born.",
+    "intro_p5": "Our party's objective is not just to contest elections. Our aim is to understand the issues of the country's farmers, youth, women, traders, laborers, and common citizens, stand with them, and promote developmental policies through democratic and constitutional means.",
+    "belief_p1": "I believe that if the farmer gets fair compensation for his produce, modernity comes into agriculture, the rural economy becomes strong, and the youth get employment and new opportunities, then India can find a place among the most prosperous countries in the world.",
+    "youth_title": "My Message to the Youth",
+    "youth_desc": "The future of India is in your hands. Do not just be a job seeker, but become a youth who creates new opportunities, accepts responsibility for the society, and actively participates in the development of the country. Honesty, hard work, and knowledge are your biggest allies.",
+    "women_title": "My Approach towards Women",
+    "women_desc": "True development of any society is not possible without the empowerment of women. Every daughter should get an education, and every woman should get safety, respect, equal opportunity, and a chance to become self-reliant. The dream of a developed India is incomplete without the participation of women.",
+    "promise_title": "Our Biggest Promise",
+    "promise_desc": "Our biggest promise is not to make any impossible promises. Our promise is that we will work with the principles of honesty, transparency, accountability, and public interest, and we will continuously strive to keep the interests of every citizen, including farmers, at the center of policy-making.",
+    "we_believe_title": "We believe that—",
+    "we_believe_points": [
+      "\"The development of the farmer is the development of the country.\"",
+      "\"The honor of the food provider is the honor of the nation.\""
+    ],
+    "appeal_title": "My Appeal",
+    "appeal_p1": "I request every citizen of the country that change does not come from just one person, but with the participation of millions of people.",
+    "appeal_p2": "If you also desire an India where the farmer gets dignity, the youth gets opportunities, women become empowered, villages develop, and the common citizen gets respect, then join us in this journey of Rashtriya Annadata Vikas Party.",
+    "appeal_p3": "Let us all come together and build an India where the benefits of development reach everyone and every food provider can live a life with dignity.",
+    "closing_slogan": "Jai Jawan - Jai Kisan - Jai Bharat",
+    "sign_off": "Regards,",
+    "founder_name_sign": "Mansukhbhai Muljibhai Bhalodiya"
+  },
+  "resolutionsPageContent": {
+    "title": "Our 25 Main Resolutions",
+    "subtitle": "Rashtriya Annadata Vikas Party (RAVP)",
+    "slogan": "\"Not promises, a resolution for development\"",
+    "intro": "Rashtriya Annadata Vikas Party is determined to serve the country with the following main resolutions for the holistic development of India.",
+    "items": [
+      {
+        "title": "1. Respect for Farmers",
+        "desc": "Continuously strive to get fair value for the hard work of farmers and strengthen the agricultural sector."
+      },
+      {
+        "title": "2. Making Farming Profitable",
+        "desc": "Work to make farming more profitable through modern technology, value addition, and easy access to markets."
+      },
+      {
+        "title": "3. Water Conservation",
+        "desc": "Promote water conservation and efficient irrigation solutions in every village."
+      },
+      {
+        "title": "4. Quality Education",
+        "desc": "Strive to ensure that quality and modern education reaches every child."
+      },
+      {
+        "title": "5. Health",
+        "desc": "Promote policies to make accessible and quality healthcare services available to every citizen."
+      },
+      {
+        "title": "6. Opportunities for Youth",
+        "desc": "Promote skill development, self-employment, and job creation."
+      },
+      {
+        "title": "7. Women Empowerment",
+        "desc": "Increase women's participation in education, safety, economic empowerment, and leadership."
+      },
+      {
+        "title": "8. Trade and Industry",
+        "desc": "Create a favorable environment for local businesses, MSMEs, and startups."
+      },
+      {
+        "title": "9. Rural Development",
+        "desc": "Work for the development of roads, water, electricity, internet, and public services in every village."
+      },
+      {
+        "title": "10. Employment",
+        "desc": "Increase employment opportunities in industry, service, and agriculture-based sectors."
+      },
+      {
+        "title": "11. Transparency",
+        "desc": "Increase accountability and transparency in public life."
+      },
+      {
+        "title": "12. Anti-Corruption",
+        "desc": "Strengthen efforts to reduce corruption through transparent processes and accountable governance."
+      },
+      {
+        "title": "13. Digital India",
+        "desc": "Encourage greater use of digital technology in government services and public utilities."
+      },
+      {
+        "title": "14. Environment",
+        "desc": "Prioritize the conservation of water, land, and natural resources."
+      },
+      {
+        "title": "15. Local Self-Government",
+        "desc": "Strengthen village panchayat, taluka, and district level institutions."
+      },
+      {
+        "title": "16. Animal Husbandry and Dairy",
+        "desc": "Promote the development of the animal husbandry and dairy sectors."
+      },
+      {
+        "title": "17. Agriculture-based Industries",
+        "desc": "Promote food processing, cold storage, and value-added agricultural products."
+      },
+      {
+        "title": "18. Youth Leadership",
+        "desc": "Make youth active participants in social and public life."
+      },
+      {
+        "title": "19. Technology",
+        "desc": "Increase the use of Artificial Intelligence (AI), drones, and new technologies in development."
+      },
+      {
+        "title": "20. Social Harmony",
+        "desc": "Promote equality, harmony, and national unity in accordance with constitutional values."
+      },
+      {
+        "title": "21. Citizen Participation",
+        "desc": "Encourage people to engage more in development and public discussions."
+      },
+      {
+        "title": "22. Clean India",
+        "desc": "Promote cleanliness, waste management, and healthy lifestyles."
+      },
+      {
+        "title": "23. Self-Reliant India",
+        "desc": "Promote local production, local employment, and indigenous innovation."
+      },
+      {
+        "title": "24. Accountable Governance",
+        "desc": "Promote timely, simple, and citizen-centric public services."
+      },
+      {
+        "title": "25. Developed India",
+        "desc": "Actively contribute to efforts to make India a prosperous, self-reliant, and leading nation in the world by 2047."
+      }
+    ],
+    "outro_title": "Our Belief",
+    "outro_desc": "We believe not just in promises, but in public participation, responsible work, and long-term development.",
+    "slogans": [
+      "\"Farmers Prosper - India Prospers\"",
+      "\"Public Welfare • Public Participation • Public Development\""
+    ]
+  },
+  "vision2047PageContent": {
+    "title": "Vision 2047",
+    "subtitle": "Rashtriya Annadata Vikas Party's vision document for a developed, prosperous, and self-reliant India",
+    "slogan": "\"If the farmer prospers, India prospers\"",
+    "intro_p1": "Keeping in view the year 2047, which marks 100 years of India's independence, Rashtriya Annadata Vikas Party envisions an India that is economically strong, socially just, a leader in technology, and the world's leading nation in the agricultural sector.",
+    "intro_p2": "Our vision is not limited to economic development alone. We want to build an India where the benefits of development reach every citizen.",
+    "sections": [
+      {
+        "title": "1. World's Leading Agricultural Power",
+        "desc": "To make India the world's leading agricultural nation by 2047:",
+        "points": [
+          "Policies to increase farmers' income.",
+          "Promotion of modern farming.",
+          "Technology for efficient water use.",
+          "Agricultural research and innovation.",
+          "Value-added agriculture and exports."
+        ]
+      },
+      {
+        "title": "2. Prosperous Villages",
+        "desc": "In every village:",
+        "points": [
+          "Paved roads.",
+          "Pure drinking water.",
+          "Reliable electricity supply.",
+          "High-speed internet.",
+          "Health centers.",
+          "Quality schools.",
+          "Digital government services."
+        ]
+      },
+      {
+        "title": "3. Employment",
+        "desc": "Our goal:",
+        "points": [
+          "New employment through industries.",
+          "Development of agriculture-based industries.",
+          "Promotion of startups and self-employment.",
+          "Skill development centers."
+        ]
+      },
+      {
+        "title": "4. Education",
+        "desc": "To every child:",
+        "points": [
+          "Quality education.",
+          "Digital education.",
+          "Vocational training.",
+          "Encouragement for research."
+        ]
+      },
+      {
+        "title": "5. Health",
+        "desc": "By 2047:",
+        "points": [
+          "Accessible healthcare for every citizen.",
+          "Improvement in rural hospitals.",
+          "Maternal and child health.",
+          "Expansion of telemedicine."
+        ]
+      },
+      {
+        "title": "6. Women Empowerment",
+        "desc": "",
+        "points": [
+          "Equal opportunity.",
+          "Safe environment.",
+          "Promotion of women entrepreneurs.",
+          "Education and skill development."
+        ]
+      },
+      {
+        "title": "7. India of Youth",
+        "desc": "To ensure India's youth get world-class opportunities:",
+        "points": [
+          "Technology education.",
+          "Startup assistance.",
+          "Sports.",
+          "Innovation and research."
+        ]
+      },
+      {
+        "title": "8. Trade and Industry",
+        "desc": "",
+        "points": [
+          "Assistance to small traders.",
+          "Development of MSMEs.",
+          "Increase exports.",
+          "Favorable environment for investment."
+        ]
+      },
+      {
+        "title": "9. Technology",
+        "desc": "An effort to place India among the world's leading countries in fields like AI, Robotics, Drones, Semiconductors, Space Technology, and Green Energy.",
+        "points": []
+      },
+      {
+        "title": "10. Environment",
+        "desc": "",
+        "points": [
+          "Water conservation.",
+          "Tree plantation.",
+          "Clean energy.",
+          "Pollution control.",
+          "Conservation of natural resources."
+        ]
+      },
+      {
+        "title": "11. Good Governance",
+        "desc": "Our goal:",
+        "points": [
+          "Transparency.",
+          "Accountability.",
+          "Fast government services.",
+          "Digital governance.",
+          "Public participation."
+        ]
+      }
+    ],
+    "dream_title": "Our Dream",
+    "dream_desc": "By 2047, an India where—",
+    "dreams": [
+      "No farmer lives in poverty.",
+      "No youth is left behind due to lack of opportunity.",
+      "Every child gets a good education.",
+      "Every family receives healthcare.",
+      "Every village is connected with development.",
+      "Every citizen gets respect and justice."
+    ],
+    "message_title": "Our Message",
+    "message_desc": "Vision 2047 is not just a document; it is a resolution of development for future generations. We believe that this vision can only be realized with the participation of the government, civil society, industries, farmers, youth, and every citizen.",
+    "final_slogan": "\"Prosperous Farmer - Strong Village - Developed India.\""
+  },
+  "coreValuesPageContent": {
+    "title": "Core Values",
+    "subtitle": "Our Core Values",
+    "slogan": "\"Strong values build a strong organization\"",
+    "intro": "Rashtriya Annadata Vikas Party (RAVP) believes that the true identity of any political party is not just its leaders, but its principles and values. Every policy, every decision, and every action of ours will be based on the following core values.",
+    "values": [
+      {
+        "title": "1. National Interest Above All",
+        "desc": "The interest of the country will remain above the interest of any individual, political entity, or organization. Working for the unity, integrity, and progress of the country is our first responsibility."
+      },
+      {
+        "title": "2. Supreme Respect for the Food Provider",
+        "desc": "We consider the farmer of India as the pillar of the country's development. We consider the development of agriculture and farming sector as an integral part of national development."
+      },
+      {
+        "title": "3. Complete Faith in the Constitution",
+        "desc": "Strict adherence to the Constitution of India, democracy, and the rule of law is our fundamental commitment."
+      },
+      {
+        "title": "4. Democracy",
+        "desc": "Giving importance to discussion, deliberation, and public participation in every decision."
+      },
+      {
+        "title": "5. Transparency",
+        "desc": "Maintaining transparency, openness, and accountability in public life."
+      },
+      {
+        "title": "6. Honesty",
+        "desc": "Adhering to integrity and ethical values in personal and public life."
+      },
+      {
+        "title": "7. Accountability",
+        "desc": "Every office bearer and worker will be accountable to the people."
+      },
+      {
+        "title": "8. Equality",
+        "desc": "Not keeping any kind of discrimination on the basis of religion, caste, language, region, or economic status."
+      },
+      {
+        "title": "9. Social Justice",
+        "desc": "Striving to ensure that every section of society gets equal opportunity and justice."
+      },
+      {
+        "title": "10. Respect for Women",
+        "desc": "Providing women with equal rights, security, and opportunities for leadership."
+      },
+      {
+        "title": "11. Trust in Youth",
+        "desc": "Considering youth as the builders of the country's future and providing them with skills, education, and leadership opportunities."
+      },
+      {
+        "title": "12. Responsibility towards the Environment",
+        "desc": "Conserving water, land, forests, and natural resources."
+      },
+      {
+        "title": "13. Development and Innovation",
+        "desc": "Accelerating the country's development by adopting modern technology, research, and new ideas."
+      },
+      {
+        "title": "14. Spirit of Service",
+        "desc": "Considering politics not as a means to gain power, but as a medium of public service."
+      },
+      {
+        "title": "15. Responsible Public Life",
+        "desc": "Every elected representative and office bearer should maintain public trust and set an example by their behavior."
+      },
+      {
+        "title": "16. Rural Development",
+        "desc": "The development of villages is the foundation of the country's development. Continuously improving agriculture, village industries, education, and health."
+      },
+      {
+        "title": "17. Education and Knowledge",
+        "desc": "Promoting quality education, a scientific approach, and a culture of lifelong learning."
+      },
+      {
+        "title": "18. Development for All",
+        "desc": "Working so that every section of society gets equal opportunity for development and the benefits of development reach widely."
+      }
+    ],
+    "resolution_title": "Our Resolution",
+    "resolution_p1": "Rashtriya Annadata Vikas Party pledges that all these values will not just remain in documents, but will be reflected in the work of every worker, office bearer, and representative of the organization.",
+    "resolution_p2": "Our success will not be measured by power, but by people's trust, service, and work.",
+    "slogan_title": "Our Slogan",
+    "slogans": [
+      "\"Belief in values – Effort in development\"",
+      "\"Service • Integrity • Equality • Development\""
+    ]
+  },
+  "objectivesPageContent": {
+    "title": "Party Objectives",
+    "subtitle": "Rashtriya Annadata Vikas Party (RAVP)",
+    "slogan": "\"Development of the nation - Through the development of the food provider\"",
+    "intro": "The main objective of the Rashtriya Annadata Vikas Party is to make India stronger and more prosperous in the fields of agriculture, industry, education, health, employment, and transparent governance. Our party is committed to working in the public interest while adhering to constitutional values, democracy, and the rule of law.",
+    "sections": [
+      {
+        "category": "Agriculture and Farmers",
+        "points": [
+          "1. Strive for policy reforms so that farmers get just and fair compensation for their hard work.",
+          "2. Develop agriculture as a profitable, modern, and sustainable profession.",
+          "3. Strengthen irrigation, water conservation, and agricultural infrastructure.",
+          "4. Promote agricultural research, quality seeds, and modern technology.",
+          "5. Promote the development of animal husbandry, horticulture, dairy, and agriculture-based industries."
+        ]
+      },
+      {
+        "category": "Rural Development",
+        "points": [
+          "6. Development of basic facilities like roads, water, electricity, health, education, and digital connectivity in every village.",
+          "7. Effort to reduce migration from villages by strengthening the rural economy.",
+          "8. Empower local self-government institutions and make them more accountable."
+        ]
+      },
+      {
+        "category": "Education",
+        "points": [
+          "9. Strive to make quality education available to every child.",
+          "10. Promote skill-based and employment-oriented education.",
+          "11. Create a conducive environment for digital education and research."
+        ]
+      },
+      {
+        "category": "Health",
+        "points": [
+          "12. Effort to provide accessible and quality healthcare services to every citizen.",
+          "13. Strengthen rural health services and primary health centers."
+        ]
+      },
+      {
+        "category": "Youth",
+        "points": [
+          "14. Create more opportunities for employment and self-employment.",
+          "15. Promote skill development, startups, and innovation.",
+          "16. Promote sports and leadership development."
+        ]
+      },
+      {
+        "category": "Women",
+        "points": [
+          "17. Work for women's education, safety, and economic empowerment.",
+          "18. Provide women with opportunities for greater participation in leadership and public life."
+        ]
+      },
+      {
+        "category": "Trade and Industry",
+        "points": [
+          "19. Promote the development of small traders, MSMEs, and local industries.",
+          "20. Support transparent and simple administrative processes for business."
+        ]
+      },
+      {
+        "category": "Employment",
+        "points": [
+          "21. Promote favorable policies for job creation in industry, service, and agriculture sectors.",
+          "22. Promote guidance and assistance to youth to become entrepreneurs."
+        ]
+      },
+      {
+        "category": "Good Governance",
+        "points": [
+          "23. Strengthen transparency, accountability, and efficient public administration.",
+          "24. Effort to make government services simpler, faster, and digital.",
+          "25. Promote a proper system for timely and effective redressal of public grievances."
+        ]
+      },
+      {
+        "category": "Environment",
+        "points": [
+          "26. Promote water conservation, tree plantation, and conservation of natural resources.",
+          "27. Support clean energy and sustainable development."
+        ]
+      },
+      {
+        "category": "Social Harmony",
+        "points": [
+          "28. Promote equal opportunity, social justice, and mutual harmony in accordance with constitutional values.",
+          "29. Strengthen national unity with respect for diverse languages, cultures, and traditions."
+        ]
+      },
+      {
+        "category": "Technology",
+        "points": [
+          "30. Accelerate development through the use of digital services, innovation, and modern technology."
+        ]
+      }
+    ],
+    "resolution_title": "Our Resolution",
+    "resolution_p1": "Rashtriya Annadata Vikas Party believes that development means not only economic growth, but delivering opportunity, justice, respect, and basic facilities to every citizen is equally important.",
+    "resolution_p2": "We express our resolution to continuously work for the holistic development of the country based on public participation, transparency, and constitutional values.",
+    "slogan_title": "Our Slogan",
+    "slogans": [
+      "\"Public Welfare • Public Participation • Public Development\"",
+      "\"Farmers Prosper - India Prospers\""
+    ]
+  },
+  "farmerPolicyPageContent": {
+    "title": "Farmer Policy",
+    "subtitle": "Rashtriya Annadata Vikas Party (RAVP)",
+    "slogan": "\"Respect for the Food Provider - Respect for the Nation\"",
+    "intro_title": "Introduction",
+    "intro_p1": "India is an agricultural country. The livelihood of millions of families in the country depends on farming, animal husbandry, and agriculture-related businesses. The farmer is not just a producer of food, but the main pillar of the country's food security, rural economy, and national development.",
+    "intro_p2": "Rashtriya Annadata Vikas Party believes that the development of the farmer is the foundation of India's development. Therefore, the goal of our agricultural policy is to increase farmers' income, make farming more profitable and sustainable, and strengthen the rural economy.",
+    "goals_title": "Our Main Goals",
+    "goals": [
+      "Increase in farmers' income.",
+      "Make farming a profitable business.",
+      "Effective policies to reduce the cost of farming.",
+      "Promotion of modern agricultural technology.",
+      "Development of rural employment and agriculture-based industries.",
+      "Conservation of natural resources."
+    ],
+    "points": [
+      {
+        "title": "1. Just and Fair Compensation for Produce",
+        "desc": "Our effort will be to ensure that farmers get just and fair prices for their produce. Policies for reforms in the agricultural market system, storage, processing, and easy access to the market will be promoted."
+      },
+      {
+        "title": "2. Reducing the Cost of Farming",
+        "desc": "Keeping in mind the increasing costs in farming, more efficient use of seeds, fertilizers, water, irrigation, and modern equipment will be promoted."
+      },
+      {
+        "title": "3. Irrigation and Water Management",
+        "desc": "Priority will be given to efficient use of water, rainwater harvesting, micro-irrigation, and local water conservation efforts."
+      },
+      {
+        "title": "4. Quality Power Supply",
+        "desc": "Work will be done towards providing a reliable power supply for farming, promoting energy efficiency, and the use of renewable energy like solar."
+      },
+      {
+        "title": "5. Agricultural Technology",
+        "desc": "Efforts to provide information and training to farmers about drones, digital agriculture, weather information, soil testing, and other modern tools will be promoted."
+      },
+      {
+        "title": "6. Animal Husbandry and Dairy",
+        "desc": "An approach will be adopted to develop additional sources of income for farmers through animal husbandry, dairy, goat rearing, beekeeping, and other agriculture-based activities."
+      },
+      {
+        "title": "7. Horticulture and Value Addition",
+        "desc": "Production, processing, and marketing of fruits, vegetables, flowers, and other horticultural crops will be promoted to give farmers more income opportunities."
+      },
+      {
+        "title": "8. Natural and Organic Farming",
+        "desc": "Wherever appropriate and practical, natural and organic farming will be promoted, with an emphasis on maintaining soil quality and long-term productivity."
+      },
+      {
+        "title": "9. Agricultural Education",
+        "desc": "Efforts will be made to increase cooperation with various institutions to provide training and guidance to farmers regarding new methods, scientific farming, and market information."
+      }
+    ],
+    "resolution_title": "10. Our Resolution",
+    "resolution_p1": "Rashtriya Annadata Vikas Party believes that the farmer should be seen not just as a beneficiary of aid, but as a partner in the country's development. We support agricultural policies that help the farmer become self-reliant, empowered, and live a dignified life.",
+    "slogan_title": "Our Slogan",
+    "slogans": [
+      "\"Prosperous Farmer – Prosperous India\"",
+      "\"Respect for the Food Provider – Respect for the Nation\""
+    ]
+  },
+  "youthPolicyPageContent": {
+    "title": "Youth Policy",
+    "subtitle": "Rashtriya Annadata Vikas Party (RAVP)",
+    "slogan": "\"Youth Power - National Power\"",
+    "intro_title": "Introduction",
+    "intro_p1": "India is one of the youngest countries in the world. The greatest strength of the country is its youth. If the youth get quality education, proper guidance, employment, self-employment, and opportunities for leadership, India can become a leading nation in the world.",
+    "intro_p2": "Rashtriya Annadata Vikas Party believes that the youth are not just citizens of tomorrow, but partners in today's development. The aim of our policies is to empower the youth, make them self-reliant, and inspire them towards innovation.",
+    "goals_title": "Our Main Goals",
+    "goals": [
+      "Opportunity for every youth to develop their potential.",
+      "Promotion of skill development.",
+      "Favorable environment for employment and self-employment.",
+      "Promotion of new technology and innovation.",
+      "Sports and leadership development.",
+      "Increasing youth participation in public life."
+    ],
+    "points": [
+      {
+        "title": "1. Employment",
+        "desc": "Our effort will be to promote favorable policies for job creation in various sectors including industry, services, and agriculture."
+      },
+      {
+        "title": "2. Skill Development",
+        "desc": "Necessary skills in changing times, technical training, and vocational education will be promoted so that youth become more capable of employment."
+      },
+      {
+        "title": "3. Self-Employment",
+        "desc": "Guidance, training, and support systems for startups, new businesses, and entrepreneurship will be promoted."
+      },
+      {
+        "title": "4. Technology",
+        "desc": "Youth will be encouraged to advance in the fields of digital skills, Artificial Intelligence (AI), robotics, software, and new technology."
+      },
+      {
+        "title": "5. Education",
+        "desc": "Work will be done towards preparing the youth for global competition through quality, vocational, and modern education."
+      },
+      {
+        "title": "6. Sports",
+        "desc": "Sports will be promoted as an important area of both healthy living and career. Efforts to increase sports facilities in rural and urban areas will be supported."
+      },
+      {
+        "title": "7. Innovation and Research",
+        "desc": "Students and young researchers will be encouraged to develop new inventions, startups, and technology-based solutions."
+      },
+      {
+        "title": "8. Youth Leadership",
+        "desc": "Training and opportunities for youth to become active partners in social service, local development, and public life will be promoted."
+      },
+      {
+        "title": "9. Rural Youth",
+        "desc": "Efforts will be made to develop opportunities in agriculture, agriculture-based industries, digital services, and local employment for rural youth."
+      }
+    ],
+    "resolution_title": "10. Our Resolution",
+    "resolution_p1": "We want to build an India where every youth gets an equal opportunity to develop their talent, live a dignified life, and contribute to the development of the country.",
+    "resolution_p2": "Rashtriya Annadata Vikas Party believes that investing in youth is investing in India's future.",
+    "slogan_title": "Our Slogan",
+    "slogans": [
+      "\"Empowered Youth – Empowered India\"",
+      "\"India Towards Dreams, Resolutions, and Success\""
+    ]
+  },
+  "womenPolicyPageContent": {
+    "title": "Women Policy",
+    "subtitle": "Rashtriya Annadata Vikas Party (RAVP)",
+    "slogan": "\"Empowered Woman - Prosperous Family - Developed India\"",
+    "intro_title": "Introduction",
+    "intro_p1": "The role of women is extremely important in the development of India. Women make significant contributions in every field including family, farming, education, health, industry, and social life. Despite this, many women still face challenges in accessing equal opportunities in education, health, employment, security, and economic prospects.",
+    "intro_p2": "Rashtriya Annadata Vikas Party believes that the empowerment of women is necessary not just for the benefit of women, but for the development of the entire society and the nation.",
+    "vision_title": "Our Vision",
+    "vision_p1": "An India where every woman—",
+    "visions": [
+      "Is secure.",
+      "Is educated.",
+      "Is self-reliant.",
+      "Is economically empowered.",
+      "Has equal opportunities for leadership.",
+      "Can live a life with dignity and equal rights."
+    ],
+    "goals_title": "Our Main Goals",
+    "goals": [
+      "Women's education.",
+      "Women's security.",
+      "Women's self-employment.",
+      "Women's health.",
+      "Skill development.",
+      "Participation in leadership.",
+      "Digital empowerment.",
+      "Development of rural women."
+    ],
+    "points": [
+      {
+        "title": "1. Women's Education",
+        "desc": "Favorable policies will be promoted to ensure that every daughter gets quality education and access to higher education increases."
+      },
+      {
+        "title": "2. Women's Security",
+        "desc": "Work will be done towards promoting safe public places for women, quick grievance redressal systems, and awareness programs."
+      },
+      {
+        "title": "3. Women's Self-Employment",
+        "desc": "Women will be encouraged to become economically empowered through small businesses, home-based industries, agriculture-based activities, and self-help groups."
+      },
+      {
+        "title": "4. Women's Health",
+        "desc": "Priority will be given to maternal and child health, nutrition, regular health check-ups, and health awareness."
+      },
+      {
+        "title": "5. Skill Development",
+        "desc": "Skill training in sewing, handicrafts, digital services, food processing, agriculture-based industries, and others will be promoted for women."
+      },
+      {
+        "title": "6. Leadership",
+        "desc": "Leadership development programs will be promoted to increase women's participation in local self-government, social organizations, and public life."
+      },
+      {
+        "title": "7. Digital Empowerment",
+        "desc": "Women will be encouraged to use digital literacy, online services, digital banking, and technology."
+      },
+      {
+        "title": "8. Rural Women",
+        "desc": "Agriculture, animal husbandry, dairy, horticulture, food processing, and other local employment-based activities will be promoted for rural women."
+      },
+      {
+        "title": "9. Equal Opportunity",
+        "desc": "Efforts will be made to ensure that women get equal opportunities and respect in education, employment, industry, and public life."
+      }
+    ],
+    "resolution_title": "10. Our Resolution",
+    "resolution_p1": "Rashtriya Annadata Vikas Party believes that when women are empowered, the family becomes strong, society progresses, and the country's development accelerates.",
+    "resolution_p2": "We will promote policies that help women advance in security, respect, education, economic opportunities, and leadership.",
+    "slogan_title": "Our Slogan",
+    "slogans": [
+      "\"Empowered Woman – Empowered India\"",
+      "\"Respect for Women, Pride of the Nation\""
+    ]
+  },
+  "msmePolicyPageContent": {
+    "title": "Business & MSME Policy",
+    "subtitle": "Rashtriya Annadata Vikas Party (RAVP)",
+    "slogan": "\"Strong Business - Strong Economy - Prosperous India\"",
+    "intro_title": "Introduction",
+    "intro_p1": "Small traders, Micro, Small and Medium Enterprises (MSME), startups, manufacturers, the service sector, and entrepreneurs make a significant contribution to the economic development of India. They have an important role in the country's development through job creation, innovation, production, and taxation.",
+    "intro_p2": "Rashtriya Annadata Vikas Party believes that the development of business and industry and the development of agriculture are complementary to each other. Strong business provides a market to farmers, and strong agriculture provides quality products to business.",
+    "vision_title": "Our Vision",
+    "vision_p1": "We want to build an India where—",
+    "visions": [
+      "Small traders get equal opportunities for development.",
+      "There is a favorable environment for starting new industries.",
+      "Local production gets a boost.",
+      "Youth are inspired to become entrepreneurs.",
+      "Agriculture-based industries develop rapidly."
+    ],
+    "goals_title": "Our Main Goals",
+    "goals": [
+      "Encouragement to small traders.",
+      "Development of the MSME sector.",
+      "Promotion of startups and innovation.",
+      "Expansion of digital business.",
+      "Local production and value addition.",
+      "Job creation."
+    ],
+    "points": [
+      {
+        "title": "1. Development of Small Traders",
+        "desc": "Small traders will be encouraged to adopt training, information, and modern business methods for business development."
+      },
+      {
+        "title": "2. MSME",
+        "desc": "Micro, Small and Medium Enterprises will be promoted as the main basis for increasing employment and production."
+      },
+      {
+        "title": "3. Startups",
+        "desc": "A favorable environment for guidance, networking, and business development will be promoted for youth and entrepreneurs with innovative ideas."
+      },
+      {
+        "title": "4. Digital Business",
+        "desc": "Digital payments, e-commerce, online marketing, and technology-based business methods will be promoted."
+      },
+      {
+        "title": "5. Agriculture-based Industries",
+        "desc": "The development of food processing, cold storage, packaging, dairy, horticulture, and other agriculture-based industries will be promoted so that both farmers and industry benefit."
+      },
+      {
+        "title": "6. Local Production",
+        "desc": "Encouragement will be given to increase the quality, branding, and market access of local products."
+      },
+      {
+        "title": "7. Skill Development",
+        "desc": "Digital, financial, and business skill development programs will be promoted for traders, entrepreneurs, and employees."
+      },
+      {
+        "title": "8. Women Entrepreneurs",
+        "desc": "Support will be given to efforts that make more opportunities for market, training, and development available to businesses and self-help groups run by women."
+      },
+      {
+        "title": "9. Youth Entrepreneurs",
+        "desc": "Guidance and encouragement will be given to youth to start new companies, startups, and local industries."
+      },
+      {
+        "title": "10. Employment",
+        "desc": "A developmental approach that creates more employment opportunities in industry, service, and agriculture-based sectors will be promoted."
+      }
+    ],
+    "resolution_title": "Our Resolution",
+    "resolution_p1": "Rashtriya Annadata Vikas Party believes that strong business, successful industries, and self-reliant entrepreneurs are essential for India's economic development.",
+    "resolution_p2": "We will promote policies that build a strong partnership between traders, entrepreneurs, and farmers and give a new direction to the entire economy.",
+    "slogan_title": "Our Slogan",
+    "slogans": [
+      "\"Strong Business – Prosperous India\"",
+      "\"Local Development, National Prosperity\""
+    ]
+  },
+  "educationPolicyPageContent": {
+    "title": "Education Policy",
+    "subtitle": "Rashtriya Annadata Vikas Party (RAVP)",
+    "slogan": "\"Quality Education - Developed India\"",
+    "intro_title": "Introduction",
+    "intro_p1": "Education is the foundation of the holistic development of any nation. Only an educated society can progress economically, socially, scientifically, and culturally. Rashtriya Annadata Vikas Party believes that every child, youth, and citizen has the right to receive quality, equal, and modern education.",
+    "intro_p2": "Our aim is to develop an educational framework that is not just exam-oriented but develops skills, personality, a scientific approach, innovation, and national values.",
+    "vision_title": "Our Vision",
+    "visions": [
+      "Quality education for every child.",
+      "Equal educational opportunities in villages and cities.",
+      "Expansion of digital education.",
+      "Skill-based education.",
+      "Promotion of research and innovation.",
+      "Building a self-reliant India through education."
+    ],
+    "goals_title": "Our Main Goals",
+    "goals": [],
+    "points": [
+      {
+        "title": "1. Education for All",
+        "desc": "Continuous effort to ensure that quality education reaches every child."
+      },
+      {
+        "title": "2. Digital Education",
+        "desc": "Use of smart classrooms, e-learning, and modern technology."
+      },
+      {
+        "title": "3. Skill Development",
+        "desc": "Promotion of employment-oriented and vocational education."
+      },
+      {
+        "title": "4. Higher Education",
+        "desc": "Promotion of research, innovation, and global quality education."
+      },
+      {
+        "title": "5. Empowerment of Teachers",
+        "desc": "Training, quality, and professional development of teachers."
+      },
+      {
+        "title": "6. Rural Education",
+        "desc": "Availability of a quality school and digital education in every village."
+      },
+      {
+        "title": "7. Sports and Personality Development",
+        "desc": "Promotion of sports, art, and leadership for the holistic development of students."
+      },
+      {
+        "title": "8. Equal Opportunity",
+        "desc": "Equal opportunity for every student regardless of economic or social situation."
+      },
+      {
+        "title": "9. Technology Education",
+        "desc": "Education in AI, Robotics, Coding, Drones, and new technology areas."
+      }
+    ],
+    "resolution_title": "10. Our Resolution",
+    "resolution_p1": "It is our resolution to make education the most powerful tool for nation-building and to give equal opportunities for development to every youth.",
+    "slogan_title": "Our Slogan",
+    "slogans": [
+      "\"Quality Education – Empowered Youth – Developed India.\"",
+      "\"Education is the foundation of development, knowledge is the nation's greatest strength.\""
+    ]
+  },
+  "healthPolicyPageContent": {
+    "title": "Health Policy",
+    "subtitle": "Rashtriya Annadata Vikas Party (RAVP)",
+    "slogan": "\"Healthy Citizen - Prosperous India\"",
+    "intro_title": "Introduction",
+    "intro_p1": "Only healthy citizens can build a strong nation. Healthcare is a fundamental right of every citizen. Rashtriya Annadata Vikas Party believes that quality, affordable, and accessible healthcare should reach every person in the country.",
+    "vision_title": "Our Vision",
+    "visions": [
+      "Quality healthcare for everyone.",
+      "Development of the rural health system.",
+      "Priority to maternal and child health.",
+      "Awareness about preventive health.",
+      "Expansion of digital health services."
+    ],
+    "goals_title": "Our Main Goals",
+    "goals": [],
+    "points": [
+      {
+        "title": "1. Healthcare for All",
+        "desc": ""
+      },
+      {
+        "title": "2. Development of Rural Health Centers",
+        "desc": ""
+      },
+      {
+        "title": "3. Maternal and Child Health",
+        "desc": ""
+      },
+      {
+        "title": "4. Telemedicine and Digital Health",
+        "desc": ""
+      },
+      {
+        "title": "5. Cleanliness and Nutrition",
+        "desc": ""
+      },
+      {
+        "title": "6. Disaster and Emergency Health Services",
+        "desc": ""
+      },
+      {
+        "title": "7. Mental Health Awareness",
+        "desc": ""
+      },
+      {
+        "title": "8. Empowerment of Health Workers",
+        "desc": ""
+      },
+      {
+        "title": "9. Modern Technology in Healthcare",
+        "desc": ""
+      }
+    ],
+    "resolution_title": "10. Our Resolution",
+    "resolution_p1": "We will constantly strive to ensure that quality and dignified healthcare reaches every citizen.",
+    "slogan_title": "Our Slogan",
+    "slogans": [
+      "\"Healthy Citizen – Prosperous Nation.\"",
+      "\"Health for every family, security for every citizen.\""
+    ]
+  },
+  "ruralPolicyPageContent": {
+    "title": "Rural Development Policy",
+    "subtitle": "Rashtriya Annadata Vikas Party (RAVP)",
+    "slogan": "\"Strong Village - Strong India\"",
+    "intro_title": "Introduction",
+    "intro_p1": "The soul of India resides in villages. The development of villages means the development of the entire nation. Rashtriya Annadata Vikas Party believes that it is extremely necessary to increase modern facilities, employment, agricultural development, and digital connectivity in rural areas.",
+    "vision_title": "Our Vision",
+    "visions": [
+      "Self-reliant villages.",
+      "Modern rural facilities.",
+      "Employment-rich rural economy.",
+      "Digital villages.",
+      "Sustainable rural development."
+    ],
+    "goals_title": "Our Main Goals",
+    "goals": [],
+    "points": [
+      {
+        "title": "1. Roads and Transport",
+        "desc": ""
+      },
+      {
+        "title": "2. Clean Drinking Water",
+        "desc": ""
+      },
+      {
+        "title": "3. Reliable Power Supply",
+        "desc": ""
+      },
+      {
+        "title": "4. Digital Connectivity",
+        "desc": ""
+      },
+      {
+        "title": "5. Rural Employment",
+        "desc": ""
+      },
+      {
+        "title": "6. Agriculture-based Industries",
+        "desc": ""
+      },
+      {
+        "title": "7. Clean Village Campaign",
+        "desc": ""
+      },
+      {
+        "title": "8. Rural Education and Health",
+        "desc": ""
+      },
+      {
+        "title": "9. Empowerment of Local Self-Government Institutions",
+        "desc": ""
+      }
+    ],
+    "resolution_title": "10. Our Resolution",
+    "resolution_p1": "It is our resolution to contribute to the creation of a self-reliant India by making every village prosperous with development, employment, and modern facilities.",
+    "slogan_title": "Our Slogan",
+    "slogans": [
+      "\"Prosperous Village – Prosperous India.\"",
+      "\"The development of the village means the development of the nation.\""
+    ]
+  },
+  "environmentPolicyPageContent": {
+    "title": "Environment Policy",
+    "subtitle": "Rashtriya Annadata Vikas Party (RAVP)",
+    "slogan": "\"Conservation of Nature - Security of the Future\"",
+    "intro_title": "Introduction",
+    "intro_p1": "Conservation of the environment is not just today's necessity but also a responsibility towards future generations. Conservation of water, land, forests, and natural resources is essential for sustainable development.",
+    "vision_title": "Our Vision",
+    "visions": [
+      "Clean and green India.",
+      "Water conservation.",
+      "Development of clean energy.",
+      "Reduction in pollution.",
+      "Conservation of natural resources."
+    ],
+    "goals_title": "Our Main Goals",
+    "goals": [],
+    "points": [
+      {
+        "title": "1. Water Conservation",
+        "desc": ""
+      },
+      {
+        "title": "2. Tree Plantation",
+        "desc": ""
+      },
+      {
+        "title": "3. Land and Soil Conservation",
+        "desc": ""
+      },
+      {
+        "title": "4. Clean Energy",
+        "desc": ""
+      },
+      {
+        "title": "5. Pollution Control",
+        "desc": ""
+      },
+      {
+        "title": "6. Waste Management",
+        "desc": ""
+      },
+      {
+        "title": "7. Conservation of Biodiversity",
+        "desc": ""
+      },
+      {
+        "title": "8. Environmental Awareness",
+        "desc": ""
+      },
+      {
+        "title": "9. Preparedness against Climate Change",
+        "desc": ""
+      }
+    ],
+    "resolution_title": "10. Our Resolution",
+    "resolution_p1": "It is our resolution to build a clean, green, and sustainable India by protecting natural resources and maintaining a balance between the environment and development.",
+    "slogan_title": "Our Slogan",
+    "slogans": [
+      "\"Green Environment – Secure Future.\"",
+      "\"Conservation of nature, protection of the next generation.\""
+    ]
   }
 }

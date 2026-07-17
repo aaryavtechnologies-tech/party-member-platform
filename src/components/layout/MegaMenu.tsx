@@ -52,6 +52,16 @@ const mediaLinks = [
   { titleKey: "video_gallery", href: "/media/video-gallery" },
 ];
 
+const membershipLinks = [
+  { titleKey: "member_registration", href: "/membership/register" },
+  { titleKey: "member_login", href: "/membership/login" },
+];
+
+const contactLinks = [
+  { titleKey: "contact_us", href: "/contact" },
+  { titleKey: "faq", href: "/contact/faq" },
+];
+
 export function MegaMenu() {
   const t = useTranslations("Navigation");
 
@@ -100,6 +110,17 @@ export function MegaMenu() {
         </NavigationMenuItem>
 
         <NavigationMenuItem>
+          <NavigationMenuTrigger>{t("membership")}</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid w-[250px] gap-3 p-4 bg-white dark:bg-slate-950">
+              {membershipLinks.map((link) => (
+                <ListItem key={link.titleKey} title={t(link.titleKey as any)} href={link.href} />
+              ))}
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+
+        <NavigationMenuItem>
           <NavigationMenuTrigger>{t("media")}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[300px] gap-3 p-4 md:w-[400px] md:grid-cols-2 bg-white dark:bg-slate-950">
@@ -111,20 +132,16 @@ export function MegaMenu() {
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <Link href="/membership" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              {t("membership")}
-            </NavigationMenuLink>
-          </Link>
+          <NavigationMenuTrigger>{t("contact")}</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid w-[250px] gap-3 p-4 bg-white dark:bg-slate-950">
+              {contactLinks.map((link) => (
+                <ListItem key={link.titleKey} title={t(link.titleKey as any)} href={link.href} />
+              ))}
+            </ul>
+          </NavigationMenuContent>
         </NavigationMenuItem>
 
-        <NavigationMenuItem>
-          <Link href="/contact" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              {t("contact")}
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
   );
