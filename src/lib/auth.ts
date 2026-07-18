@@ -13,6 +13,20 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    sendResetPassword: async ({ user, url }) => {
+      await resend.emails.send({
+        from: FROM_EMAIL,
+        to: user.email,
+        subject: "Reset your password – RAVP",
+        html: `<div style="font-family:sans-serif;max-width:480px;margin:auto">
+          <h2 style="color:#166534">Rashtriya Annadata Vikas Party</h2>
+          <p>We received a request to reset your password. Click the link below to set a new password:</p>
+          <a href="${url}" style="display:inline-block;background:#166534;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;margin:16px 0">Reset Password</a>
+          <p>This link will expire in 24 hours.</p>
+          <p style="color:#6b7280;font-size:12px;margin-top:24px">If you did not request a password reset, please ignore this email.</p>
+        </div>`,
+      });
+    },
   },
   emailVerification: {
     sendOnSignUp: false,

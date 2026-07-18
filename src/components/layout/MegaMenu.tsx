@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { useTranslations } from "next-intl";
 
-const aboutLinks = [
+export const aboutLinks = [
   { titleKey: "about", href: "/about" },
   { titleKey: "our_journey", href: "/about/journey" },
   { titleKey: "founder_message", href: "/about/founder-message" },
@@ -25,7 +25,7 @@ const aboutLinks = [
   { titleKey: "objectives", href: "/about/objectives" },
 ];
 
-const policyLinks = [
+export const policyLinks = [
   { titleKey: "farmer", href: "/policies/farmer" },
   { titleKey: "youth", href: "/policies/youth" },
   { titleKey: "women", href: "/policies/women" },
@@ -36,7 +36,7 @@ const policyLinks = [
   { titleKey: "environment", href: "/policies/environment" },
 ];
 
-const orgLinks = [
+export const orgLinks = [
   { titleKey: "structure", href: "/organization/structure" },
   { titleKey: "national_team", href: "/organization/national" },
   { titleKey: "state_team", href: "/organization/state" },
@@ -45,19 +45,19 @@ const orgLinks = [
   { titleKey: "village_team", href: "/organization/village" },
 ];
 
-const mediaLinks = [
+export const mediaLinks = [
   { titleKey: "news", href: "/media/news" },
   { titleKey: "press_releases", href: "/media/press-release" },
   { titleKey: "photo_gallery", href: "/media/photo-gallery" },
   { titleKey: "video_gallery", href: "/media/video-gallery" },
 ];
 
-const membershipLinks = [
+export const membershipLinks = [
   { titleKey: "member_registration", href: "/membership/register" },
   { titleKey: "member_login", href: "/membership/login" },
 ];
 
-const contactLinks = [
+export const contactLinks = [
   { titleKey: "contact_us", href: "/contact" },
   { titleKey: "faq", href: "/contact/faq" },
 ];

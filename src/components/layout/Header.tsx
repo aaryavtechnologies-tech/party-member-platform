@@ -5,6 +5,7 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import { MegaMenu } from "./MegaMenu";
+import { MobileNav } from "./MobileNav";
 
 export function Header() {
   const t = useTranslations("Navigation");
@@ -13,6 +14,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 flex h-20 items-center justify-between">
         <div className="flex gap-6 md:gap-10">
+          <MobileNav />
           <Link href="/" className="flex items-center space-x-2">
             <img src="/logo.jpg" alt="RAVP Logo" className="w-12 h-12 rounded-full" />
             <span className="hidden lg:inline-block font-bold text-lg text-primary leading-tight">
