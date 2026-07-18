@@ -4,9 +4,7 @@ import { Link } from "@/i18n/routing";
 import { usePathname } from "next/navigation";
 import { 
   LayoutDashboard, User, Award, CreditCard, 
-  Users, Newspaper, Calendar, Download, 
-  LifeBuoy, Settings, LogOut, Shield,
-  QrCode
+  Users, LogOut, Shield, QrCode
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -27,11 +25,6 @@ export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (va
     { title: t("certificate"), href: "/dashboard/certificate", icon: QrCode },
     { title: t("referrals"), href: "/dashboard/referrals", icon: Users },
     { title: t("payments"), href: "/dashboard/payments", icon: CreditCard },
-    { title: t("news"), href: "/dashboard/news", icon: Newspaper },
-    { title: t("events"), href: "/dashboard/events", icon: Calendar },
-    { title: t("downloads"), href: "/dashboard/downloads", icon: Download },
-    { title: t("support"), href: "/dashboard/support", icon: LifeBuoy },
-    { title: t("settings"), href: "/dashboard/settings", icon: Settings },
   ];
 
   return (

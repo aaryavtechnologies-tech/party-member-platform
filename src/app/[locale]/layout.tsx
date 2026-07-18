@@ -4,9 +4,6 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import Script from "next/script";
 import "../globals.css";
 
@@ -93,16 +90,10 @@ export default async function RootLayout({
           locale === "gu" ? "font-gujarati" : "font-inter"
         }`}
       >
-        <SmoothScrollProvider>
-          <NextIntlClientProvider messages={messages}>
-            <Header />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </NextIntlClientProvider>
-        </SmoothScrollProvider>
-          <Script
+        <NextIntlClientProvider messages={messages}>
+          {children}
+        </NextIntlClientProvider>
+        <Script
           id="organization-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
