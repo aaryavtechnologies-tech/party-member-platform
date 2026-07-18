@@ -36,6 +36,7 @@ export function ForgotPasswordForm() {
   const onSubmit = async (data: ForgotPasswordValues) => {
     setIsLoading(true);
     try {
+      // @ts-expect-error - better-auth type inference with plugins groups forgetPassword under emailOtp type incorrectly, but it's a function at runtime.
       const { error } = await authClient.forgetPassword({
         email: data.email,
         redirectTo: "/membership/reset-password",

@@ -51,16 +51,25 @@ export default async function proxy(request: NextRequest) {
   }
 
   // 2. Authentication Protection
-  const isProtected = pathname.includes('/dashboard') || pathname.includes('/admin');
-  
-  if (isProtected) {
+  const pathWithoutLocale = pathname.replace(/^\/(en|gu)/, "") || "/";
+  const isDashboard = pathWithoutLocale.startsWith("/dashboard");
+  const isAdmin = pathWithoutLocale.startsWith("/admin");
+  const isAdminLogin = pathWithoutLocale === "/admin/login";
+
+  if ((isDashboard || isAdmin) && !isAdminLogin) {
     const sessionCookie = request.cookies.get('better-auth.session_token') || request.cookies.get('__Secure-better-auth.session_token');
     
+    const localeMatch = pathname.match(/^\/([a-z]{2})\//);
+    const locale = localeMatch ? localeMatch[1] : 'en';
+
     if (!sessionCookie) {
       const url = request.nextUrl.clone();
-      const localeMatch = pathname.match(/^\/([a-z]{2})\//);
-      const locale = localeMatch ? localeMatch[1] : 'en';
-      url.pathname = `/${locale}/login`;
+      if (isAdmin) {
+        url.pathname = `/${locale}/admin/login`;
+      } else {
+        url.pathname = `/${locale}/membership/login`;
+      }
+      url.searchParams.set("callbackUrl", pathname);
       return NextResponse.redirect(url);
     }
   }
