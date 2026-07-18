@@ -15,12 +15,14 @@ export function MobileNav() {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="lg:hidden">
-          <Menu className="h-6 w-6" />
-          <span className="sr-only">Toggle navigation menu</span>
-        </Button>
-      </SheetTrigger>
+      <SheetTrigger
+        render={
+          <Button variant="ghost" size="icon" className="lg:hidden">
+            <Menu className="h-6 w-6" />
+            <span className="sr-only">Toggle navigation menu</span>
+          </Button>
+        }
+      />
       <SheetContent side="left" className="w-[300px] sm:w-[400px] overflow-y-auto">
         <SheetHeader>
           <SheetTitle className="text-left">
@@ -37,7 +39,7 @@ export function MobileNav() {
             {t("home")}
           </Link>
           
-          <Accordion type="single" collapsible className="w-full">
+          <Accordion multiple={false} className="w-full">
             <AccordionItem value="about">
               <AccordionTrigger className="p-2 hover:no-underline hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md">{t("about")}</AccordionTrigger>
               <AccordionContent className="pl-4 pb-0 flex flex-col gap-2 pt-2">
