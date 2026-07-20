@@ -1,10 +1,92 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, Shield, Zap } from "lucide-react";
+import { CheckCircle2, Shield, Zap, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+
+// Define Razorpay on window
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
 
 export default function MembershipUpgradePage() {
-  const currentMembership = "Primary"; // "Primary" | "LifetimePrimary" | "LifetimeActive"
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const currentMembership = "Primary"; // TODO: Fetch from session/context
+
+  const handleUpgrade = async (tier: "LIFETIME_PRIMARY" | "LIFETIME_ACTIVE", amount: number) => {
+    try {
+      setIsLoading(true);
+      
+      // 1. Create order on the backend
+      const res = await fetch("/api/payments/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tier }),
+      });
+      
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to create order");
+      }
+
+      // 2. Initialize Razorpay options
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Use NEXT_PUBLIC for frontend
+        amount: data.amount,
+        currency: data.currency,
+        name: "Rashtriya Annadata Vikas Party",
+        description: `Upgrade to ${tier === 'LIFETIME_PRIMARY' ? 'Lifetime Primary' : 'Lifetime Active'} Membership`,
+        image: "/logo.jpg",
+        order_id: data.orderId,
+        handler: async function (response: any) {
+          try {
+            // 3. Verify payment on the backend
+            const verifyRes = await fetch("/api/payments/verify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            });
+
+            const verifyData = await verifyRes.json();
+
+            if (verifyRes.ok) {
+              toast.success("Payment successful! Membership upgraded.");
+              router.refresh();
+            } else {
+              toast.error(verifyData.error || "Payment verification failed.");
+            }
+          } catch (error) {
+            toast.error("An error occurred during verification.");
+          }
+        },
+        theme: {
+          color: "#166534", // Using the primary color
+        },
+      };
+
+      const rzp1 = new window.Razorpay(options);
+      
+      rzp1.on("payment.failed", function (response: any) {
+        toast.error(`Payment failed: ${response.error.description}`);
+      });
+
+      rzp1.open();
+    } catch (error: any) {
+      toast.error(error.message || "An error occurred.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
@@ -64,8 +146,12 @@ export default function MembershipUpgradePage() {
             ))}
           </ul>
           
-          <Button className="w-full h-14 rounded-full font-bold text-lg bg-primary text-slate-950 hover:bg-primary/90">
-            Upgrade for ₹100
+          <Button 
+            className="w-full h-14 rounded-full font-bold text-lg bg-primary text-slate-950 hover:bg-primary/90"
+            onClick={() => handleUpgrade("LIFETIME_PRIMARY", 100)}
+            disabled={isLoading}
+          >
+            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Upgrade for ₹100"}
           </Button>
         </div>
 
@@ -86,7 +172,12 @@ export default function MembershipUpgradePage() {
             ))}
           </ul>
           
-          <Button variant="outline" className="w-full h-14 rounded-full font-bold text-lg" disabled>
+          <Button 
+            variant="outline" 
+            className="w-full h-14 rounded-full font-bold text-lg" 
+            onClick={() => handleUpgrade("LIFETIME_ACTIVE", 1000)}
+            disabled={isLoading || currentMembership === "Primary"}
+          >
             Upgrade First to Lifetime Primary
           </Button>
         </div>

@@ -18,7 +18,7 @@ export default async function DigitalCardPage() {
     where: { userId: session.user.id },
     include: {
       user: true,
-      organizationAssignments: {
+      officeBearers: {
         include: {
           unit: true
         }
@@ -32,9 +32,9 @@ export default async function DigitalCardPage() {
   }
 
   // Determine official assignment
-  const assignment = memberProfile.organizationAssignments.find(a => a.status === "ACTIVE");
+  const assignment = memberProfile.officeBearers.find(a => a.status === "ACTIVE");
   const stateDistrict = assignment 
-    ? `${assignment.unit.name}` 
+    ? `${assignment.unit.nameEn}` 
     : memberProfile.state 
       ? `${memberProfile.state || ''} / ${memberProfile.district || ''}`
       : "India";

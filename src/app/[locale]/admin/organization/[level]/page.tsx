@@ -16,11 +16,11 @@ export default async function OrganizationLevelPage({ params }: { params: Promis
 
   // Fetch data
   const units = await prisma.organizationUnit.findMany({
-    where: { level: enumLevel },
+    where: { level: { nameEn: { equals: level, mode: 'insensitive' } } },
     include: {
       parent: true,
       _count: {
-        select: { assignments: { where: { status: "ACTIVE" } } }
+        select: { officeBearers: { where: { status: "ACTIVE" } } }
       }
     }
   });
@@ -88,20 +88,20 @@ export default async function OrganizationLevelPage({ params }: { params: Promis
                 units.map((unit) => (
                   <tr key={unit.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30 transition-colors group">
                     <td className="p-4">
-                      <p className="font-bold text-slate-900 dark:text-white text-sm">{unit.name}</p>
+                      <p className="font-bold text-slate-900 dark:text-white text-sm">{unit.nameEn}</p>
                       <p className="text-xs text-slate-500 font-mono">ID: {unit.id.substring(0,8)}</p>
                     </td>
                     {enumLevel !== "NATIONAL" && (
                       <td className="p-4 text-sm text-slate-700 dark:text-slate-300">
-                        {unit.parent?.name || "—"}
+                        {unit.parent?.nameEn || "—"}
                       </td>
                     )}
                     <td className="p-4">
                       <div className="flex items-center gap-2">
                         <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">
-                          {unit._count.assignments}
+                          {unit._count.officeBearers}
                         </span>
-                        <span className="text-xs text-slate-500">Assignments</span>
+                        <span className="text-xs text-slate-500">Bearers</span>
                       </div>
                     </td>
                     <td className="p-4">

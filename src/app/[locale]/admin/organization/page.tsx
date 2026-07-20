@@ -6,10 +6,10 @@ import { Link } from "@/i18n/routing";
 
 export default async function OrganizationOverviewPage() {
   const [nationalCount, stateCount, districtCount, activeAssignments] = await Promise.all([
-    prisma.organizationUnit.count({ where: { level: "NATIONAL" } }),
-    prisma.organizationUnit.count({ where: { level: "STATE" } }),
-    prisma.organizationUnit.count({ where: { level: "DISTRICT" } }),
-    prisma.organizationAssignment.count({ where: { status: "ACTIVE" } })
+    prisma.organizationUnit.count({ where: { level: { priority: 1 } } }), // Assuming priority 1 is National
+    prisma.organizationUnit.count({ where: { level: { priority: 2 } } }), // Assuming priority 2 is State
+    prisma.organizationUnit.count({ where: { level: { priority: 3 } } }), // Assuming priority 3 is District
+    prisma.officeBearer.count({ where: { status: "ACTIVE" } })
   ]);
 
   const hierarchyLevels = [

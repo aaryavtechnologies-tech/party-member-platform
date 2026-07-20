@@ -7,24 +7,24 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  name          String
-  email         String    @unique
-  emailVerified Boolean   @default(false)
-  image         String?
-  role          String    @default("USER") // USER, ADMIN, SUPERADMIN
-  preferredLanguage String @default("en") // 'en' or 'gu'
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id                String   @id @default(uuid())
+  name              String
+  email             String   @unique
+  emailVerified     Boolean  @default(false)
+  image             String?
+  role              String   @default("USER") // USER, ADMIN, SUPERADMIN
+  preferredLanguage String   @default("en") // 'en' or 'gu'
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   // Better Auth Relations
-  sessions      Session[]
-  accounts      Account[]
+  sessions Session[]
+  accounts Account[]
 
   // Membership Relations
-  memberProfile MemberProfile?
-  payments      Payment[]
-  auditLogs     AuditLog[]
+  memberProfile  MemberProfile?
+  payments       Payment[]
+  auditLogs      AuditLog[]
   supportTickets SupportTicket[]
 
   @@index([email])
@@ -44,69 +44,71 @@ model Session {
 }
 
 model Account {
-  id                    String   @id @default(uuid())
+  id                    String    @id @default(uuid())
   userId                String
-  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   providerId            String
   accountId             String
   provider              String
-  password              String?  // hashed password for credential provider
+  password              String? // hashed password for credential provider
   accessToken           String?
   refreshToken          String?
   accessTokenExpiresAt  DateTime?
   refreshTokenExpiresAt DateTime?
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 }
 
 model MemberProfile {
-  id              String   @id @default(uuid())
-  userId          String   @unique
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  memberId        String   @unique // e.g., RAVP000001
-  fatherName      String
-  gender          String
-  dob             DateTime
-  mobile          String   @unique // Required, even though OTP is email
-  aadhaar         String?
-  voterId         String?
-  
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  memberId   String   @unique // e.g., RAVP000001
+  fatherName String
+  gender     String
+  dob        DateTime
+  mobile     String   @unique // Required, even though OTP is email
+  aadhaar    String?
+  voterId    String?
+
   // Address
-  state           String
-  district        String
-  taluka          String
-  village         String
-  fullAddress     String
-  pincode         String
+  state       String
+  district    String
+  taluka      String
+  village     String
+  fullAddress String
+  pincode     String
 
   // Membership Details
-  membershipType  MembershipTier @default(PRIMARY)
-  issueDate       DateTime       @default(now())
-  
+  membershipType MembershipTier @default(PRIMARY)
+  issueDate      DateTime       @default(now())
+
   // Assets
-  qrCodeUrl       String?
-  
+  qrCodeUrl String?
+
   // Referrals
-  referralCode    String   @unique // e.g., RAVP458963
-  referredById    String?
-  referredBy      MemberProfile?  @relation("Referrals", fields: [referredById], references: [id])
-  referrals       MemberProfile[] @relation("Referrals")
+  referralCode String          @unique // e.g., RAVP458963
+  referredById String?
+  referredBy   MemberProfile?  @relation("Referrals", fields: [referredById], references: [id])
+  referrals    MemberProfile[] @relation("Referrals")
 
   // Status & Assignment
-  status          MemberStatus @default(ACTIVE)
-  assignedTeam    String?
-  assignedPost    String?
-  deletedAt       DateTime?
-  
-  organizationAssignments OrganizationAssignment[]
+  status       MemberStatus @default(ACTIVE)
+  assignedTeam String?
+  assignedPost String?
+  deletedAt    DateTime?
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  officeBearers       OfficeBearer[]
+  organizationHistory OrganizationHistory[]
+  departmentMembers   DepartmentMember[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   membershipHistory MembershipHistory[]
-  referralHistory   ReferralHistory[] @relation("ReferredMember")
-  referralsMade     ReferralHistory[] @relation("Referrer")
+  referralHistory   ReferralHistory[]   @relation("ReferredMember")
+  referralsMade     ReferralHistory[]   @relation("Referrer")
 
   @@index([memberId])
   @@index([referralCode])
@@ -130,29 +132,29 @@ enum MembershipTier {
 }
 
 model MembershipHistory {
-  id              String   @id @default(uuid())
+  id              String        @id @default(uuid())
   memberProfileId String
   memberProfile   MemberProfile @relation(fields: [memberProfileId], references: [id], onDelete: Cascade)
-  
-  fromTier        MembershipTier?
-  toTier          MembershipTier
-  amountPaid      Int      @default(0) // in paise
-  paymentId       String?
-  
-  createdAt       DateTime @default(now())
+
+  fromTier   MembershipTier?
+  toTier     MembershipTier
+  amountPaid Int             @default(0) // in paise
+  paymentId  String?
+
+  createdAt DateTime @default(now())
 }
 
 model ReferralHistory {
-  id              String   @id @default(uuid())
-  referrerId      String
-  referrer        MemberProfile @relation("Referrer", fields: [referrerId], references: [id], onDelete: Cascade)
-  
-  referredId      String   @unique // A member can only be referred once
-  referredMember  MemberProfile @relation("ReferredMember", fields: [referredId], references: [id], onDelete: Cascade)
-  
-  status          ReferralStatus @default(SUCCESS)
-  
-  createdAt       DateTime @default(now())
+  id         String        @id @default(uuid())
+  referrerId String
+  referrer   MemberProfile @relation("Referrer", fields: [referrerId], references: [id], onDelete: Cascade)
+
+  referredId     String        @unique // A member can only be referred once
+  referredMember MemberProfile @relation("ReferredMember", fields: [referredId], references: [id], onDelete: Cascade)
+
+  status ReferralStatus @default(SUCCESS)
+
+  createdAt DateTime @default(now())
 }
 
 enum ReferralStatus {
@@ -162,25 +164,25 @@ enum ReferralStatus {
 }
 
 model Payment {
-  id              String   @id @default(uuid())
-  userId          String
-  user            User     @relation(fields: [userId], references: [id])
-  razorpayOrderId String   @unique
-  razorpayPaymentId String? @unique
-  amount          Int      // In paise (100 = ₹1)
-  status          PaymentStatus @default(PENDING)
-  upgradeTo       MembershipTier
-  
-  currency        String   @default("INR")
-  paymentMethod   String?  // e.g., "UPI", "CARD", "NETBANKING"
-  tax             Int      @default(0) // in paise
-  errorMessage    String?
-  
-  invoice         Invoice?
-  receipt         Receipt?
+  id                String         @id @default(uuid())
+  userId            String
+  user              User           @relation(fields: [userId], references: [id])
+  razorpayOrderId   String         @unique
+  razorpayPaymentId String?        @unique
+  amount            Int // In paise (100 = ₹1)
+  status            PaymentStatus  @default(PENDING)
+  upgradeTo         MembershipTier
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  currency      String  @default("INR")
+  paymentMethod String? // e.g., "UPI", "CARD", "NETBANKING"
+  tax           Int     @default(0) // in paise
+  errorMessage  String?
+
+  invoice Invoice?
+  receipt Receipt?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
   @@index([razorpayOrderId])
@@ -196,23 +198,23 @@ enum PaymentStatus {
 }
 
 model Invoice {
-  id            String   @id @default(uuid())
-  invoiceNumber String   @unique // e.g., INV-2026-000001
-  paymentId     String   @unique
-  payment       Payment  @relation(fields: [paymentId], references: [id])
-  
-  fileUrl       String?
-  createdAt     DateTime @default(now())
+  id            String  @id @default(uuid())
+  invoiceNumber String  @unique // e.g., INV-2026-000001
+  paymentId     String  @unique
+  payment       Payment @relation(fields: [paymentId], references: [id])
+
+  fileUrl   String?
+  createdAt DateTime @default(now())
 }
 
 model Receipt {
-  id            String   @id @default(uuid())
-  receiptNumber String   @unique // e.g., REC-2026-000001
-  paymentId     String   @unique
-  payment       Payment  @relation(fields: [paymentId], references: [id])
-  
-  fileUrl       String?
-  createdAt     DateTime @default(now())
+  id            String  @id @default(uuid())
+  receiptNumber String  @unique // e.g., REC-2026-000001
+  paymentId     String  @unique
+  payment       Payment @relation(fields: [paymentId], references: [id])
+
+  fileUrl   String?
+  createdAt DateTime @default(now())
 }
 
 model AuditLog {
@@ -231,76 +233,201 @@ model AuditLog {
 }
 
 model SupportTicket {
-  id           String    @id @default(uuid())
-  ticketNumber String    @unique // e.g., TKT-2026-000001
+  id           String @id @default(uuid())
+  ticketNumber String @unique // e.g., TKT-2026-000001
   userId       String
-  user         User      @relation(fields: [userId], references: [id])
+  user         User   @relation(fields: [userId], references: [id])
   subject      String
   category     String
-  priority     String    @default("LOW") // LOW, MEDIUM, HIGH, URGENT
-  status       String    @default("OPEN") // OPEN, UNDER_REVIEW, IN_PROGRESS, RESOLVED, CLOSED, REJECTED
+  priority     String @default("LOW") // LOW, MEDIUM, HIGH, URGENT
+  status       String @default("OPEN") // OPEN, UNDER_REVIEW, IN_PROGRESS, RESOLVED, CLOSED, REJECTED
   description  String
-  
+
   messages     TicketMessage[]
   attachments  TicketAttachment[]
   activityLogs TicketActivityLog[]
 
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  resolvedAt   DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  resolvedAt DateTime?
 }
 
 // ----------------------------------------------------
 // Organization Management (Phase 5)
 // ----------------------------------------------------
 
-enum OrgLevel {
-  NATIONAL
-  STATE
-  DISTRICT
-  TALUKA
-  VILLAGE
+model OrganizationLevel {
+  id       String @id @default(uuid())
+  nameEn   String
+  nameGu   String
+  priority Int    @default(0) // e.g. 1=National, 2=State
+  status   String @default("ACTIVE") // ACTIVE, INACTIVE
+
+  units     OrganizationUnit[]
+  positions Position[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  createdBy String?
+  updatedBy String?
+  deletedAt DateTime?
 }
 
 model OrganizationUnit {
-  id          String   @id @default(uuid())
-  name        String   // e.g., "Gujarat", "Ahmedabad"
-  level       OrgLevel
-  
-  parentId    String?
-  parent      OrganizationUnit?  @relation("UnitHierarchy", fields: [parentId], references: [id])
-  children    OrganizationUnit[] @relation("UnitHierarchy")
+  id     String @id @default(uuid())
+  nameEn String
+  nameGu String
 
-  assignments OrganizationAssignment[]
+  levelId String
+  level   OrganizationLevel @relation(fields: [levelId], references: [id])
+
+  parentId String?
+  parent   OrganizationUnit?  @relation("UnitHierarchy", fields: [parentId], references: [id])
+  children OrganizationUnit[] @relation("UnitHierarchy")
+
+  officeBearers OfficeBearer[]
+  documents     OrganizationDocument[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  createdBy String?
+  updatedBy String?
+  deletedAt DateTime?
 }
 
-model OrganizationPosition {
-  id          String   @id @default(uuid())
-  title       String
-  level       OrgLevel
-  isActive    Boolean  @default(true)
+model Position {
+  id          String  @id @default(uuid())
+  nameEn      String
+  nameGu      String
+  description String? @db.Text
+  priority    Int     @default(0)
+  status      String  @default("ACTIVE")
+
+  levelId String? // Optional, if tied to a specific level
+  level   OrganizationLevel? @relation(fields: [levelId], references: [id])
+
+  officeBearers OfficeBearer[]
+  histories     OrganizationHistory[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  createdBy String?
+  updatedBy String?
+  deletedAt DateTime?
+}
+
+model Department {
+  id          String  @id @default(uuid())
+  nameEn      String
+  nameGu      String
+  description String? @db.Text
+  status      String  @default("ACTIVE")
+
+  officeBearers     OfficeBearer[]
+  departmentMembers DepartmentMember[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  createdBy String?
+  updatedBy String?
+  deletedAt DateTime?
+}
+
+model OfficeBearer {
+  id String @id @default(uuid())
+
+  memberId String
+  member   MemberProfile @relation(fields: [memberId], references: [id])
+
+  positionId String
+  position   Position @relation(fields: [positionId], references: [id])
+
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id])
+
+  unitId String
+  unit   OrganizationUnit @relation(fields: [unitId], references: [id])
+
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+  status    String    @default("ACTIVE") // ACTIVE, EXPIRED, REVOKED
+
+  appointmentOrder String?
+  profilePhoto     String?
+  signature        String?
 
   assignments OrganizationAssignment[]
+  histories   OrganizationHistory[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  createdBy String?
+  updatedBy String?
+  deletedAt DateTime?
 }
 
 model OrganizationAssignment {
-  id           String   @id @default(uuid())
-  
-  memberId     String
-  member       MemberProfile @relation(fields: [memberId], references: [id])
-  
-  unitId       String
-  unit         OrganizationUnit @relation(fields: [unitId], references: [id])
-  
-  positionId   String
-  position     OrganizationPosition @relation(fields: [positionId], references: [id])
+  id             String       @id @default(uuid())
+  officeBearerId String
+  officeBearer   OfficeBearer @relation(fields: [officeBearerId], references: [id])
 
-  startDate    DateTime @default(now())
-  endDate      DateTime?
-  status       String   @default("ACTIVE") // ACTIVE, EXPIRED, REVOKED
-  remarks      String?
+  action  String // e.g. CREATED, APPROVED, REVOKED
+  remarks String? @db.Text
 
-  createdAt    DateTime @default(now())
+  createdAt DateTime @default(now())
+  createdBy String?
+}
+
+model OrganizationHistory {
+  id             String       @id @default(uuid())
+  officeBearerId String
+  officeBearer   OfficeBearer @relation(fields: [officeBearerId], references: [id])
+
+  memberId String
+  member   MemberProfile @relation(fields: [memberId], references: [id])
+
+  positionId String
+  position   Position @relation(fields: [positionId], references: [id])
+
+  startDate DateTime
+  endDate   DateTime
+  reason    String? // e.g. PROMOTED, EXPIRED, RESIGNED
+
+  createdAt DateTime @default(now())
+  createdBy String?
+}
+
+model DepartmentMember {
+  id           String     @id @default(uuid())
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id])
+
+  memberId String
+  member   MemberProfile @relation(fields: [memberId], references: [id])
+
+  role   String @default("MEMBER") // Could be VOLUNTEER, etc.
+  status String @default("ACTIVE")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  createdBy String?
+  updatedBy String?
+  deletedAt DateTime?
+}
+
+model OrganizationDocument {
+  id      String @id @default(uuid())
+  title   String
+  fileUrl String
+
+  unitId String
+  unit   OrganizationUnit @relation(fields: [unitId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  createdBy String?
+  updatedBy String?
+  deletedAt DateTime?
 }
 
 // ----------------------------------------------------
@@ -314,74 +441,74 @@ enum ContentStatus {
 }
 
 model CmsPage {
-  id             String        @id @default(uuid())
-  status         ContentStatus @default(DRAFT)
+  id     String        @id @default(uuid())
+  status ContentStatus @default(DRAFT)
 
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  translations   CmsPageTranslation[]
+  translations CmsPageTranslation[]
 }
 
 model CmsPageTranslation {
-  id             String       @id @default(uuid())
-  pageId         String
-  page           CmsPage      @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  
-  language       String       // 'en' or 'gu'
-  title          String
-  slug           String       @unique
-  content        String       @db.Text
-  
+  id     String  @id @default(uuid())
+  pageId String
+  page   CmsPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  language String // 'en' or 'gu'
+  title    String
+  slug     String @unique
+  content  String @db.Text
+
   seoTitle       String?
   seoDescription String?
   seoKeywords    String?
 
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([pageId, language])
 }
 
 model MediaFile {
-  id             String   @id @default(uuid())
-  filename       String   @unique
-  originalName   String
-  filePath       String?  // Made optional for backwards compat if needed
-  mimeType       String
-  extension      String?
-  size           Int      // in bytes
-  url            String   // e.g., /uploads/images/file.webp
-  folder         String?  // e.g. "gallery", "news"
-  
-  newsMedia      NewsMedia[]
-  
-  createdAt      DateTime @default(now())
+  id           String  @id @default(uuid())
+  filename     String  @unique
+  originalName String
+  filePath     String? // Made optional for backwards compat if needed
+  mimeType     String
+  extension    String?
+  size         Int // in bytes
+  url          String // e.g., /uploads/images/file.webp
+  folder       String? // e.g. "gallery", "news"
+
+  newsMedia NewsMedia[]
+
+  createdAt DateTime @default(now())
 }
 
 model FaqItem {
-  id             String        @id @default(uuid())
-  category       String        @default("GENERAL")
-  order          Int           @default(0)
-  status         ContentStatus @default(PUBLISHED)
-  
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  id       String        @id @default(uuid())
+  category String        @default("GENERAL")
+  order    Int           @default(0)
+  status   ContentStatus @default(PUBLISHED)
 
-  translations   FaqTranslation[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  translations FaqTranslation[]
 }
 
 model FaqTranslation {
-  id             String       @id @default(uuid())
-  faqId          String
-  faq            FaqItem      @relation(fields: [faqId], references: [id], onDelete: Cascade)
-  
-  language       String       // 'en' or 'gu'
-  question       String
-  answer         String       @db.Text
+  id    String  @id @default(uuid())
+  faqId String
+  faq   FaqItem @relation(fields: [faqId], references: [id], onDelete: Cascade)
 
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  language String // 'en' or 'gu'
+  question String
+  answer   String @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([faqId, language])
 }
@@ -391,126 +518,125 @@ model FaqTranslation {
 // ----------------------------------------------------
 
 model Policy {
-  id             String        @id @default(uuid())
-  status         ContentStatus @default(PUBLISHED)
-  order          Int           @default(0)
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  id        String        @id @default(uuid())
+  status    ContentStatus @default(PUBLISHED)
+  order     Int           @default(0)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 
-  translations   PolicyTranslation[]
+  translations PolicyTranslation[]
 }
 
 model PolicyTranslation {
-  id             String       @id @default(uuid())
-  policyId       String
-  policy         Policy       @relation(fields: [policyId], references: [id], onDelete: Cascade)
-  
-  language       String       // 'en' or 'gu'
-  title          String
-  slug           String       @unique
-  content        String       @db.Text
-  
+  id       String @id @default(uuid())
+  policyId String
+  policy   Policy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  language String // 'en' or 'gu'
+  title    String
+  slug     String @unique
+  content  String @db.Text
+
   seoTitle       String?
   seoDescription String?
-  
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([policyId, language])
 }
 
 model Menu {
-  id             String        @id @default(uuid())
-  location       String        @unique // HEADER, FOOTER, MOBILE
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  
-  items          MenuItem[]
+  id        String   @id @default(uuid())
+  location  String   @unique // HEADER, FOOTER, MOBILE
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items MenuItem[]
 }
 
 model MenuItem {
-  id             String        @id @default(uuid())
-  menuId         String
-  menu           Menu          @relation(fields: [menuId], references: [id], onDelete: Cascade)
-  parentId       String?
-  parent         MenuItem?     @relation("MenuItemHierarchy", fields: [parentId], references: [id])
-  children       MenuItem[]    @relation("MenuItemHierarchy")
-  
-  url            String
-  order          Int           @default(0)
-  target         String        @default("_self")
-  
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  id       String     @id @default(uuid())
+  menuId   String
+  menu     Menu       @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  parentId String?
+  parent   MenuItem?  @relation("MenuItemHierarchy", fields: [parentId], references: [id])
+  children MenuItem[] @relation("MenuItemHierarchy")
 
-  translations   MenuItemTranslation[]
+  url    String
+  order  Int    @default(0)
+  target String @default("_self")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  translations MenuItemTranslation[]
 }
 
 model MenuItemTranslation {
-  id             String       @id @default(uuid())
-  itemId         String
-  item           MenuItem     @relation(fields: [itemId], references: [id], onDelete: Cascade)
-  language       String
-  title          String
+  id       String   @id @default(uuid())
+  itemId   String
+  item     MenuItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  language String
+  title    String
 
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([itemId, language])
 }
 
 model EmailTemplate {
-  id             String        @id @default(uuid())
-  name           String        @unique // e.g. WELCOME, PASSWORD_RESET
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  id        String   @id @default(uuid())
+  name      String   @unique // e.g. WELCOME, PASSWORD_RESET
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  translations   EmailTemplateTranslation[]
+  translations EmailTemplateTranslation[]
 }
 
 model EmailTemplateTranslation {
-  id             String       @id @default(uuid())
-  templateId     String
-  template       EmailTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
-  language       String
-  
-  subject        String
-  body           String       @db.Text
+  id         String        @id @default(uuid())
+  templateId String
+  template   EmailTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  language   String
 
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  subject String
+  body    String @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([templateId, language])
 }
 
-
 model TicketMessage {
-  id           String    @id @default(uuid())
-  ticketId     String
-  ticket       SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
-  senderType   String    // "MEMBER" | "ADMIN"
-  senderId     String    // userId or adminId
-  message      String
-  createdAt    DateTime  @default(now())
+  id         String        @id @default(uuid())
+  ticketId   String
+  ticket     SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  senderType String // "MEMBER" | "ADMIN"
+  senderId   String // userId or adminId
+  message    String
+  createdAt  DateTime      @default(now())
 }
 
 model TicketAttachment {
-  id           String    @id @default(uuid())
-  ticketId     String
-  ticket       SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
-  fileName     String
-  fileUrl      String
-  fileType     String
-  uploadedAt   DateTime  @default(now())
+  id         String        @id @default(uuid())
+  ticketId   String
+  ticket     SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  fileName   String
+  fileUrl    String
+  fileType   String
+  uploadedAt DateTime      @default(now())
 }
 
 model TicketActivityLog {
-  id           String    @id @default(uuid())
-  ticketId     String
-  ticket       SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
-  action       String    // "CREATED", "STATUS_CHANGED", "REPLIED"
-  performedBy  String    // userId or adminId
-  createdAt    DateTime  @default(now())
+  id          String        @id @default(uuid())
+  ticketId    String
+  ticket      SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  action      String // "CREATED", "STATUS_CHANGED", "REPLIED"
+  performedBy String // userId or adminId
+  createdAt   DateTime      @default(now())
 }
 
 model Event {
@@ -537,60 +663,60 @@ enum ArticleStatus {
 }
 
 model NewsArticle {
-  id              String         @id @default(uuid())
-  authorId        String         // Points to Admin User ID
-  status          ArticleStatus  @default(DRAFT)
-  
-  isFeatured      Boolean        @default(false)
-  isBreaking      Boolean        @default(false)
-  isPressRelease  Boolean        @default(false)
-  
-  views           Int            @default(0)
-  
-  publishedAt     DateTime?
-  scheduledFor    DateTime?
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  id       String        @id @default(uuid())
+  authorId String // Points to Admin User ID
+  status   ArticleStatus @default(DRAFT)
 
-  translations    NewsTranslation[]
-  categories      NewsCategory[]
-  tags            NewsTag[]
-  media           NewsMedia[]
-  seo             NewsSEO?
+  isFeatured     Boolean @default(false)
+  isBreaking     Boolean @default(false)
+  isPressRelease Boolean @default(false)
+
+  views Int @default(0)
+
+  publishedAt  DateTime?
+  scheduledFor DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  translations NewsTranslation[]
+  categories   NewsCategory[]
+  tags         NewsTag[]
+  media        NewsMedia[]
+  seo          NewsSEO?
 }
 
 model NewsTranslation {
-  id              String       @id @default(uuid())
-  articleId       String
-  article         NewsArticle  @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  
-  language        String       // 'en' or 'gu'
-  title           String
-  slug            String       @unique
-  summary         String?      @db.Text
-  content         String       @db.Text
-  
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  id        String      @id @default(uuid())
+  articleId String
+  article   NewsArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  language String // 'en' or 'gu'
+  title    String
+  slug     String  @unique
+  summary  String? @db.Text
+  content  String  @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([articleId, language])
 }
 
 model NewsCategory {
-  id              String        @id @default(uuid())
-  name            String        @unique // e.g., "Party News", "Press Release"
-  slug            String        @unique
-  isActive        Boolean       @default(true)
-  
-  articles        NewsArticle[]
+  id       String  @id @default(uuid())
+  name     String  @unique // e.g., "Party News", "Press Release"
+  slug     String  @unique
+  isActive Boolean @default(true)
+
+  articles NewsArticle[]
 }
 
 model NewsTag {
-  id              String        @id @default(uuid())
-  name            String        @unique // e.g., "Gujarat", "Youth"
-  slug            String        @unique
-  
-  articles        NewsArticle[]
+  id   String @id @default(uuid())
+  name String @unique // e.g., "Gujarat", "Youth"
+  slug String @unique
+
+  articles NewsArticle[]
 }
 
 enum MediaType {
@@ -601,23 +727,23 @@ enum MediaType {
 }
 
 model NewsMedia {
-  id              String        @id @default(uuid())
-  articleId       String
-  article         NewsArticle   @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  
-  mediaId         String
-  media           MediaFile     @relation(fields: [mediaId], references: [id], onDelete: Cascade)
-  
-  type            MediaType     @default(GALLERY_IMAGE)
-  order           Int           @default(0)
-  caption         String?
+  id        String      @id @default(uuid())
+  articleId String
+  article   NewsArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  mediaId String
+  media   MediaFile @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  type    MediaType @default(GALLERY_IMAGE)
+  order   Int       @default(0)
+  caption String?
 }
 
 model NewsSEO {
-  id              String        @id @default(uuid())
-  articleId       String        @unique
-  article         NewsArticle   @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  
+  id        String      @id @default(uuid())
+  articleId String      @unique
+  article   NewsArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
   metaTitle       String?
   metaDescription String?
   metaKeywords    String?
@@ -626,9 +752,9 @@ model NewsSEO {
 }
 
 model DownloadableAsset {
-  id          String   @id @default(uuid())
-  title       String
-  category    String   // Policy, Form, Guideline
-  fileUrl     String
-  createdAt   DateTime @default(now())
+  id        String   @id @default(uuid())
+  title     String
+  category  String // Policy, Form, Guideline
+  fileUrl   String
+  createdAt DateTime @default(now())
 }
