@@ -38,11 +38,11 @@ export const policyLinks = [
 
 export const orgLinks = [
   { titleKey: "structure", href: "/organization/structure" },
-  { titleKey: "national_team", href: "/organization/national" },
-  { titleKey: "state_team", href: "/organization/state" },
-  { titleKey: "district_team", href: "/organization/district" },
-  { titleKey: "taluka_team", href: "/organization/taluka" },
-  { titleKey: "village_team", href: "/organization/village" },
+  { titleKey: "national_team", href: "/national-team" },
+  { titleKey: "state_team", href: "/state-team" },
+  { titleKey: "district_team", href: "/district-team" },
+  { titleKey: "taluka_team", href: "/taluka-team" },
+  { titleKey: "village_team", href: "/village-team" },
 ];
 
 export const mediaLinks = [
