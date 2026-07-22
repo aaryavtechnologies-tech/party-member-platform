@@ -8,6 +8,15 @@ const resend = new Resend(process.env.RESEND_API_KEY!);
 const FROM_EMAIL = process.env.EMAIL_FROM || "RAVP <noreply@playvia.in>";
 
 export const auth = betterAuth({
+  baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || process.env.RENDER_EXTERNAL_URL || "https://party-member-platform.onrender.com",
+  trustedOrigins: [
+    "http://localhost:3001",
+    "http://localhost:3000",
+    "https://party-member-platform.onrender.com",
+    process.env.BETTER_AUTH_URL || "",
+    process.env.NEXT_PUBLIC_APP_URL || "",
+    process.env.RENDER_EXTERNAL_URL || "",
+  ].filter(Boolean),
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),

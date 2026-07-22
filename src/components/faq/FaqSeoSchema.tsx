@@ -11,7 +11,7 @@ interface FaqSeoSchemaProps {
 }
 
 export function FaqSeoSchema({ locale, faqs }: FaqSeoSchemaProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.rashtriyaannadatavikasparty.org";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.RENDER_EXTERNAL_URL || "https://party-member-platform.onrender.com";
   const isGu = locale === "gu";
 
   const faqItemsSchema = faqs.map((faq) => ({

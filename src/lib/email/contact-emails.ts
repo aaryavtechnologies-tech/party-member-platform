@@ -117,7 +117,7 @@ export async function sendAdminInquiryNotificationEmail(data: ContactInquiryEmai
             </table>
 
             <div style="margin-top: 24px; text-align: center;">
-              <a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001'}/en/admin/contact" style="display: inline-block; background-color: #166534; color: #ffffff; padding: 12px 24px; border-radius: 8px; font-weight: 700; text-decoration: none;">View Inquiry in Admin Panel</a>
+              <a href="${process.env.NEXT_PUBLIC_APP_URL || process.env.RENDER_EXTERNAL_URL || 'https://party-member-platform.onrender.com'}/en/admin/contact" style="display: inline-block; background-color: #166534; color: #ffffff; padding: 12px 24px; border-radius: 8px; font-weight: 700; text-decoration: none;">View Inquiry in Admin Panel</a>
             </div>
           </div>
         </div>
