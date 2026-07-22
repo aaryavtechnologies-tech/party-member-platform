@@ -758,3 +758,185 @@ model DownloadableAsset {
   fileUrl   String
   createdAt DateTime @default(now())
 }
+
+// ----------------------------------------------------
+// Contact & Inquiry Management System (Module 007-01)
+// ----------------------------------------------------
+
+enum ContactInquiryStatus {
+  NEW
+  PENDING
+  IN_PROGRESS
+  REPLIED
+  CLOSED
+}
+
+enum ContactInquiryPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model ContactInquiry {
+  id           String                 @id @default(uuid())
+  inquiryId    String                 @unique // e.g. INQ-2026-000001
+  fullName     String
+  mobileNumber String
+  email        String
+  state        String
+  district     String
+  taluka       String
+  subject      String
+  message      String                 @db.Text
+  status       ContactInquiryStatus   @default(NEW)
+  priority     ContactInquiryPriority @default(MEDIUM)
+  assignedTo   String?                // User / Admin name or ID
+  archived     Boolean                @default(false)
+  replyNotes   String?                @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  activityLogs ContactActivityLog[]
+
+  @@index([status])
+  @@index([priority])
+  @@index([state])
+  @@index([district])
+  @@index([createdAt])
+}
+
+model ContactOffice {
+  id             String  @id @default(uuid())
+  officeNameEn   String
+  officeNameGu   String
+  addressEn      String  @db.Text
+  addressGu      String  @db.Text
+  phone          String
+  email          String
+  website        String
+  googleMapUrl   String? @db.Text
+  embedMapUrl    String? @db.Text
+  isHeadquarters Boolean @default(true)
+  order          Int     @default(0)
+
+  workingHours ContactWorkingHour[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactWorkingHour {
+  id         String         @id @default(uuid())
+  officeId   String?
+  office     ContactOffice? @relation(fields: [officeId], references: [id], onDelete: Cascade)
+  dayRangeEn String         // e.g. "Monday – Saturday"
+  dayRangeGu String         // e.g. "સોમવાર – શનિવાર"
+  timingEn   String         // e.g. "10:00 AM – 6:00 PM"
+  timingGu   String         // e.g. "સવારે 10:00 – સાંજે 6:00"
+  isClosed   Boolean        @default(false)
+  order      Int            @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactSocialLink {
+  id             String  @id @default(uuid())
+  platform       String  @unique // FACEBOOK, INSTAGRAM, TWITTER, YOUTUBE, WHATSAPP, TELEGRAM, LINKEDIN, THREADS
+  platformNameEn String
+  platformNameGu String
+  url            String?
+  icon           String?
+  isEnabled      Boolean @default(true)
+  order          Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactFaq {
+  id         String  @id @default(uuid())
+  questionEn String
+  questionGu String
+  answerEn   String  @db.Text
+  answerGu   String  @db.Text
+  category   String  @default("GENERAL")
+  order      Int     @default(0)
+  isEnabled  Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique // e.g. 'contact_hero', 'contact_intro', 'contact_join', 'contact_commitment', 'contact_motto', 'contact_seo'
+  value     String   @db.Text // JSON formatted string containing bilingual attributes
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactActivityLog {
+  id          String         @id @default(uuid())
+  inquiryId   String
+  inquiry     ContactInquiry @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  action      String         // CREATED, STATUS_CHANGED, ASSIGNED, PRIORITY_CHANGED, REPLIED, ARCHIVED
+  performedBy String         // e.g. "System" or Admin User name
+  remarks     String?        @db.Text
+
+  createdAt DateTime @default(now())
+}
+
+// ----------------------------------------------------
+// FAQ Management System (Module 007-02)
+// ----------------------------------------------------
+
+model FaqCategory {
+  id        String   @id @default(uuid())
+  nameGu    String
+  nameEn    String
+  slug      String   @unique
+  icon      String?  @default("HelpCircle")
+  sortOrder Int      @default(0)
+  status    String   @default("ACTIVE") // ACTIVE, INACTIVE
+
+  faqs Faq[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Faq {
+  id              String      @id @default(uuid())
+  categoryId      String
+  category        FaqCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  questionGu      String
+  questionEn      String
+  answerGu        String      @db.Text
+  answerEn        String      @db.Text
+  featured        Boolean     @default(false)
+  published       Boolean     @default(true)
+  sortOrder       Int         @default(0)
+  views           Int         @default(0)
+  helpfulCount    Int         @default(0)
+  notHelpfulCount Int         @default(0)
+  metaTitle       String?
+  metaDescription String?
+  keywords        String?
+  slug            String      @unique
+  createdBy       String?
+  updatedBy       String?
+  deletedAt       DateTime?   // Soft delete
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([published])
+  @@index([featured])
+  @@index([slug])
+}
+
+

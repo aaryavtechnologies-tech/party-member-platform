@@ -50,6 +50,7 @@ const ADMIN_NAV_CONFIG: NavGroup[] = [
     label: "Content Management",
     items: [
       { title: "Homepage", href: "/admin/cms/home", icon: FileEdit },
+      { title: "FAQ Management", href: "/admin/faq", icon: LifeBuoy },
       { title: "About Pages", href: "/admin/cms/about", icon: FileText },
       { title: "Policies", href: "/admin/cms/policies", icon: FileText },
       { title: "News & Media", href: "/admin/news", icon: Globe },
@@ -75,6 +76,7 @@ const ADMIN_NAV_CONFIG: NavGroup[] = [
   {
     label: "Support",
     items: [
+      { title: "Contact & Inquiries", href: "/admin/contact", icon: Bell },
       { title: "Support Tickets", href: "/admin/support", icon: LifeBuoy },
     ]
   },
