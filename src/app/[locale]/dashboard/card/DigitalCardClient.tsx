@@ -72,7 +72,7 @@ export default function DigitalCardClient({ data }: { data: CardData }) {
           <div className="h-32 bg-gradient-to-br from-orange-500 to-orange-600 relative overflow-hidden flex flex-col items-center justify-center text-white p-4 text-center">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 blur-xl rounded-full -mr-10 -mt-10" />
             <h2 className="font-black text-3xl tracking-tighter relative z-10 text-white drop-shadow-md">RAVP</h2>
-            <p className="text-[10px] font-bold uppercase tracking-widest relative z-10 opacity-90 drop-shadow-sm">Rashtriya Adarsh Vikas Party</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest relative z-10 opacity-90 drop-shadow-sm text-center">Rashtriya Annadata Vikas Party</p>
           </div>
 
           {/* Photo */}
@@ -107,9 +107,14 @@ export default function DigitalCardClient({ data }: { data: CardData }) {
             </div>
 
             {/* Footer & QR */}
-            <div className="border-t border-slate-100 pt-4 flex justify-between items-center bg-white">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400">
-                <ShieldCheck className="w-4 h-4 text-green-500" /> Verified Member
+            <div className="border-t border-slate-100 pt-4 flex justify-between items-end bg-white">
+              <div className="flex flex-col items-start">
+                <div className="h-8 mb-1">
+                  <img src="/sign.png" alt="Signature" className="h-full object-contain" />
+                </div>
+                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400">
+                  <ShieldCheck className="w-4 h-4 text-green-500" /> Verified
+                </div>
               </div>
               <div className="w-16 h-16 bg-white p-1 rounded-lg border border-slate-200">
                 {/* Dynamically generate QR code to point to public verify page */}

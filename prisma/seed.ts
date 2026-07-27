@@ -285,7 +285,7 @@ async function main() {
   // ─── FAQ MODULE SEED ───
   console.log("📌 Seeding FAQ Module categories & 20 FAQs...");
   const catCount = await prisma.faqCategory.count();
-  let categories: Record<string, string> = {};
+  const categories: Record<string, string> = {};
 
   if (catCount === 0) {
     const createdCats = await Promise.all([

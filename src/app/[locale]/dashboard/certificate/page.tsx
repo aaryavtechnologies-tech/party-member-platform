@@ -56,7 +56,7 @@ export default function CertificatePage() {
 
               {/* Header */}
               <h1 className="text-5xl font-black text-primary tracking-tighter mb-2">RAVP</h1>
-              <h2 className="text-xl font-bold text-slate-600 uppercase tracking-[0.3em] mb-12">Rashtriya Adarsh Vikas Party</h2>
+              <h2 className="text-xl font-bold text-slate-600 uppercase tracking-[0.3em] mb-12">Rashtriya Annadata Vikas Party</h2>
               
               <h3 className="text-4xl font-serif text-slate-900 italic mb-10">Certificate of Membership</h3>
               
@@ -64,23 +64,25 @@ export default function CertificatePage() {
               <h4 className="text-5xl font-bold text-slate-900 border-b-2 border-slate-300 pb-2 px-12 mb-8">Himanshu Kumar</h4>
               
               <p className="text-lg text-slate-600 max-w-2xl leading-relaxed mb-12">
-                is a registered <strong className="text-slate-900">Lifetime Primary Member</strong> of the Rashtriya Adarsh Vikas Party (Member ID: RAVP000245) and is committed to upholding the core values and vision of the organization.
+                is a registered <strong className="text-slate-900">Lifetime Primary Member</strong> of the Rashtriya Annadata Vikas Party (Member ID: RAVP000245) and is committed to upholding the core values and vision of the organization.
               </p>
 
               {/* Signatures */}
               <div className="w-full flex justify-between px-16 mt-auto">
                 <div className="text-center">
-                  <div className="w-40 h-12 border-b border-slate-400 mb-2" />
+                  <div className="w-40 h-16 border-b border-slate-400 mb-2 flex items-end justify-center">
+                    <img src="/sign.png" alt="National President Signature" className="h-14 object-contain" />
+                  </div>
                   <p className="text-sm font-bold text-slate-900 uppercase">National President</p>
                 </div>
                 <div className="text-center">
-                  <div className="w-40 h-12 border-b border-slate-400 mb-2 flex items-end justify-center pb-2">
+                  <div className="w-40 h-16 border-b border-slate-400 mb-2 flex items-end justify-center pb-2">
                     <span className="font-bold text-slate-900">14 / 07 / 2026</span>
                   </div>
                   <p className="text-sm font-bold text-slate-900 uppercase">Date of Issue</p>
                 </div>
                 <div className="text-center">
-                  <div className="w-40 h-12 border-b border-slate-400 mb-2" />
+                  <div className="w-40 h-16 border-b border-slate-400 mb-2" />
                   <p className="text-sm font-bold text-slate-900 uppercase">General Secretary</p>
                 </div>
               </div>

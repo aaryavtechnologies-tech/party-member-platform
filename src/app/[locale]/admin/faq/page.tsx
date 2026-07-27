@@ -140,13 +140,17 @@ export default function AdminFaqPage() {
   };
 
   useEffect(() => {
-    fetchAnalytics();
-    fetchCategories();
-    fetchFaqs();
+    setTimeout(() => {
+      fetchAnalytics();
+      fetchCategories();
+      fetchFaqs();
+    }, 0);
   }, []);
 
   useEffect(() => {
-    fetchFaqs();
+    setTimeout(() => {
+      fetchFaqs();
+    }, 0);
   }, [search, selectedCatFilter, statusFilter]);
 
   // Save FAQ (Create / Update)

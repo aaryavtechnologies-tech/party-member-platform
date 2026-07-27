@@ -18,22 +18,17 @@ export default function FounderMessagePage() {
       <div className="py-20 lg:py-32 bg-slate-50 dark:bg-slate-900/50">
         <div className="container mx-auto px-4 max-w-6xl flex flex-col md:flex-row gap-16 items-start">
           {/* Left Column: Photo & Signature */}
-          <div className="w-full md:w-1/3 flex flex-col items-center space-y-6 sticky top-24">
+          <div className="w-full md:w-1/3 flex flex-col items-center space-y-6 sticky top-24 order-2 md:order-1">
             <div className="w-full aspect-[3/4] bg-slate-200 dark:bg-slate-800 rounded-3xl overflow-hidden shadow-2xl relative border-4 border-white dark:border-slate-800">
-              {/* Professional Photo Placeholder */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-10" />
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-500 font-medium p-6 text-center z-20">
-                <svg className="w-16 h-16 mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                [Professional Photo in Suit]
-              </div>
+              {/* Professional Photo */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent z-10" />
+              <img src="/foundr-image.png" alt="Founder" className="w-full h-full object-cover relative z-0" />
             </div>
             
             <div className="text-center w-full bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-md border border-slate-100 dark:border-slate-800">
-              {/* Digital Signature Placeholder */}
+              {/* Digital Signature */}
               <div className="h-16 w-full flex items-center justify-center border-b border-dashed border-slate-300 dark:border-slate-700 mb-4 pb-2">
-                <span className="font-serif text-3xl text-slate-700 dark:text-slate-300 italic opacity-80" style={{ fontFamily: "cursive" }}>
-                  {t("founder_name_sign")}
-                </span>
+                <img src="/sign.png" alt="Founder Signature" className="h-full object-contain dark:invert" />
               </div>
               <h3 className="font-bold text-xl text-primary">{t("founder_name")}</h3>
               <p className="text-accent font-medium">{t("founder_title")}</p>
@@ -42,7 +37,7 @@ export default function FounderMessagePage() {
           </div>
 
           {/* Right Column: Message Content */}
-          <div className="w-full md:w-2/3 space-y-8 text-lg text-slate-700 dark:text-slate-300">
+          <div className="w-full md:w-2/3 space-y-8 text-lg text-slate-700 dark:text-slate-300 order-1 md:order-2">
             <div>
               <h2 className="text-4xl font-bold text-primary mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">{t("title")}</h2>
               <p className="font-semibold text-xl mb-2">{t("greeting")}</p>

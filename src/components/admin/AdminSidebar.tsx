@@ -97,17 +97,19 @@ export function AdminSidebar({ isMobileOpen, setMobileOpen }: { isMobileOpen: bo
 
   // Initialize from local storage on mount
   useEffect(() => {
-    const savedCollapsed = localStorage.getItem("adminSidebarCollapsed");
-    if (savedCollapsed) {
-      setIsCollapsed(savedCollapsed === "true");
-    }
-    const savedGroups = localStorage.getItem("adminSidebarExpandedGroups");
-    if (savedGroups) {
-      setExpandedGroups(JSON.parse(savedGroups));
-    } else {
-      // Default to opening first group
-      setExpandedGroups({ "Dashboard": true, "Member Management": true });
-    }
+    setTimeout(() => {
+      const savedCollapsed = localStorage.getItem("adminSidebarCollapsed");
+      if (savedCollapsed) {
+        setIsCollapsed(savedCollapsed === "true");
+      }
+      const savedGroups = localStorage.getItem("adminSidebarExpandedGroups");
+      if (savedGroups) {
+        setExpandedGroups(JSON.parse(savedGroups));
+      } else {
+        // Default to opening first group
+        setExpandedGroups({ "Dashboard": true, "Member Management": true });
+      }
+    }, 0);
   }, []);
 
   const toggleSidebar = () => {

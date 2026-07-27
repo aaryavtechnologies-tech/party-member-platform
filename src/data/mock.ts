@@ -12,7 +12,6 @@ export const mainNav: NavItem[] = [
 
 export const statistics: StatItem[] = [
   { id: '1', labelKey: 'Members', value: 1500000, icon: 'Users' },
-  { id: '2', labelKey: 'Volunteers', value: 500000, icon: 'HandHeart' },
   { id: '3', labelKey: 'Districts', value: 750, icon: 'Map' },
   { id: '4', labelKey: 'Villages', value: 600000, icon: 'Home' },
   { id: '5', labelKey: 'Campaigns', value: 1200, icon: 'Flag' },

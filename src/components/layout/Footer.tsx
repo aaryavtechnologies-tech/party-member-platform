@@ -195,7 +195,6 @@ export function Footer() {
             <h4 className="text-white font-semibold mb-4 text-lg">{t("quick_links")} 2</h4>
             <ul className="space-y-3">
               <li><Link href="/membership/register" className="hover:text-primary transition-colors">{tNav("membership")}</Link></li>
-              <li><Link href="/volunteer" className="hover:text-primary transition-colors">{tNav("volunteer")}</Link></li>
               <li><Link href="/media/news" className="hover:text-primary transition-colors">{tNav("news")}</Link></li>
               <li><Link href="/media/photo-gallery" className="hover:text-primary transition-colors">{tNav("gallery")}</Link></li>
               <li><Link href="/contact" className="hover:text-primary transition-colors">{tNav("contact")}</Link></li>

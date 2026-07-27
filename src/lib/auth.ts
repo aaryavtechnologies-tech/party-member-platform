@@ -1,11 +1,20 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import { emailOTP } from "better-auth/plugins";
 
-const resend = new Resend(process.env.RESEND_API_KEY!);
-const FROM_EMAIL = process.env.EMAIL_FROM || "RAVP <onboarding@resend.dev>";
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || "",
+  port: parseInt(process.env.SMTP_PORT || "465", 10),
+  secure: process.env.SMTP_PORT === "465",
+  auth: {
+    user: process.env.SMTP_USER || "",
+    pass: process.env.SMTP_PASS || "",
+  },
+});
+
+const FROM_EMAIL = process.env.EMAIL_FROM || "RAVP <info@yourdomain.com>";
 
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || process.env.RENDER_EXTERNAL_URL || "https://party-member-platform.onrender.com",
@@ -25,7 +34,7 @@ export const auth = betterAuth({
     sendResetPassword: async ({ user, url }) => {
       console.log(`[Auth Email] Attempting to send reset password email to: ${user.email}`);
       try {
-        const response = await resend.emails.send({
+        const response = await transporter.sendMail({
           from: FROM_EMAIL,
           to: user.email,
           subject: "Reset your password – RAVP",
@@ -67,7 +76,7 @@ export const auth = betterAuth({
     sendVerificationEmail: async ({ user, url }) => {
       console.log(`[Auth Email] Attempting to send verification email to: ${user.email}`);
       try {
-        const response = await resend.emails.send({
+        const response = await transporter.sendMail({
           from: FROM_EMAIL,
           to: user.email,
           subject: "Verify your email address – RAVP",
@@ -106,7 +115,7 @@ export const auth = betterAuth({
       async sendVerificationOTP({ email, otp, type }) {
         console.log(`[Auth Email] Attempting to send ${type} OTP to: ${email}`);
         try {
-          const response = await resend.emails.send({
+          const response = await transporter.sendMail({
             from: FROM_EMAIL,
             to: email,
             subject: "Your OTP Verification Code – RAVP",

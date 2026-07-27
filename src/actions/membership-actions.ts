@@ -133,7 +133,25 @@ export async function registerMember(data: RegistrationData) {
 
   } catch (error: any) {
     console.error("Registration Error:", error);
-    return { success: false, error: error.message || "Something went wrong during registration." };
+    
+    // Handle Prisma Unique Constraint Violations
+    if (error.code === 'P2002') {
+      const target = error.meta?.target;
+      if (Array.isArray(target)) {
+        if (target.includes('mobile')) {
+          return { success: false, error: "This mobile number is already registered to another member." };
+        }
+        if (target.includes('aadhaar')) {
+          return { success: false, error: "This Aadhaar number is already registered." };
+        }
+        if (target.includes('voterId')) {
+          return { success: false, error: "This Voter ID is already registered." };
+        }
+      }
+      return { success: false, error: "A record with this information already exists." };
+    }
+    
+    return { success: false, error: "Something went wrong during registration. Please check your details." };
   }
 }
 

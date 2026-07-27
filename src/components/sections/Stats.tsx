@@ -17,7 +17,7 @@ export function Stats() {
   return (
     <section className="relative -mt-24 z-20 pb-24">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
           {statistics.map((stat, i) => (
             <motion.div
               key={stat.id}

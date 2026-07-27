@@ -33,12 +33,10 @@ export function ResetPasswordForm() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!token && typeof window !== 'undefined') {
-      // The better-auth client will look for ?token in URL natively.
-      // If no token is found, we should warn the user.
+    if (!token) {
       const urlParams = new URLSearchParams(window.location.search);
       if (!urlParams.get("token") && !urlParams.get("error")) {
-         setErrorState("Invalid or missing reset token.");
+         setTimeout(() => setErrorState("Invalid or missing reset token."), 0);
       }
     }
   }, [token]);

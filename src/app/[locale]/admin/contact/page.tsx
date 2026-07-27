@@ -150,13 +150,17 @@ export default function AdminContactPage() {
   };
 
   useEffect(() => {
-    fetchDashboard();
-    fetchInquiries();
-    fetchCmsSettings();
+    setTimeout(() => {
+      fetchDashboard();
+      fetchInquiries();
+      fetchCmsSettings();
+    }, 0);
   }, []);
 
   useEffect(() => {
-    fetchInquiries();
+    setTimeout(() => {
+      fetchInquiries();
+    }, 0);
   }, [search, statusFilter, priorityFilter]);
 
   // Handle Inquiry Status Update & Reply

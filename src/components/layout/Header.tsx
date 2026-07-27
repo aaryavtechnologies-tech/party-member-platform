@@ -14,11 +14,11 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 flex h-20 items-center justify-between">
         {/* Left: Logo + Desktop MegaMenu */}
-        <div className="flex gap-6 md:gap-10 items-center">
+        <div className="flex gap-3 sm:gap-6 md:gap-10 items-center">
           <Link href="/" className="flex items-center space-x-2">
-            <img src="/logo.jpg" alt="RAVP Logo" className="w-12 h-12 rounded-full" />
-            <span className="hidden lg:inline-block font-bold text-lg text-primary leading-tight">
-              {t("party_name_full")}<br/><span className="text-sm text-muted-foreground">RAVP</span>
+            <img src="/logo.jpg" alt="RAVP Logo" className="w-10 h-10 sm:w-12 sm:h-12 rounded-full shrink-0" />
+            <span className="inline-block font-bold text-[10px] sm:text-sm lg:text-lg text-primary leading-[1.2] max-w-[140px] sm:max-w-none">
+              {t("party_name_full")}<br/><span className="text-[9px] sm:text-xs lg:text-sm text-muted-foreground">RAVP</span>
             </span>
           </Link>
           <MegaMenu />
