@@ -131,7 +131,7 @@ export const auth = betterAuth({
     },
     useSecureCookies: true,
     ipAddress: {
-      trustedProxies: true,
+      ipAddressHeaders: ["x-forwarded-for", "x-real-ip"],
     }
   }
 });
