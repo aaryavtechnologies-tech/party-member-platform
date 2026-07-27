@@ -125,5 +125,14 @@ export const auth = betterAuth({
       },
     }),
   ],
+  advanced: {
+    defaultCookieAttributes: {
+      secure: true,
+    },
+    useSecureCookies: true,
+    ipAddress: {
+      trustedProxies: true,
+    }
+  }
 });
 
