@@ -8,11 +8,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { 
   User, Phone, Mail, Calendar, MapPin, 
-  CreditCard, ShieldCheck, ChevronRight, ChevronLeft, CheckCircle2, Loader2, RefreshCw 
+  CreditCard, ShieldCheck, ChevronRight, ChevronLeft, CheckCircle2, Loader2, RefreshCw, Lock 
 } from "lucide-react";
-import { registerMember } from "@/actions/membership-actions";
+import { registerMember, verifyRegistrationOtp } from "@/actions/membership-actions";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "@/i18n/routing";
 
 // Strict Zod Validation Schema
 const formSchema = z.object({
@@ -25,6 +26,7 @@ const formSchema = z.object({
   dob: z.string().min(1, "Date of birth is required"),
   mobile: z.string().regex(/^[6-9]\d{9}$/, "Must be a valid 10-digit Indian mobile number"),
   email: z.string().email("Invalid email address").min(1, "Email is required for OTP"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
   aadhaar: z.string().regex(/^\d{12}$/, "Aadhaar must be exactly 12 digits").optional().or(z.literal("")),
   voterId: z.string().regex(/^[A-Z]{3}\d{7}$/, "Invalid Voter ID (e.g., ABC1234567)").optional().or(z.literal("")),
   
@@ -58,6 +60,7 @@ export function RegistrationForm() {
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMemberId, setSuccessMemberId] = useState<string | null>(null);
+  const router = useRouter();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -70,6 +73,7 @@ export function RegistrationForm() {
       dob: "",
       mobile: "",
       email: "",
+      password: "",
       aadhaar: "",
       voterId: "",
       state: "",
@@ -85,7 +89,7 @@ export function RegistrationForm() {
   const nextStep = async () => {
     let isValid = false;
     if (step === 1) {
-      isValid = await form.trigger(["firstName", "middleName", "lastName", "fatherName", "gender", "dob", "mobile", "email", "aadhaar", "voterId"]);
+      isValid = await form.trigger(["firstName", "middleName", "lastName", "fatherName", "gender", "dob", "mobile", "email", "password", "aadhaar", "voterId"]);
     } else if (step === 2) {
       isValid = await form.trigger(["state", "district", "taluka", "village", "fullAddress", "pincode"]);
     } else if (step === 3) {
@@ -129,11 +133,15 @@ export function RegistrationForm() {
     }
     setIsVerifyingOtp(true);
     try {
-      await authClient.emailOtp.verifyEmail({ email, otp });
-      setIsOtpVerified(true);
-      toast.success("Email verified successfully!");
+      const result = await verifyRegistrationOtp(email, otp);
+      if (result.success) {
+        setIsOtpVerified(true);
+        toast.success("Email verified successfully!");
+      } else {
+        toast.error(result.error || "Invalid OTP. Please try again.");
+      }
     } catch (err: any) {
-      toast.error(err?.message || "Invalid OTP. Please try again.");
+      toast.error("Failed to verify OTP.");
     } finally {
       setIsVerifyingOtp(false);
     }
@@ -154,8 +162,19 @@ export function RegistrationForm() {
     try {
       const result = await registerMember(data);
       if (result.success && result.memberId) {
-        toast.success("Registration Successful!");
+        
+        // Log the user in to establish a session for the dashboard
+        await authClient.signIn.email({
+          email: data.email,
+          password: data.password,
+        });
+
+        toast.success("Registration Successful! Redirecting to dashboard...");
         setSuccessMemberId(result.memberId);
+        setTimeout(() => {
+          router.push("/dashboard");
+          router.refresh();
+        }, 3000);
       } else {
         toast.error(result.error || "Failed to register.");
       }
@@ -180,11 +199,15 @@ export function RegistrationForm() {
           <span className="text-sm font-semibold text-slate-400 block mb-1">Your Member ID</span>
           <strong className="text-3xl text-primary font-black tracking-wider block">{successMemberId}</strong>
         </div>
-        <a href="/dashboard/membership">
-          <Button className="h-14 px-10 rounded-full font-bold text-base bg-primary text-slate-950 hover:bg-primary/90">
-            Go to Member Dashboard
-          </Button>
-        </a>
+        <Button 
+          onClick={() => {
+            router.push("/dashboard");
+            router.refresh();
+          }} 
+          className="h-14 px-10 rounded-full font-bold text-base bg-primary text-slate-950 hover:bg-primary/90"
+        >
+          Go to Member Dashboard
+        </Button>
       </div>
     );
   }
@@ -227,7 +250,19 @@ export function RegistrationForm() {
         </div>
       </div>
 
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 relative z-10">
+      <form 
+        onSubmit={form.handleSubmit(onSubmit, (errors) => {
+          console.error("Form Validation Errors:", errors);
+          toast.error("Some fields are missing or invalid. Please check previous steps.");
+          // Auto-navigate to the step with errors
+          if (errors.firstName || errors.lastName || errors.mobile || errors.email || errors.password || errors.aadhaar || errors.voterId) {
+            setStep(1);
+          } else if (errors.state || errors.district || errors.taluka || errors.village || errors.fullAddress || errors.pincode) {
+            setStep(2);
+          }
+        })} 
+        className="space-y-8 relative z-10"
+      >
         <AnimatePresence mode="wait">
           
           {/* STEP 1: Personal Information */}
@@ -312,6 +347,15 @@ export function RegistrationForm() {
                     <input type="email" {...form.register("email")} className="w-full h-14 pl-12 pr-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Required for OTP Verification" />
                   </div>
                   {form.formState.errors.email && <p className="text-red-500 text-xs font-medium">{form.formState.errors.email.message}</p>}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Password *</label>
+                  <div className="relative">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                    <input type="password" {...form.register("password")} className="w-full h-14 pl-12 pr-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Create a secure password" />
+                  </div>
+                  {form.formState.errors.password && <p className="text-red-500 text-xs font-medium">{form.formState.errors.password.message}</p>}
                 </div>
 
                 <div className="space-y-2">

@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { hashPassword } from "@better-auth/utils/password";
 
 const formSchema = z.object({
   firstName: z.string().min(2),
@@ -12,6 +13,7 @@ const formSchema = z.object({
   dob: z.string().min(1),
   mobile: z.string().regex(/^[6-9]\d{9}$/),
   email: z.string().email(),
+  password: z.string().min(6),
   aadhaar: z.string().optional().or(z.literal("")),
   voterId: z.string().optional().or(z.literal("")),
   state: z.string().min(2),
@@ -73,11 +75,21 @@ export async function registerMember(data: RegistrationData) {
         .filter(Boolean)
         .join(" ");
 
+      const hashedPass = await hashPassword(validatedData.password);
+
       const user = await tx.user.create({
         data: {
           name: fullName,
           email: validatedData.email,
           emailVerified: true, // Auto-verified for this flow context
+          accounts: {
+            create: {
+              accountId: validatedData.email,
+              providerId: "credential",
+              provider: "credential",
+              password: hashedPass
+            }
+          }
         }
       });
 
@@ -122,5 +134,34 @@ export async function registerMember(data: RegistrationData) {
   } catch (error: any) {
     console.error("Registration Error:", error);
     return { success: false, error: error.message || "Something went wrong during registration." };
+  }
+}
+
+export async function verifyRegistrationOtp(email: string, otp: string) {
+  try {
+    const verification = await prisma.verification.findFirst({
+      where: {
+        identifier: email,
+        value: otp
+      }
+    });
+
+    if (!verification) {
+      return { success: false, error: "Invalid OTP." };
+    }
+
+    if (verification.expiresAt < new Date()) {
+      return { success: false, error: "OTP has expired." };
+    }
+
+    // OTP is valid, delete it so it can't be reused
+    await prisma.verification.delete({
+      where: { id: verification.id }
+    });
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("OTP Verification Error:", error);
+    return { success: false, error: "Failed to verify OTP." };
   }
 }

@@ -4,6 +4,8 @@ import { AdminStatsCard } from "@/components/admin/AdminStatsCard";
 import { Users, UserCheck, UserX, UserMinus, Search, Filter, MoreHorizontal, Mail, ShieldAlert, Edit, Eye } from "lucide-react";
 import { Link } from "@/i18n/routing";
 
+export const dynamic = 'force-dynamic';
+
 // This is a Server Component
 export default async function AdminMembersPage() {
   // Fetch actual data from DB
