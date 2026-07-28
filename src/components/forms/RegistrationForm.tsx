@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { 
   User, Phone, Mail, Calendar, MapPin, 
-  CreditCard, ShieldCheck, ChevronRight, ChevronLeft, CheckCircle2, Loader2, RefreshCw, Lock 
+  CreditCard, ShieldCheck, ChevronRight, ChevronLeft, CheckCircle2, Loader2, RefreshCw, Lock, Eye, EyeOff 
 } from "lucide-react";
 import { registerMember, verifyRegistrationOtp } from "@/actions/membership-actions";
 import { toast } from "sonner";
@@ -21,14 +21,26 @@ const formSchema = z.object({
   firstName: z.string().min(2, "First name is required").max(50),
   middleName: z.string().max(50).optional(),
   lastName: z.string().min(2, "Last name is required").max(50),
-  fatherName: z.string().min(3, "Father/Husband name is required").max(50),
+  relativeRelation: z.enum(["Father", "Husband"]),
+  relativeFirstName: z.string().min(2, "First name is required").max(50),
+  relativeMiddleName: z.string().max(50).optional(),
+  relativeLastName: z.string().min(2, "Last name is required").max(50),
   gender: z.string().min(1, "Gender is required"),
-  dob: z.string().min(1, "Date of birth is required"),
+  dob: z.string().min(1, "Date of birth is required").refine((date) => {
+    const today = new Date();
+    const dob = new Date(date);
+    let age = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+    return age >= 18;
+  }, "You must be at least 18 years old to register"),
   mobile: z.string().regex(/^[6-9]\d{9}$/, "Must be a valid 10-digit Indian mobile number"),
   email: z.string().email("Invalid email address").min(1, "Email is required for OTP"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   aadhaar: z.string().regex(/^\d{12}$/, "Aadhaar must be exactly 12 digits").optional().or(z.literal("")),
-  voterId: z.string().regex(/^[A-Z]{3}\d{7}$/, "Invalid Voter ID (e.g., ABC1234567)").optional().or(z.literal("")),
+  voterId: z.string().regex(/^[a-zA-Z0-9]{10,15}$/, "Invalid Voter ID format").optional().or(z.literal("")),
   
   // Step 2: Address Info
   state: z.string().min(2, "State is required"),
@@ -60,6 +72,7 @@ export function RegistrationForm() {
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMemberId, setSuccessMemberId] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const form = useForm<FormData>({
@@ -68,7 +81,10 @@ export function RegistrationForm() {
       firstName: "",
       middleName: "",
       lastName: "",
-      fatherName: "",
+      relativeRelation: "Father",
+      relativeFirstName: "",
+      relativeMiddleName: "",
+      relativeLastName: "",
       gender: "",
       dob: "",
       mobile: "",
@@ -89,7 +105,7 @@ export function RegistrationForm() {
   const nextStep = async () => {
     let isValid = false;
     if (step === 1) {
-      isValid = await form.trigger(["firstName", "middleName", "lastName", "fatherName", "gender", "dob", "mobile", "email", "password", "aadhaar", "voterId"]);
+      isValid = await form.trigger(["firstName", "middleName", "lastName", "relativeRelation", "relativeFirstName", "relativeMiddleName", "relativeLastName", "gender", "dob", "mobile", "email", "password", "aadhaar", "voterId"]);
     } else if (step === 2) {
       isValid = await form.trigger(["state", "district", "taluka", "village", "fullAddress", "pincode"]);
     } else if (step === 3) {
@@ -298,13 +314,41 @@ export function RegistrationForm() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Father/Husband Name *</label>
-                  <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                    <input {...form.register("fatherName")} className="w-full h-14 pl-12 pr-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Relative's name" />
+                <div className="space-y-4 md:col-span-2">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Father or Husband? *</label>
+                    <div className="flex items-center gap-6">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" value="Father" {...form.register("relativeRelation")} className="w-4 h-4 text-primary focus:ring-primary" />
+                        <span className="text-sm font-medium">Father</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" value="Husband" {...form.register("relativeRelation")} className="w-4 h-4 text-primary focus:ring-primary" />
+                        <span className="text-sm font-medium">Husband</span>
+                      </label>
+                    </div>
+                    {form.formState.errors.relativeRelation && <p className="text-red-500 text-xs font-medium">{form.formState.errors.relativeRelation.message}</p>}
                   </div>
-                  {form.formState.errors.fatherName && <p className="text-red-500 text-xs font-medium">{form.formState.errors.fatherName.message}</p>}
+                  
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Relative's Name *</label>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div className="relative">
+                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                        <input {...form.register("relativeFirstName")} className="w-full h-14 pl-12 pr-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="First Name" />
+                        {form.formState.errors.relativeFirstName && <p className="text-red-500 text-xs font-medium mt-1">{form.formState.errors.relativeFirstName.message}</p>}
+                      </div>
+                      <div className="relative">
+                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                        <input {...form.register("relativeMiddleName")} className="w-full h-14 pl-12 pr-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Middle Name" />
+                      </div>
+                      <div className="relative">
+                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                        <input {...form.register("relativeLastName")} className="w-full h-14 pl-12 pr-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Last Name" />
+                        {form.formState.errors.relativeLastName && <p className="text-red-500 text-xs font-medium mt-1">{form.formState.errors.relativeLastName.message}</p>}
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="space-y-2">
@@ -353,7 +397,10 @@ export function RegistrationForm() {
                   <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Password *</label>
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                    <input type="password" {...form.register("password")} className="w-full h-14 pl-12 pr-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Create a secure password" />
+                    <input type={showPassword ? "text" : "password"} {...form.register("password")} className="w-full h-14 pl-12 pr-12 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Create a secure password" />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
                   </div>
                   {form.formState.errors.password && <p className="text-red-500 text-xs font-medium">{form.formState.errors.password.message}</p>}
                 </div>
@@ -465,7 +512,7 @@ export function RegistrationForm() {
                   <p className="text-slate-500 text-sm mb-4">Support the member who invited you by entering their unique referral code.</p>
                   <div className="relative">
                     <ShieldCheck className="absolute left-4 top-1/2 -translate-y-1/2 text-primary w-6 h-6" />
-                    <input {...form.register("referralCode")} className="w-full h-14 pl-14 pr-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white focus:ring-2 focus:ring-primary outline-none transition-all uppercase font-semibold tracking-wider text-slate-900" placeholder="E.G. RAVP458963" />
+                    <input {...form.register("referralCode")} className="w-full h-14 pl-14 pr-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white focus:ring-2 focus:ring-primary outline-none transition-all uppercase font-semibold tracking-wider text-slate-900" placeholder="E.G. RAVP0000000000000001" />
                   </div>
                 </div>
                 

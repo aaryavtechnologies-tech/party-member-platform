@@ -16,7 +16,7 @@ export default function RegisterPage() {
         ]}
       />
       <div className="py-20 bg-slate-50 dark:bg-slate-950">
-        <div className="container mx-auto px-4 max-w-3xl">
+        <div className="container mx-auto px-4 max-w-5xl">
           <RegistrationForm />
         </div>
       </div>

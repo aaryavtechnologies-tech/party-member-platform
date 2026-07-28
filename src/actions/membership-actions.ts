@@ -8,14 +8,26 @@ const formSchema = z.object({
   firstName: z.string().min(2),
   middleName: z.string().optional(),
   lastName: z.string().min(2),
-  fatherName: z.string().min(3),
+  relativeRelation: z.enum(["Father", "Husband"]),
+  relativeFirstName: z.string().min(2),
+  relativeMiddleName: z.string().optional(),
+  relativeLastName: z.string().min(2),
   gender: z.string().min(1),
-  dob: z.string().min(1),
+  dob: z.string().min(1).refine((date) => {
+    const today = new Date();
+    const dob = new Date(date);
+    let age = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+    return age >= 18;
+  }, "Must be at least 18 years old"),
   mobile: z.string().regex(/^[6-9]\d{9}$/),
   email: z.string().email(),
   password: z.string().min(6),
   aadhaar: z.string().optional().or(z.literal("")),
-  voterId: z.string().optional().or(z.literal("")),
+  voterId: z.string().regex(/^[a-zA-Z0-9]{10,15}$/).optional().or(z.literal("")),
   state: z.string().min(2),
   district: z.string().min(2),
   taluka: z.string().min(2),
@@ -34,11 +46,6 @@ function generateMemberId() {
   return `RAVP-${year}-${randomNum}`;
 }
 
-function generateReferralCode() {
-  // e.g. RAVP458963
-  const randomNum = Math.floor(100000 + Math.random() * 900000);
-  return `RAVP${randomNum}`;
-}
 
 export async function registerMember(data: RegistrationData) {
   try {
@@ -67,7 +74,6 @@ export async function registerMember(data: RegistrationData) {
 
     // 3. Create User and MemberProfile in a transaction
     const memberId = generateMemberId();
-    const referralCode = generateReferralCode();
 
     const newUser = await prisma.$transaction(async (tx) => {
       // Create Base User
@@ -93,13 +99,37 @@ export async function registerMember(data: RegistrationData) {
         }
       });
 
+      // Generate Sequential Referral Code
+      const lastProfile = await tx.memberProfile.findFirst({
+        where: {
+          referralCode: {
+            startsWith: "RAVP0"
+          }
+        },
+        orderBy: {
+          createdAt: 'desc'
+        }
+      });
+
+      let nextRefNumber = 1;
+      if (lastProfile) {
+        const lastNumberStr = lastProfile.referralCode.replace("RAVP", "");
+        const lastNumber = parseInt(lastNumberStr, 10);
+        if (!isNaN(lastNumber)) {
+          nextRefNumber = lastNumber + 1;
+        }
+      }
+      const referralCode = `RAVP${nextRefNumber.toString().padStart(16, "0")}`;
+
+      const fullFatherName = `${validatedData.relativeRelation}: ${validatedData.relativeFirstName} ${validatedData.relativeMiddleName ? validatedData.relativeMiddleName + ' ' : ''}${validatedData.relativeLastName}`.trim();
+
       // Create MemberProfile
       const profile = await tx.memberProfile.create({
         data: {
           userId: user.id,
           memberId,
           referralCode,
-          fatherName: validatedData.fatherName,
+          fatherName: fullFatherName,
           gender: validatedData.gender,
           dob: new Date(validatedData.dob),
           mobile: validatedData.mobile,

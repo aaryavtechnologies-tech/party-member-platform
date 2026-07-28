@@ -46,7 +46,7 @@ export default async function ReferralsPage({
         </div>
 
         <div className="space-y-6">
-          <ReferralLinkGen referralCode="RAVP458963" />
+          <ReferralLinkGen referralCode="RAVP0000000000000001" />
         </div>
       </div>
     </div>
