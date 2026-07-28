@@ -114,6 +114,11 @@ export const auth = betterAuth({
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
         console.log(`[Auth Email] Attempting to send ${type} OTP to: ${email}`);
+        if (process.env.NODE_ENV !== "production") {
+          console.log(`\n========================================`);
+          console.log(`🔑 [LOCAL DEV] OTP for ${email} is: ${otp}`);
+          console.log(`========================================\n`);
+        }
         try {
           const response = await transporter.sendMail({
             from: FROM_EMAIL,
