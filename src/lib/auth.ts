@@ -33,6 +33,12 @@ export const auth = betterAuth({
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
       console.log(`[Auth Email] Attempting to send reset password email to: ${user.email}`);
+      if (process.env.NODE_ENV !== "production") {
+        console.log(`\n========================================`);
+        console.log(`🔑 [LOCAL DEV] Reset Password URL for ${user.email} is: ${url}`);
+        console.log(`========================================\n`);
+        return;
+      }
       try {
         const response = await transporter.sendMail({
           from: FROM_EMAIL,
@@ -75,6 +81,12 @@ export const auth = betterAuth({
     sendOnSignUp: false,
     sendVerificationEmail: async ({ user, url }) => {
       console.log(`[Auth Email] Attempting to send verification email to: ${user.email}`);
+      if (process.env.NODE_ENV !== "production") {
+        console.log(`\n========================================`);
+        console.log(`🔑 [LOCAL DEV] Verification URL for ${user.email} is: ${url}`);
+        console.log(`========================================\n`);
+        return;
+      }
       try {
         const response = await transporter.sendMail({
           from: FROM_EMAIL,
@@ -118,6 +130,8 @@ export const auth = betterAuth({
           console.log(`\n========================================`);
           console.log(`🔑 [LOCAL DEV] OTP for ${email} is: ${otp}`);
           console.log(`========================================\n`);
+          // Skip sending email locally to prevent hanging due to ISP SMTP port blocks
+          return;
         }
         try {
           const response = await transporter.sendMail({
