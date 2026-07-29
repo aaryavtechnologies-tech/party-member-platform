@@ -5,11 +5,16 @@ import { FileText, Image as ImageIcon, BookOpen, Layers, Edit3, Settings } from 
 import { Link } from "@/i18n/routing";
 
 export default async function CMSOverviewPage() {
-  const [totalPages, publishedPages, draftPages, mediaFiles] = await Promise.all([
+  const [totalPages, publishedPages, draftPages, mediaFiles, recentEdits] = await Promise.all([
     prisma.cmsPage.count(),
     prisma.cmsPage.count({ where: { status: "PUBLISHED" } }),
     prisma.cmsPage.count({ where: { status: "DRAFT" } }),
-    prisma.mediaFile.count()
+    prisma.mediaFile.count(),
+    prisma.cmsPage.findMany({ 
+      take: 5, 
+      orderBy: { updatedAt: "desc" },
+      include: { translations: true }
+    })
   ]);
 
   const quickActions = [
@@ -73,10 +78,33 @@ export default async function CMSOverviewPage() {
         {/* Recent Activity */}
         <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col">
           <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Recent Edits</h3>
-          <div className="flex-1 flex flex-col items-center justify-center py-12 text-center">
-            <FileText className="w-8 h-8 text-slate-300 dark:text-slate-700 mb-3" />
-            <p className="text-sm text-slate-500 font-medium">No recent activity.</p>
-            <p className="text-xs text-slate-400 mt-1">Updates to pages and media will appear here.</p>
+          <div className="space-y-4 flex-1">
+            {recentEdits.length === 0 ? (
+              <div className="flex-1 flex flex-col items-center justify-center py-12 text-center">
+                <FileText className="w-8 h-8 text-slate-300 dark:text-slate-700 mb-3" />
+                <p className="text-sm text-slate-500 font-medium">No recent activity.</p>
+                <p className="text-xs text-slate-400 mt-1">Updates to pages and media will appear here.</p>
+              </div>
+            ) : (
+              recentEdits.map((page) => (
+                <div key={page.id} className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
+                  <div className="flex items-center gap-3 overflow-hidden">
+                    <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center shrink-0">
+                      <FileText className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div className="overflow-hidden">
+                      <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{page.translations[0]?.title || "Untitled Page"}</p>
+                      <p className="text-xs text-slate-500 truncate">Updated {new Date(page.updatedAt).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shrink-0 ${
+                    page.status === 'PUBLISHED' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-700'
+                  }`}>
+                    {page.status}
+                  </span>
+                </div>
+              ))
+            )}
           </div>
         </div>
 

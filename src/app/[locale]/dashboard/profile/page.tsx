@@ -26,10 +26,10 @@ export default async function ProfilePage() {
   const defaultValues: ProfileData = {
     fullName: user.name || "",
     fatherName: user.memberProfile.fatherName || "",
-    dob: user.memberProfile.dateOfBirth ? new Date(user.memberProfile.dateOfBirth).toISOString().split('T')[0] : "",
+    dob: user.memberProfile.dob ? new Date(user.memberProfile.dob).toISOString().split('T')[0] : "",
     email: user.email || "",
     mobile: user.memberProfile.mobile || "",
-    address: user.memberProfile.address || "",
+    address: user.memberProfile.fullAddress || "",
     pincode: user.memberProfile.pincode || ""
   };
 

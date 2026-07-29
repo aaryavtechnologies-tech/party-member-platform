@@ -5,19 +5,30 @@ import { ShieldCheck, MapPin, Map, Users, Network, ChevronRight } from "lucide-r
 import { Link } from "@/i18n/routing";
 
 export default async function OrganizationOverviewPage() {
-  const [nationalCount, stateCount, districtCount, activeAssignments] = await Promise.all([
+  const [nationalCount, stateCount, districtCount, talukaCount, villageCount, activeAssignments, recentAssignments] = await Promise.all([
     prisma.organizationUnit.count({ where: { level: { priority: 1 } } }), // Assuming priority 1 is National
     prisma.organizationUnit.count({ where: { level: { priority: 2 } } }), // Assuming priority 2 is State
     prisma.organizationUnit.count({ where: { level: { priority: 3 } } }), // Assuming priority 3 is District
-    prisma.officeBearer.count({ where: { status: "ACTIVE" } })
+    prisma.organizationUnit.count({ where: { level: { priority: 4 } } }),
+    prisma.organizationUnit.count({ where: { level: { priority: 5 } } }),
+    prisma.officeBearer.count({ where: { status: "ACTIVE" } }),
+    prisma.officeBearer.findMany({
+      take: 5,
+      orderBy: { startDate: 'desc' },
+      include: {
+        member: { include: { user: true } },
+        position: true,
+        unit: true
+      }
+    })
   ]);
 
   const hierarchyLevels = [
     { title: "National Level", href: "/admin/organization/national", icon: ShieldCheck, color: "text-blue-600 bg-blue-100", count: nationalCount },
     { title: "State Level", href: "/admin/organization/state", icon: Map, color: "text-emerald-600 bg-emerald-100", count: stateCount },
     { title: "District Level", href: "/admin/organization/district", icon: MapPin, color: "text-orange-600 bg-orange-100", count: districtCount },
-    { title: "Taluka Level", href: "/admin/organization/taluka", icon: MapPin, color: "text-purple-600 bg-purple-100", count: "..." },
-    { title: "Village Level", href: "/admin/organization/village", icon: MapPin, color: "text-rose-600 bg-rose-100", count: "..." },
+    { title: "Taluka Level", href: "/admin/organization/taluka", icon: MapPin, color: "text-purple-600 bg-purple-100", count: talukaCount },
+    { title: "Village Level", href: "/admin/organization/village", icon: MapPin, color: "text-rose-600 bg-rose-100", count: villageCount },
   ];
 
   return (
@@ -71,10 +82,35 @@ export default async function OrganizationOverviewPage() {
         <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
           <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Recent Assignments</h3>
           <div className="space-y-4">
-            <div className="text-center py-12">
-              <p className="text-sm text-slate-500 font-medium">No recent assignments.</p>
-              <p className="text-xs text-slate-400 mt-1">Assignments will appear here.</p>
-            </div>
+            {recentAssignments.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-sm text-slate-500 font-medium">No recent assignments.</p>
+                <p className="text-xs text-slate-400 mt-1">Assignments will appear here.</p>
+              </div>
+            ) : (
+              recentAssignments.map((assignment: any) => (
+                <div key={assignment.id} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
+                  <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 shrink-0 overflow-hidden">
+                    {assignment.member.user.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={assignment.member.user.image} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-slate-500 font-bold">
+                        {assignment.member.user.name?.charAt(0) || "U"}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 overflow-hidden">
+                    <p className="text-sm font-bold text-slate-900 dark:text-white truncate">
+                      {assignment.member.user.name}
+                    </p>
+                    <p className="text-xs text-slate-500 truncate">
+                      {assignment.position.nameEn} • {assignment.unit.nameEn}
+                    </p>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
