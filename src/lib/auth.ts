@@ -12,6 +12,12 @@ const transporter = nodemailer.createTransport({
     user: process.env.SMTP_USER || "",
     pass: process.env.SMTP_PASS || "",
   },
+  tls: {
+    // This prevents certificate errors if your mail server uses a self-signed or slightly mismatched SSL cert
+    rejectUnauthorized: false,
+  },
+  // Ensure it fails quickly (10 seconds) instead of hanging forever if the port is blocked
+  connectionTimeout: 10000,
 });
 
 const FROM_EMAIL = process.env.EMAIL_FROM || "RAVP <info@yourdomain.com>";

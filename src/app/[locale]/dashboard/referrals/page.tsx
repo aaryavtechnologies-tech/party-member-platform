@@ -1,7 +1,11 @@
 import { getTranslations } from "next-intl/server";
 import { Users, UserPlus, Award, Crown } from "lucide-react";
-import { ReferralTable } from "./components/ReferralTable";
+import { ReferralTable, ReferralData } from "./components/ReferralTable";
 import { ReferralLinkGen } from "./components/ReferralLinkGen";
+import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function ReferralsPage({
   params
@@ -11,13 +15,47 @@ export default async function ReferralsPage({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Referral" });
 
-  // Dummy data for now. In a real app, fetch from Prisma where referrerId = currentUser
-  const dummyStats = {
-    total: 124,
-    active: 98,
-    lifetimePrimary: 45,
-    lifetimeActive: 12
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
+
+  if (!session || !session.user) {
+    redirect("/membership/login");
+  }
+
+  const memberProfile = await prisma.memberProfile.findUnique({
+    where: { userId: session.user.id }
+  });
+
+  if (!memberProfile) {
+    redirect("/dashboard/membership");
+  }
+
+  // Fetch referrals
+  const referrals = await prisma.memberProfile.findMany({
+    where: { referredById: memberProfile.id },
+    include: { user: true },
+    orderBy: { createdAt: 'desc' }
+  });
+
+  const stats = {
+    total: referrals.length,
+    active: referrals.filter(r => r.status === "ACTIVE").length,
+    lifetimePrimary: referrals.filter(r => r.membershipType === "LIFETIME_PRIMARY").length,
+    lifetimeActive: referrals.filter(r => r.membershipType === "LIFETIME_ACTIVE").length
   };
+
+  const tableData: ReferralData[] = referrals.map(r => ({
+    id: r.memberId,
+    name: r.user.name,
+    date: new Date(r.createdAt).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }),
+    status: r.status,
+    tier: r.membershipType
+  }));
 
   return (
     <div className="space-y-6">
@@ -33,20 +71,20 @@ export default async function ReferralsPage({
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <div className="grid sm:grid-cols-2 gap-4">
-            <StatCard title={t("Total Referred Members")} value={dummyStats.total} icon={<Users className="w-6 h-6 text-blue-500" />} />
-            <StatCard title={t("Active Members")} value={dummyStats.active} icon={<UserPlus className="w-6 h-6 text-green-500" />} />
-            <StatCard title={t("Lifetime Primary Members")} value={dummyStats.lifetimePrimary} icon={<Award className="w-6 h-6 text-purple-500" />} />
-            <StatCard title={t("Lifetime Active Members")} value={dummyStats.lifetimeActive} icon={<Crown className="w-6 h-6 text-yellow-500" />} />
+            <StatCard title={t("Total Referred Members")} value={stats.total} icon={<Users className="w-6 h-6 text-blue-500" />} />
+            <StatCard title={t("Active Members")} value={stats.active} icon={<UserPlus className="w-6 h-6 text-green-500" />} />
+            <StatCard title={t("Lifetime Primary Members")} value={stats.lifetimePrimary} icon={<Award className="w-6 h-6 text-purple-500" />} />
+            <StatCard title={t("Lifetime Active Members")} value={stats.lifetimeActive} icon={<Crown className="w-6 h-6 text-yellow-500" />} />
           </div>
 
           <div className="bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
             <h3 className="font-bold text-lg mb-4">Referral History</h3>
-            <ReferralTable />
+            <ReferralTable data={tableData} />
           </div>
         </div>
 
         <div className="space-y-6">
-          <ReferralLinkGen referralCode="RAVP0000000000000001" />
+          <ReferralLinkGen referralCode={memberProfile.referralCode} />
         </div>
       </div>
     </div>
