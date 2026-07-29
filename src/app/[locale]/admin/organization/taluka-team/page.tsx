@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Building, Users, Map, Activity, Plus, Search, Download, MoreHorizontal } from "lucide-react";
-import { Link } from "@/i18n/routing";
+
 
 export default async function AdminTalukaDashboardPage() {
   const t = await getTranslations("Admin");
