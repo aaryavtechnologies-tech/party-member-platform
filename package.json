@@ -6,6 +6,7 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "node ping.js & next start",
+    "ping": "node ping.js",
     "lint": "eslint",
     "postinstall": "prisma generate"
   },
