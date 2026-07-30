@@ -25,13 +25,12 @@ export const auth = betterAuth({
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
       console.log(`[Auth Email] Attempting to send reset password email to: ${user.email}`);
-      if (process.env.NODE_ENV !== "production") {
-        console.log(`\n========================================`);
-        console.log(`🔑 [LOCAL DEV] Reset Password URL for ${user.email} is: ${url}`);
-        console.log(`========================================\n`);
-      }
+      console.log(`\n========================================`);
+      console.log(`🔑 Reset Password URL for ${user.email} is: ${url}`);
+      console.log(`========================================\n`);
+      
       try {
-        const response = await resend.emails.send({
+        const { data, error } = await resend.emails.send({
           from: FROM_EMAIL,
           to: user.email,
           subject: "Reset your password – RAVP",
@@ -62,9 +61,13 @@ export const auth = betterAuth({
             </div>
           </div>`,
         });
-        console.log(`[Auth Email] Successfully sent reset password email to ${user.email}`, response);
-      } catch (error) {
-        console.error(`[Auth Email] Error sending reset password email to ${user.email}:`, error);
+        if (error) {
+          console.error(`[Auth Email] Resend API Error sending reset password email to ${user.email}:`, error);
+        } else {
+          console.log(`[Auth Email] Successfully sent reset password email to ${user.email}`, data);
+        }
+      } catch (err) {
+        console.error(`[Auth Email] Exception sending reset password email to ${user.email}:`, err);
       }
     },
   },
@@ -72,13 +75,12 @@ export const auth = betterAuth({
     sendOnSignUp: false,
     sendVerificationEmail: async ({ user, url }) => {
       console.log(`[Auth Email] Attempting to send verification email to: ${user.email}`);
-      if (process.env.NODE_ENV !== "production") {
-        console.log(`\n========================================`);
-        console.log(`🔑 [LOCAL DEV] Verification URL for ${user.email} is: ${url}`);
-        console.log(`========================================\n`);
-      }
+      console.log(`\n========================================`);
+      console.log(`🔑 Verification URL for ${user.email} is: ${url}`);
+      console.log(`========================================\n`);
+
       try {
-        const response = await resend.emails.send({
+        const { data, error } = await resend.emails.send({
           from: FROM_EMAIL,
           to: user.email,
           subject: "Verify your email address – RAVP",
@@ -106,9 +108,13 @@ export const auth = betterAuth({
             </div>
           </div>`,
         });
-        console.log(`[Auth Email] Successfully sent verification email to ${user.email}`, response);
-      } catch (error) {
-        console.error(`[Auth Email] Error sending verification email to ${user.email}:`, error);
+        if (error) {
+          console.error(`[Auth Email] Resend API Error sending verification email to ${user.email}:`, error);
+        } else {
+          console.log(`[Auth Email] Successfully sent verification email to ${user.email}`, data);
+        }
+      } catch (err) {
+        console.error(`[Auth Email] Exception sending verification email to ${user.email}:`, err);
       }
     },
   },
@@ -116,13 +122,12 @@ export const auth = betterAuth({
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
         console.log(`[Auth Email] Attempting to send ${type} OTP to: ${email}`);
-        if (process.env.NODE_ENV !== "production") {
-          console.log(`\n========================================`);
-          console.log(`🔑 [LOCAL DEV] OTP for ${email} is: ${otp}`);
-          console.log(`========================================\n`);
-        }
+        console.log(`\n========================================`);
+        console.log(`🔑 OTP for ${email} is: ${otp}`);
+        console.log(`========================================\n`);
+
         try {
-          const response = await resend.emails.send({
+          const { data, error } = await resend.emails.send({
             from: FROM_EMAIL,
             to: email,
             subject: "Your OTP Verification Code – RAVP",
@@ -152,9 +157,13 @@ export const auth = betterAuth({
               </div>
             </div>`,
           });
-          console.log(`[Auth Email] Successfully sent ${type} OTP to ${email}`, response);
-        } catch (error) {
-          console.error(`[Auth Email] Error sending ${type} OTP to ${email}:`, error);
+          if (error) {
+            console.error(`[Auth Email] Resend API Error sending ${type} OTP to ${email}:`, error);
+          } else {
+            console.log(`[Auth Email] Successfully sent ${type} OTP to ${email}`, data);
+          }
+        } catch (err) {
+          console.error(`[Auth Email] Exception sending ${type} OTP to ${email}:`, err);
         }
       },
     }),
