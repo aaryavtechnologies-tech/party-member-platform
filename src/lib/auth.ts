@@ -1,24 +1,10 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
-import nodemailer from "nodemailer";
 import { emailOTP } from "better-auth/plugins";
+import { Resend } from "resend";
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "",
-  port: parseInt(process.env.SMTP_PORT || "465", 10),
-  secure: process.env.SMTP_PORT === "465",
-  auth: {
-    user: process.env.SMTP_USER || "",
-    pass: process.env.SMTP_PASS || "",
-  },
-  tls: {
-    // This prevents certificate errors if your mail server uses a self-signed or slightly mismatched SSL cert
-    rejectUnauthorized: false,
-  },
-  // Ensure it fails quickly (10 seconds) instead of hanging forever if the port is blocked
-  connectionTimeout: 10000,
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const FROM_EMAIL = process.env.EMAIL_FROM || "RAVP <info@yourdomain.com>";
 
@@ -43,10 +29,9 @@ export const auth = betterAuth({
         console.log(`\n========================================`);
         console.log(`🔑 [LOCAL DEV] Reset Password URL for ${user.email} is: ${url}`);
         console.log(`========================================\n`);
-        return;
       }
       try {
-        const response = await transporter.sendMail({
+        const response = await resend.emails.send({
           from: FROM_EMAIL,
           to: user.email,
           subject: "Reset your password – RAVP",
@@ -91,10 +76,9 @@ export const auth = betterAuth({
         console.log(`\n========================================`);
         console.log(`🔑 [LOCAL DEV] Verification URL for ${user.email} is: ${url}`);
         console.log(`========================================\n`);
-        return;
       }
       try {
-        const response = await transporter.sendMail({
+        const response = await resend.emails.send({
           from: FROM_EMAIL,
           to: user.email,
           subject: "Verify your email address – RAVP",
@@ -136,11 +120,9 @@ export const auth = betterAuth({
           console.log(`\n========================================`);
           console.log(`🔑 [LOCAL DEV] OTP for ${email} is: ${otp}`);
           console.log(`========================================\n`);
-          // Skip sending email locally to prevent hanging due to ISP SMTP port blocks
-          return;
         }
         try {
-          const response = await transporter.sendMail({
+          const response = await resend.emails.send({
             from: FROM_EMAIL,
             to: email,
             subject: "Your OTP Verification Code – RAVP",

@@ -1,14 +1,6 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "",
-  port: parseInt(process.env.SMTP_PORT || "465", 10),
-  secure: process.env.SMTP_PORT === "465",
-  auth: {
-    user: process.env.SMTP_USER || "",
-    pass: process.env.SMTP_PASS || "",
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM_EMAIL = process.env.EMAIL_FROM || "RAVP <noreply@playvia.in>";
 const ADMIN_EMAIL = process.env.ADMIN_NOTIFICATION_EMAIL || "info@rashtriyaannadatavikasparty.org";
 
@@ -26,10 +18,10 @@ export interface ContactInquiryEmailPayload {
 }
 
 export async function sendUserInquiryConfirmationEmail(data: ContactInquiryEmailPayload) {
-  if (!process.env.SMTP_HOST) return;
+  if (!process.env.RESEND_API_KEY) return;
 
   try {
-    await transporter.sendMail({
+    await resend.emails.send({
       from: FROM_EMAIL,
       to: data.email,
       subject: `Inquiry Confirmation [${data.inquiryId}] – Rashtriya Annadata Vikas Party`,
@@ -100,10 +92,10 @@ export async function sendUserInquiryConfirmationEmail(data: ContactInquiryEmail
 }
 
 export async function sendAdminInquiryNotificationEmail(data: ContactInquiryEmailPayload) {
-  if (!process.env.SMTP_HOST) return;
+  if (!process.env.RESEND_API_KEY) return;
 
   try {
-    await transporter.sendMail({
+    await resend.emails.send({
       from: FROM_EMAIL,
       to: ADMIN_EMAIL,
       subject: `🚨 New Contact Inquiry [${data.inquiryId}]: ${data.subject}`,
