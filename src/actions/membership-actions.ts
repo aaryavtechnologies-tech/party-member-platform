@@ -3,6 +3,10 @@
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { hashPassword } from "@better-auth/utils/password";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY!);
+const FROM_EMAIL = process.env.EMAIL_FROM || "RVSP <noreply@playvia.in>";
 
 const formSchema = z.object({
   firstName: z.string().min(2),
@@ -182,6 +186,78 @@ export async function registerMember(data: RegistrationData) {
     }
     
     return { success: false, error: "Something went wrong during registration. Please check your details." };
+  }
+}
+
+export async function sendRegistrationOtp(email: string) {
+  try {
+    // 1. Check if user already exists
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return { success: false, error: "A user with this email already exists." };
+    }
+
+    // 2. Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // 3. Save to Verification table (expires in 5 minutes)
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
+    
+    // Delete any existing OTP for this email to prevent clutter
+    await prisma.verification.deleteMany({ where: { identifier: email } });
+    
+    await prisma.verification.create({
+      data: {
+        identifier: email,
+        value: otp,
+        expiresAt
+      }
+    });
+
+    console.log(`[Registration] Generated OTP for ${email}: ${otp}`);
+
+    // 4. Send email using Resend
+    const { data, error } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      subject: "Your OTP Verification Code – RAVP",
+      html: `<div style="font-family:sans-serif;max-width:480px;margin:auto;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+        <div style="background-color:#FF9933;padding:24px;text-align:center;">
+          <h2 style="color:#ffffff;margin:0;font-size:24px;font-weight:bold;">Rashtriya Annadata Vikas Party</h2>
+          <h3 style="color:#ffffff;margin:8px 0 0 0;font-size:20px;font-weight:bold;">રાષ્ટ્રીય અન્નદાતા વિકાસ પાર્ટી</h3>
+        </div>
+        <div style="padding:24px;background-color:#ffffff;color:#333333;">
+          <p style="font-size:16px;line-height:1.5;margin-top:0;">
+            Your one-time password (OTP) for verification is:
+          </p>
+          <p style="font-size:16px;line-height:1.5;margin-top:0;">
+            ચકાસણી માટે તમારો વન-ટાઇમ પાસવર્ડ (OTP) છે:
+          </p>
+          <div style="font-size:40px;font-weight:bold;letter-spacing:12px;color:#000080;background:#f3f4f6;padding:24px;border-radius:8px;text-align:center;margin:32px 0;border:2px dashed #000080;">
+            ${otp}
+          </div>
+          <p style="font-size:14px;color:#666666;line-height:1.5;text-align:center;">
+            This OTP will expire in <strong>5 minutes</strong>.<br />
+            (આ OTP <strong>5 મિનિટમાં</strong> સમાપ્ત થશે.)
+          </p>
+          <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;" />
+          <p style="color:#9ca3af;font-size:12px;margin:0;">
+            If you did not request this, please ignore this email. (જો તમે આ વિનંતી કરી નથી, તો કૃપા કરીને આ ઇમેઇલની અવગણના કરો.)
+          </p>
+        </div>
+      </div>`,
+    });
+
+    if (error) {
+      console.error("[sendRegistrationOtp] Resend API Error:", error);
+      return { success: false, error: error.message || "Failed to send email via Resend. Check your API key or domain verification." };
+    }
+
+    console.log(`[Registration] Successfully sent OTP to ${email}`, data);
+    return { success: true };
+  } catch (error: any) {
+    console.error("[sendRegistrationOtp] Exception:", error);
+    return { success: false, error: "Failed to send OTP. Please try again later." };
   }
 }
 

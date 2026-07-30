@@ -6,11 +6,10 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { 
-  User, Phone, Mail, Calendar, MapPin, 
+import { User, Phone, Mail, Calendar, MapPin, 
   CreditCard, ShieldCheck, ChevronRight, ChevronLeft, CheckCircle2, Loader2, RefreshCw, Lock, Eye, EyeOff 
 } from "lucide-react";
-import { registerMember, verifyRegistrationOtp } from "@/actions/membership-actions";
+import { registerMember, verifyRegistrationOtp, sendRegistrationOtp } from "@/actions/membership-actions";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "@/i18n/routing";
@@ -102,6 +101,8 @@ export function RegistrationForm() {
     },
   });
 
+  const relativeRelation = form.watch("relativeRelation");
+
   const nextStep = async () => {
     let isValid = false;
     if (step === 1) {
@@ -130,10 +131,14 @@ export function RegistrationForm() {
     }
     setIsSendingOtp(true);
     try {
-      await authClient.emailOtp.sendVerificationOtp({ email, type: "email-verification" });
-      setIsOtpSent(true);
-      setOtp("");
-      toast.success(`OTP sent to ${email}`);
+      const result = await sendRegistrationOtp(email);
+      if (result.success) {
+        setIsOtpSent(true);
+        setOtp("");
+        toast.success(`OTP sent to ${email}`);
+      } else {
+        toast.error(result.error || "Failed to send OTP. Please try again.");
+      }
     } catch (err: any) {
       toast.error(err?.message || "Failed to send OTP. Please try again.");
     } finally {
@@ -331,7 +336,9 @@ export function RegistrationForm() {
                   </div>
                   
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Relative's Name *</label>
+                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                      {relativeRelation === "Father" ? "Father's Name *" : "Husband's Name *"}
+                    </label>
                     <div className="grid md:grid-cols-3 gap-4">
                       <div className="relative">
                         <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />

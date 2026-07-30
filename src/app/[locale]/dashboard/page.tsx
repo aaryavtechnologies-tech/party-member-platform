@@ -65,7 +65,15 @@ export default async function DashboardHome() {
     take: 3,
   });
 
-  const formattedMembershipType = memberProfile.membershipType.replace("_", " ");
+  const formatMembership = (type: string) => {
+    switch (type) {
+      case "PRIMARY": return "Primary Member";
+      case "LIFETIME_PRIMARY": return "Lifetime Primary Member";
+      case "LIFETIME_ACTIVE": return "Lifetime Active Member";
+      default: return "Primary Member";
+    }
+  };
+  const membershipTranslationKey = formatMembership(memberProfile.membershipType);
 
   return (
     <div className="space-y-8">
@@ -76,7 +84,7 @@ export default async function DashboardHome() {
           <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">{t("welcomeBack", { name: memberProfile.user.name })}</h1>
           <div className="flex flex-wrap items-center gap-4 mt-6">
             <span className="bg-slate-950 text-white px-4 py-2 rounded-full font-bold text-sm shadow-sm">
-              {tMem(formattedMembershipType + " Member")}
+              {tMem(membershipTranslationKey as any)}
             </span>
             <span className="bg-white/30 backdrop-blur-md text-slate-950 border border-white/40 px-4 py-2 rounded-full font-bold text-sm shadow-sm">
               ID: {memberProfile.memberId}
