@@ -3,6 +3,7 @@ import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs";
 import { AdminStatsCard } from "@/components/admin/AdminStatsCard";
 import { Users, UserCheck, UserX, UserMinus, Search, Filter, MoreHorizontal, Mail, ShieldAlert, Edit, Eye } from "lucide-react";
 import { Link } from "@/i18n/routing";
+import { DeleteMemberButton } from "@/components/admin/DeleteMemberButton";
 
 export const dynamic = 'force-dynamic';
 
@@ -173,12 +174,12 @@ export default async function AdminMembersPage() {
                             <Eye className="w-4 h-4" />
                           </button>
                         </Link>
-                        <button className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors" title="Edit">
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors" title="More Actions">
-                          <MoreHorizontal className="w-4 h-4" />
-                        </button>
+                        <DeleteMemberButton
+                          profileId={profile.id}
+                          memberId={profile.memberId}
+                          memberName={profile.user.name}
+                          variant="icon"
+                        />
                       </div>
                     </td>
                   </tr>

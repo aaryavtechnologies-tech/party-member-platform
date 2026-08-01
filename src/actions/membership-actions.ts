@@ -351,3 +351,27 @@ export async function checkStep1Availability(data: {
     return { available: true };
   }
 }
+
+export async function deleteMemberAction(profileId: string) {
+  try {
+    const profile = await prisma.memberProfile.findUnique({
+      where: { id: profileId },
+      select: { id: true, userId: true, memberId: true }
+    });
+
+    if (!profile) {
+      return { success: false, error: "Member profile not found." };
+    }
+
+    // Delete base User record (cascades to MemberProfile, Session, Account, etc.)
+    await prisma.user.delete({
+      where: { id: profile.userId }
+    });
+
+    console.log(`[deleteMemberAction] Successfully deleted member ${profile.memberId} (User ID: ${profile.userId})`);
+    return { success: true };
+  } catch (error: any) {
+    console.error("[deleteMemberAction] Exception:", error);
+    return { success: false, error: error?.message || "Failed to delete member." };
+  }
+}
