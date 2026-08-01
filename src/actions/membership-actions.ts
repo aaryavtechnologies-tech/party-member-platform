@@ -285,3 +285,69 @@ export async function verifyRegistrationOtp(email: string, otp: string) {
     return { success: false, error: "Failed to verify OTP." };
   }
 }
+
+export async function checkStep1Availability(data: {
+  email?: string;
+  mobile?: string;
+  aadhaar?: string;
+  voterId?: string;
+}) {
+  try {
+    if (data.email && data.email.trim()) {
+      const existingUser = await prisma.user.findUnique({
+        where: { email: data.email.trim().toLowerCase() },
+      });
+      if (existingUser) {
+        return {
+          available: false,
+          field: "email",
+          error: "A user with this email address is already registered.",
+        };
+      }
+    }
+
+    if (data.mobile && data.mobile.trim()) {
+      const existingMobile = await prisma.memberProfile.findFirst({
+        where: { mobile: data.mobile.trim() },
+      });
+      if (existingMobile) {
+        return {
+          available: false,
+          field: "mobile",
+          error: "This mobile number is already registered to another member.",
+        };
+      }
+    }
+
+    if (data.aadhaar && data.aadhaar.trim().length > 0) {
+      const existingAadhaar = await prisma.memberProfile.findFirst({
+        where: { aadhaar: data.aadhaar.trim() },
+      });
+      if (existingAadhaar) {
+        return {
+          available: false,
+          field: "aadhaar",
+          error: "This Aadhaar number is already registered.",
+        };
+      }
+    }
+
+    if (data.voterId && data.voterId.trim().length > 0) {
+      const existingVoter = await prisma.memberProfile.findFirst({
+        where: { voterId: data.voterId.trim().toUpperCase() },
+      });
+      if (existingVoter) {
+        return {
+          available: false,
+          field: "voterId",
+          error: "This Voter ID is already registered.",
+        };
+      }
+    }
+
+    return { available: true };
+  } catch (error: any) {
+    console.error("[checkStep1Availability] Exception:", error);
+    return { available: true };
+  }
+}

@@ -9,7 +9,7 @@ import * as z from "zod";
 import { User, Phone, Mail, Calendar, MapPin, 
   CreditCard, ShieldCheck, ChevronRight, ChevronLeft, CheckCircle2, Loader2, RefreshCw, Lock, Eye, EyeOff 
 } from "lucide-react";
-import { registerMember, verifyRegistrationOtp, sendRegistrationOtp } from "@/actions/membership-actions";
+import { registerMember, verifyRegistrationOtp, sendRegistrationOtp, checkStep1Availability } from "@/actions/membership-actions";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "@/i18n/routing";
@@ -70,6 +70,7 @@ export function RegistrationForm() {
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
   const [otpError, setOtpError] = useState<string | null>(null);
+  const [isCheckingStep1, setIsCheckingStep1] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMemberId, setSuccessMemberId] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -108,6 +109,23 @@ export function RegistrationForm() {
     let isValid = false;
     if (step === 1) {
       isValid = await form.trigger(["firstName", "middleName", "lastName", "relativeRelation", "relativeFirstName", "relativeMiddleName", "relativeLastName", "gender", "dob", "mobile", "email", "password", "aadhaar", "voterId"]);
+      if (isValid) {
+        setIsCheckingStep1(true);
+        try {
+          const { email, mobile, aadhaar, voterId } = form.getValues();
+          const checkResult = await checkStep1Availability({ email, mobile, aadhaar, voterId });
+          if (!checkResult.available && checkResult.field) {
+            form.setError(checkResult.field as any, {
+              type: "manual",
+              message: checkResult.error,
+            });
+            toast.error(checkResult.error);
+            return;
+          }
+        } finally {
+          setIsCheckingStep1(false);
+        }
+      }
     } else if (step === 2) {
       isValid = await form.trigger(["state", "district", "taluka", "village", "fullAddress", "pincode"]);
     } else if (step === 3) {
@@ -689,9 +707,18 @@ export function RegistrationForm() {
             <Button 
               type="button" 
               onClick={nextStep}
-              className="h-14 px-10 rounded-full font-bold text-base bg-primary text-slate-950 hover:bg-primary/90 shadow-xl shadow-primary/20 w-full sm:w-auto transition-transform hover:scale-105 active:scale-95"
+              disabled={isCheckingStep1}
+              className="h-14 px-10 rounded-full font-bold text-base bg-primary text-slate-950 hover:bg-primary/90 shadow-xl shadow-primary/20 w-full sm:w-auto transition-transform hover:scale-105 active:scale-95 disabled:opacity-70"
             >
-              Continue <ChevronRight className="w-5 h-5 ml-2" />
+              {isCheckingStep1 ? (
+                <>
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" /> Checking...
+                </>
+              ) : (
+                <>
+                  Continue <ChevronRight className="w-5 h-5 ml-2" />
+                </>
+              )}
             </Button>
           ) : (
             <Button 
