@@ -21,7 +21,7 @@ services:
       - key: RESEND_API_KEY
         sync: false
       - key: EMAIL_FROM
-        value: "RAVP <info@rashtriyaannadatavikasparty.org>"
+        value: "RVSP <noreply@playvia.in>"
       - key: SMTP_HOST
         sync: false
       - key: SMTP_PORT

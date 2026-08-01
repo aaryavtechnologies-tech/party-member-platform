@@ -1,7 +1,5 @@
-import { Resend } from "resend";
+import { sendEmail } from "./send-email";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM_EMAIL = process.env.EMAIL_FROM || "RAVP <noreply@playvia.in>";
 const ADMIN_EMAIL = process.env.ADMIN_NOTIFICATION_EMAIL || "info@rashtriyaannadatavikasparty.org";
 
 export interface ContactInquiryEmailPayload {
@@ -18,11 +16,8 @@ export interface ContactInquiryEmailPayload {
 }
 
 export async function sendUserInquiryConfirmationEmail(data: ContactInquiryEmailPayload) {
-  if (!process.env.RESEND_API_KEY) return;
-
   try {
-    await resend.emails.send({
-      from: FROM_EMAIL,
+    await sendEmail({
       to: data.email,
       subject: `Inquiry Confirmation [${data.inquiryId}] – Rashtriya Annadata Vikas Party`,
       html: `
@@ -92,11 +87,8 @@ export async function sendUserInquiryConfirmationEmail(data: ContactInquiryEmail
 }
 
 export async function sendAdminInquiryNotificationEmail(data: ContactInquiryEmailPayload) {
-  if (!process.env.RESEND_API_KEY) return;
-
   try {
-    await resend.emails.send({
-      from: FROM_EMAIL,
+    await sendEmail({
       to: ADMIN_EMAIL,
       subject: `🚨 New Contact Inquiry [${data.inquiryId}]: ${data.subject}`,
       html: `

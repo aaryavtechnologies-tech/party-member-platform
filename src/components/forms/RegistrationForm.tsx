@@ -69,6 +69,7 @@ export function RegistrationForm() {
   const [otp, setOtp] = useState("");
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+  const [otpError, setOtpError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMemberId, setSuccessMemberId] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -124,9 +125,12 @@ export function RegistrationForm() {
   };
 
   const handleSendOtp = async () => {
+    setOtpError(null);
     const email = form.getValues("email");
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      toast.error("Please enter a valid email address in Step 1 first.");
+      const msg = "Please enter a valid email address in Step 1 first.";
+      setOtpError(msg);
+      toast.error(msg);
       return;
     }
     setIsSendingOtp(true);
@@ -135,21 +139,29 @@ export function RegistrationForm() {
       if (result.success) {
         setIsOtpSent(true);
         setOtp("");
+        setOtpError(null);
         toast.success(`OTP sent to ${email}`);
       } else {
-        toast.error(result.error || "Failed to send OTP. Please try again.");
+        const msg = result.error || "Failed to send OTP. Please try again.";
+        setOtpError(msg);
+        toast.error(msg);
       }
     } catch (err: any) {
-      toast.error(err?.message || "Failed to send OTP. Please try again.");
+      const msg = err?.message || "Failed to send OTP. Please try again.";
+      setOtpError(msg);
+      toast.error(msg);
     } finally {
       setIsSendingOtp(false);
     }
   };
 
   const handleVerifyOtp = async () => {
+    setOtpError(null);
     const email = form.getValues("email");
     if (otp.length !== 6) {
-      toast.error("Please enter the 6-digit OTP.");
+      const msg = "Please enter the 6-digit OTP.";
+      setOtpError(msg);
+      toast.error(msg);
       return;
     }
     setIsVerifyingOtp(true);
@@ -157,12 +169,17 @@ export function RegistrationForm() {
       const result = await verifyRegistrationOtp(email, otp);
       if (result.success) {
         setIsOtpVerified(true);
+        setOtpError(null);
         toast.success("Email verified successfully!");
       } else {
-        toast.error(result.error || "Invalid OTP. Please try again.");
+        const msg = result.error || "Invalid OTP. Please try again.";
+        setOtpError(msg);
+        toast.error(msg);
       }
     } catch (err: any) {
-      toast.error("Failed to verify OTP.");
+      const msg = "Failed to verify OTP.";
+      setOtpError(msg);
+      toast.error(msg);
     } finally {
       setIsVerifyingOtp(false);
     }
@@ -546,6 +563,11 @@ export function RegistrationForm() {
                           <strong className="text-slate-900 dark:text-white border-b border-primary/30 pb-1">{form.getValues("email")}</strong>
                         </p>
                         
+                        {otpError && (
+                          <div className="mb-6 p-4 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm font-medium text-center">
+                            {otpError}
+                          </div>
+                        )}
                         {!isOtpSent ? (
                           <Button 
                             type="button" 

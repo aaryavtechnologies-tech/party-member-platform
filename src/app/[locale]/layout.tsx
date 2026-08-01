@@ -5,6 +5,7 @@ import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import Script from "next/script";
+import { Toaster } from "sonner";
 import "../globals.css";
 
 const inter = Inter({
@@ -93,6 +94,7 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>
+        <Toaster richColors position="top-right" />
         <Script
           id="organization-schema"
           type="application/ld+json"

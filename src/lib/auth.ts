@@ -2,11 +2,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
 import { emailOTP } from "better-auth/plugins";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-const FROM_EMAIL = process.env.EMAIL_FROM || "RAVP <info@yourdomain.com>";
+import { sendEmail } from "./email/send-email";
 
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || process.env.RENDER_EXTERNAL_URL || "https://party-member-platform.onrender.com",
@@ -30,8 +26,7 @@ export const auth = betterAuth({
       console.log(`========================================\n`);
       
       try {
-        const { data, error } = await resend.emails.send({
-          from: FROM_EMAIL,
+        const result = await sendEmail({
           to: user.email,
           subject: "Reset your password – RAVP",
           html: `<div style="font-family:sans-serif;max-width:480px;margin:auto;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0, 0, 0, 0.1);">
@@ -61,10 +56,10 @@ export const auth = betterAuth({
             </div>
           </div>`,
         });
-        if (error) {
-          console.error(`[Auth Email] Resend API Error sending reset password email to ${user.email}:`, error);
+        if (!result.success) {
+          console.error(`[Auth Email] Error sending reset password email to ${user.email}:`, result.error);
         } else {
-          console.log(`[Auth Email] Successfully sent reset password email to ${user.email}`, data);
+          console.log(`[Auth Email] Successfully sent reset password email to ${user.email}`);
         }
       } catch (err) {
         console.error(`[Auth Email] Exception sending reset password email to ${user.email}:`, err);
@@ -80,8 +75,7 @@ export const auth = betterAuth({
       console.log(`========================================\n`);
 
       try {
-        const { data, error } = await resend.emails.send({
-          from: FROM_EMAIL,
+        const result = await sendEmail({
           to: user.email,
           subject: "Verify your email address – RAVP",
           html: `<div style="font-family:sans-serif;max-width:480px;margin:auto;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0, 0, 0, 0.1);">
@@ -108,10 +102,10 @@ export const auth = betterAuth({
             </div>
           </div>`,
         });
-        if (error) {
-          console.error(`[Auth Email] Resend API Error sending verification email to ${user.email}:`, error);
+        if (!result.success) {
+          console.error(`[Auth Email] Error sending verification email to ${user.email}:`, result.error);
         } else {
-          console.log(`[Auth Email] Successfully sent verification email to ${user.email}`, data);
+          console.log(`[Auth Email] Successfully sent verification email to ${user.email}`);
         }
       } catch (err) {
         console.error(`[Auth Email] Exception sending verification email to ${user.email}:`, err);
@@ -127,8 +121,7 @@ export const auth = betterAuth({
         console.log(`========================================\n`);
 
         try {
-          const { data, error } = await resend.emails.send({
-            from: FROM_EMAIL,
+          const result = await sendEmail({
             to: email,
             subject: "Your OTP Verification Code – RAVP",
             html: `<div style="font-family:sans-serif;max-width:480px;margin:auto;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0, 0, 0, 0.1);">
@@ -157,10 +150,10 @@ export const auth = betterAuth({
               </div>
             </div>`,
           });
-          if (error) {
-            console.error(`[Auth Email] Resend API Error sending ${type} OTP to ${email}:`, error);
+          if (!result.success) {
+            console.error(`[Auth Email] Error sending ${type} OTP to ${email}:`, result.error);
           } else {
-            console.log(`[Auth Email] Successfully sent ${type} OTP to ${email}`, data);
+            console.log(`[Auth Email] Successfully sent ${type} OTP to ${email}`);
           }
         } catch (err) {
           console.error(`[Auth Email] Exception sending ${type} OTP to ${email}:`, err);
@@ -178,4 +171,3 @@ export const auth = betterAuth({
     }
   }
 });
-

@@ -3,10 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { hashPassword } from "@better-auth/utils/password";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY!);
-const FROM_EMAIL = process.env.EMAIL_FROM || "RVSP <noreply@playvia.in>";
+import { sendEmail } from "@/lib/email/send-email";
 
 const formSchema = z.object({
   firstName: z.string().min(2),
@@ -216,9 +213,8 @@ export async function sendRegistrationOtp(email: string) {
 
     console.log(`[Registration] Generated OTP for ${email}: ${otp}`);
 
-    // 4. Send email using Resend
-    const { data, error } = await resend.emails.send({
-      from: FROM_EMAIL,
+    // 4. Send email using unified sendEmail helper (supports SMTP & Resend)
+    const emailResult = await sendEmail({
       to: email,
       subject: "Your OTP Verification Code – RAVP",
       html: `<div style="font-family:sans-serif;max-width:480px;margin:auto;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0, 0, 0, 0.1);">
@@ -248,12 +244,12 @@ export async function sendRegistrationOtp(email: string) {
       </div>`,
     });
 
-    if (error) {
-      console.error("[sendRegistrationOtp] Resend API Error:", error);
-      return { success: false, error: error.message || "Failed to send email via Resend. Check your API key or domain verification." };
+    if (!emailResult.success) {
+      console.error("[sendRegistrationOtp] Email Delivery Error:", emailResult.error);
+      return { success: false, error: emailResult.error || "Failed to send OTP email. Please verify your email configuration." };
     }
 
-    console.log(`[Registration] Successfully sent OTP to ${email}`, data);
+    console.log(`[Registration] Successfully sent OTP to ${email}`);
     return { success: true };
   } catch (error: any) {
     console.error("[sendRegistrationOtp] Exception:", error);
