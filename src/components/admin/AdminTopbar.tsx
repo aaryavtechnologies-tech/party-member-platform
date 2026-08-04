@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Search, Bell, Menu, Moon, Sun, Monitor, LogOut, Settings, User as UserIcon } from "lucide-react";
 import { Link } from "@/i18n/routing";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 
 export function AdminTopbar({ setMobileOpen }: { setMobileOpen: (v: boolean) => void }) {
   return (
@@ -29,12 +30,7 @@ export function AdminTopbar({ setMobileOpen }: { setMobileOpen: (v: boolean) => 
 
       <div className="flex items-center gap-2 sm:gap-4 shrink-0">
         
-        {/* Language Switcher (Mock) */}
-        <select className="hidden sm:block h-9 px-3 rounded-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm font-medium outline-none">
-          <option>English</option>
-          <option>Gujarati</option>
-          <option>Hindi</option>
-        </select>
+        <LanguageSwitcher />
 
         {/* Notifications */}
         <Button variant="ghost" size="icon" className="relative rounded-full text-slate-500 hover:text-slate-900 dark:hover:text-white">

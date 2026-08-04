@@ -35,7 +35,8 @@
     "Video Gallery": "Video Gallery",
     "Membership": "Membership",
     "Contact": "Contact",
-    "Become Member": "Become Member"
+    "become_member": "Become Member",
+    "member_login": "Member Login"
   },
   "Membership": {
     "title": "Membership Levels",

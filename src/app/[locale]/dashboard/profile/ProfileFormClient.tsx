@@ -4,8 +4,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import { User, Mail, Phone, MapPin, Calendar, Camera } from "lucide-react";
+import { User, Mail, Phone, MapPin, Calendar, Camera, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useState, useRef } from "react";
+import { updateProfile } from "./actions";
+import Image from "next/image";
 
 const profileSchema = z.object({
   fullName: z.string().min(3, "Full name is required"),
@@ -15,6 +18,7 @@ const profileSchema = z.object({
   mobile: z.string().regex(/^[6-9]\d{9}$/, "Invalid mobile number"),
   address: z.string().min(5, "Address is required"),
   pincode: z.string().regex(/^[1-9][0-9]{5}$/, "Invalid PIN code"),
+  image: z.string().optional(),
 });
 
 export type ProfileData = z.infer<typeof profileSchema>;
@@ -25,10 +29,59 @@ export function ProfileFormClient({ defaultValues }: { defaultValues: ProfileDat
     defaultValues
   });
 
-  const onSubmit = (data: ProfileData) => {
-    console.log("Updating profile", data);
-    toast.success("Profile saved successfully!");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("File size must be less than 5MB");
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error("Upload failed");
+
+      const data = await res.json();
+      form.setValue("image", data.url);
+      toast.success("Photo uploaded successfully!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to upload photo");
+    } finally {
+      setIsUploading(false);
+    }
   };
+
+  const onSubmit = async (data: ProfileData) => {
+    try {
+      setIsSubmitting(true);
+      const res = await updateProfile(data);
+      if (res.success) {
+        toast.success("Profile saved successfully!");
+      } else {
+        toast.error(res.error || "Failed to update profile");
+      }
+    } catch (error) {
+      toast.error("An error occurred while saving profile");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const currentImage = form.watch("image");
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-10 border border-slate-100 dark:border-slate-800 shadow-sm">
@@ -36,16 +89,39 @@ export function ProfileFormClient({ defaultValues }: { defaultValues: ProfileDat
       <div className="flex flex-col sm:flex-row items-center gap-6 mb-10 pb-10 border-b border-slate-100 dark:border-slate-800">
         <div className="relative">
           <div className="w-24 h-24 rounded-full bg-slate-100 dark:bg-slate-800 border-4 border-white dark:border-slate-950 shadow-lg flex items-center justify-center overflow-hidden">
-            <User className="w-12 h-12 text-slate-400" />
+            {currentImage ? (
+              <Image src={currentImage} alt="Profile" width={96} height={96} className="w-full h-full object-cover" />
+            ) : (
+              <User className="w-12 h-12 text-slate-400" />
+            )}
           </div>
-          <button className="absolute bottom-0 right-0 w-8 h-8 bg-primary text-slate-950 rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform">
-            <Camera className="w-4 h-4" />
+          <button 
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isUploading}
+            className="absolute bottom-0 right-0 w-8 h-8 bg-primary text-slate-950 rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform disabled:opacity-50"
+          >
+            {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
           </button>
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            className="hidden" 
+            accept="image/jpeg, image/png, image/gif"
+            onChange={handleImageUpload}
+          />
         </div>
         <div className="text-center sm:text-left">
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">Profile Photo</h2>
           <p className="text-sm text-slate-500 mb-3">JPG, GIF or PNG. Max size of 5MB.</p>
-          <Button variant="outline" size="sm" className="rounded-full">Upload New Photo</Button>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="rounded-full"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isUploading}
+          >
+            {isUploading ? "Uploading..." : "Upload New Photo"}
+          </Button>
         </div>
       </div>
 
@@ -96,8 +172,8 @@ export function ProfileFormClient({ defaultValues }: { defaultValues: ProfileDat
         </div>
 
         <div className="pt-6 flex justify-end">
-          <Button type="submit" className="h-12 px-8 rounded-full font-bold bg-primary text-slate-950 hover:bg-primary/90 shadow-lg shadow-primary/20">
-            Save Changes
+          <Button type="submit" disabled={isSubmitting} className="h-12 px-8 rounded-full font-bold bg-primary text-slate-950 hover:bg-primary/90 shadow-lg shadow-primary/20">
+            {isSubmitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving...</> : "Save Changes"}
           </Button>
         </div>
       </form>

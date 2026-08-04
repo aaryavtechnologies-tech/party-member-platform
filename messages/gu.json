@@ -35,7 +35,8 @@
     "Video Gallery": "વિડિયો ગેલેરી",
     "Membership": "સભ્યપદ",
     "Contact": "સંપર્ક",
-    "Become Member": "સભ્ય બનો"
+    "become_member": "સભ્ય બનો",
+    "member_login": "સભ્ય લોગિન"
   },
   "Membership": {
     "title": "સભ્યપદ સ્તરો",

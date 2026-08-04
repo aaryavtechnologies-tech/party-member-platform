@@ -3,6 +3,7 @@
 import { Bell, Menu, Search, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 
 export function Topbar({ setIsOpen }: { setIsOpen: (val: boolean) => void }) {
   const t = useTranslations("dashboard.topbar");
@@ -29,6 +30,8 @@ export function Topbar({ setIsOpen }: { setIsOpen: (val: boolean) => void }) {
       </div>
 
       <div className="flex items-center gap-4">
+        <LanguageSwitcher />
+
         <Button variant="ghost" size="icon" className="relative rounded-full hover:bg-slate-100 dark:hover:bg-slate-900">
           <Bell className="w-5 h-5 text-slate-600 dark:text-slate-300" />
           <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-950" />

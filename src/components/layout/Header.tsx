@@ -28,6 +28,11 @@ export function Header() {
         <div className="flex items-center space-x-2 sm:space-x-3">
           <LanguageSwitcher />
           <MobileNav />
+          <Link href="/membership/login" className="hidden md:block">
+            <Button variant="outline" className="font-semibold rounded-full px-6 border-primary text-primary hover:bg-primary/10">
+              {t("member_login")}
+            </Button>
+          </Link>
           <Link href="/membership/register" className="hidden md:block">
             <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full px-6">
               {t("become_member")}

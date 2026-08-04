@@ -30,7 +30,8 @@ export default async function ProfilePage() {
     email: user.email || "",
     mobile: user.memberProfile.mobile || "",
     address: user.memberProfile.fullAddress || "",
-    pincode: user.memberProfile.pincode || ""
+    pincode: user.memberProfile.pincode || "",
+    image: user.image || ""
   };
 
   return (

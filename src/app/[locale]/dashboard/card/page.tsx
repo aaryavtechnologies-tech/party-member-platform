@@ -41,6 +41,14 @@ export default async function DigitalCardPage() {
 
   const cardData = {
     name: memberProfile.user.name,
+    fatherName: memberProfile.fatherName || "",
+    dob: memberProfile.dob ? new Date(memberProfile.dob).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    }) : "",
+    mobile: memberProfile.mobile || "",
+    address: memberProfile.fullAddress ? `${memberProfile.fullAddress}, ${memberProfile.pincode}` : "",
     memberId: memberProfile.memberId,
     photoUrl: memberProfile.user.image,
     issueDate: new Date(memberProfile.issueDate).toLocaleDateString("en-GB", {

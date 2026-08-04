@@ -2,11 +2,16 @@
 
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Download, Printer, Share2, ShieldCheck } from "lucide-react";
+import { Download, Printer, Share2 } from "lucide-react";
 import QRCode from "react-qr-code";
+import Image from "next/image";
 
 interface CardData {
   name: string;
+  fatherName: string;
+  dob: string;
+  mobile: string;
+  address: string;
   memberId: string;
   photoUrl: string | null | undefined;
   issueDate: string;
@@ -55,73 +60,144 @@ export default function DigitalCardClient({ data }: { data: CardData }) {
           <Button variant="outline" className="rounded-full print:hidden" onClick={printCard}>
             <Printer className="w-4 h-4 mr-2" /> Print
           </Button>
-          <Button className="rounded-full bg-primary text-slate-950 hover:bg-primary/90 print:hidden">
-            <Share2 className="w-4 h-4 mr-2" /> Share
-          </Button>
         </div>
       </div>
 
-      <div className="flex justify-center items-center py-10 print:py-0 print:block">
-        {/* Card Container for html2canvas */}
-        <div 
-          ref={cardRef} 
-          className="relative w-full max-w-sm rounded-[2rem] overflow-hidden bg-white shadow-2xl shadow-slate-900/10 border border-slate-100 print:shadow-none print:border-black"
-          style={{ aspectRatio: "63/100" }} 
-        >
-          {/* Header */}
-          <div className="h-32 bg-gradient-to-br from-orange-500 to-orange-600 relative overflow-hidden flex flex-col items-center justify-center text-white p-4 text-center">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 blur-xl rounded-full -mr-10 -mt-10" />
-            <h2 className="font-black text-3xl tracking-tighter relative z-10 text-white drop-shadow-md">RAVP</h2>
-            <p className="text-[10px] font-bold uppercase tracking-widest relative z-10 opacity-90 drop-shadow-sm text-center">Rashtriya Annadata Vikas Party</p>
-          </div>
-
-          {/* Photo */}
-          <div className="absolute top-20 left-1/2 -translate-x-1/2 w-28 h-28 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100 flex items-center justify-center z-20">
-            {data.photoUrl ? (
-              <img src={data.photoUrl} alt="Member Photo" className="w-full h-full object-cover" crossOrigin="anonymous" />
-            ) : (
-              <div className="w-full h-full bg-slate-200 flex items-center justify-center text-slate-400 font-bold text-2xl">
-                {data.name.charAt(0)}
+      <div className="flex justify-center items-center py-10 print:py-0 print:block overflow-x-auto">
+        {/* Card Container for html2canvas (Contains both Front & Back) */}
+        <div ref={cardRef} className="flex flex-col gap-8 print:gap-8 bg-transparent">
+          
+          {/* ================= FRONT SIDE ================= */}
+          <div 
+            className="relative w-[480px] min-w-[480px] rounded-xl overflow-hidden bg-white shadow-2xl shadow-slate-900/10 border-2 border-slate-300 print:shadow-none print:border-black bg-[url('/noise.png')]"
+            style={{ aspectRatio: "85/54" }} 
+          >
+            {/* Header */}
+            <div className="h-14 bg-gradient-to-r from-orange-500 via-white to-green-500 flex items-center justify-center border-b-2 border-orange-600 relative">
+              <div className="absolute left-3 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm overflow-hidden border border-slate-200 p-0.5">
+                <img src="/logo.jpg" alt="Logo" className="w-full h-full object-contain rounded-full" crossOrigin="anonymous" />
               </div>
-            )}
-          </div>
-
-          {/* Details */}
-          <div className="pt-24 pb-6 px-6 text-center h-full flex flex-col relative z-10 bg-white">
-            <h3 className="text-2xl font-bold text-slate-900 leading-tight">{data.name}</h3>
-            <p className="text-sm font-bold text-orange-600 mb-6">{data.membershipType}</p>
-            
-            <div className="grid grid-cols-2 gap-y-4 gap-x-2 text-left text-sm mb-6 flex-1">
-              <div>
-                <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Member ID</p>
-                <p className="font-bold text-slate-900">{data.memberId}</p>
-              </div>
-              <div>
-                <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Issue Date</p>
-                <p className="font-bold text-slate-900">{data.issueDate}</p>
-              </div>
-              <div className="col-span-2">
-                <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Location</p>
-                <p className="font-bold text-slate-900 truncate">{data.location}</p>
+              <div className="bg-white px-3 py-1 rounded-full shadow-sm ml-8">
+                <h2 className="font-black text-[17px] text-orange-600 tracking-tight text-center uppercase whitespace-nowrap">Rashtriya Annadata Vikas Party</h2>
               </div>
             </div>
 
-            {/* Footer & QR */}
-            <div className="border-t border-slate-100 pt-4 flex justify-between items-end bg-white">
-              <div className="flex flex-col items-start">
-                <div className="h-8 mb-1">
-                  <img src="/sign.png" alt="Signature" className="h-full object-contain" />
+            <div className="p-4 flex gap-4 h-[calc(100%-3.5rem)] relative">
+              {/* Left Column: Photo & QR */}
+              <div className="flex flex-col w-[110px] items-center shrink-0">
+                <div className="w-[100px] h-[120px] bg-slate-100 border border-slate-300 shadow-sm overflow-hidden flex items-center justify-center mb-3 rounded bg-white shrink-0">
+                  {data.photoUrl ? (
+                    <img src={data.photoUrl} alt="Photo" className="w-full h-full object-cover" crossOrigin="anonymous" />
+                  ) : (
+                    <span className="text-slate-400 font-bold text-3xl">{data.name.charAt(0)}</span>
+                  )}
                 </div>
-                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400">
-                  <ShieldCheck className="w-4 h-4 text-green-500" /> Verified
+                
+                {/* QR Code and Issue Date */}
+                <div className="w-full flex flex-col items-center justify-center gap-1.5">
+                  <div className="w-[50px] h-[50px] bg-white p-1 rounded border border-slate-200 shadow-sm">
+                    <QRCode value={`https://party.com/verify/member/${data.memberId}`} size={40} />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-[7px] text-slate-500 font-bold uppercase leading-none mb-0.5">Issue Date</p>
+                    <p className="font-bold text-slate-900 text-[10px] leading-none">{data.issueDate}</p>
+                  </div>
                 </div>
               </div>
-              <div className="w-16 h-16 bg-white p-1 rounded-lg border border-slate-200">
-                {/* Dynamically generate QR code to point to public verify page */}
-                <QRCode value={`https://party.com/verify/member/${data.memberId}`} size={54} />
+
+              {/* Right Column: Details */}
+              <div className="flex-1 flex flex-col justify-between">
+                <div className="space-y-1.5">
+                  <div className="flex justify-between items-start gap-2">
+                    <div className="flex-1">
+                      <p className="text-[10px] text-slate-500 font-bold uppercase leading-none">Member Name</p>
+                      <p className="font-bold text-slate-900 text-sm leading-tight">{data.name}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-[10px] text-slate-500 font-bold uppercase leading-none">Member ID</p>
+                      <p className="font-black text-orange-600 text-base leading-tight bg-orange-50 px-2 py-0.5 rounded border border-orange-200 whitespace-nowrap">{data.memberId}</p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="text-[10px] text-slate-500 font-bold uppercase leading-none">Father/Husband's Name</p>
+                    <p className="font-bold text-slate-900 text-sm leading-tight">{data.fatherName}</p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <p className="text-[10px] text-slate-500 font-bold uppercase leading-none">DOB</p>
+                      <p className="font-bold text-slate-900 text-sm leading-tight">{data.dob}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-slate-500 font-bold uppercase leading-none">Mobile</p>
+                      <p className="font-bold text-slate-900 text-sm leading-tight">{data.mobile}</p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="text-[10px] text-slate-500 font-bold uppercase leading-none">Address</p>
+                    <p className="font-semibold text-slate-800 text-[11px] leading-tight line-clamp-2 max-w-[200px]">{data.address}</p>
+                  </div>
+                </div>
+
+                {/* Footer Section */}
+                <div className="flex justify-end items-end mt-2 pt-2 border-t border-slate-200">
+                  <div className="flex flex-col items-center">
+                    <div className="h-8 mb-0.5">
+                      <img src="/sign.png" alt="Signature" className="h-full object-contain" />
+                    </div>
+                    <p className="text-[8px] font-bold text-slate-600 uppercase tracking-tight leading-none">Issuing Authority</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+
+          {/* ================= BACK SIDE ================= */}
+          <div 
+            className="relative w-[480px] min-w-[480px] rounded-xl overflow-hidden bg-white shadow-2xl shadow-slate-900/10 border-2 border-slate-300 print:shadow-none print:border-black bg-[url('/noise.png')]"
+            style={{ aspectRatio: "85/54" }} 
+          >
+            {/* Header */}
+            <div className="h-10 bg-slate-800 flex items-center justify-center border-b-2 border-orange-600">
+              <h2 className="font-bold text-sm text-white tracking-widest text-center uppercase">Terms & Conditions / નિયમો અને શરતો</h2>
+            </div>
+
+            <div className="p-5 flex flex-col justify-between h-[calc(100%-2.5rem)] relative">
+              
+              <div className="grid grid-cols-2 gap-6">
+                {/* English Rules */}
+                <div>
+                  <h3 className="text-orange-600 font-black text-xs uppercase mb-2 border-b border-orange-200 pb-1">English</h3>
+                  <ul className="text-[10px] text-slate-700 font-semibold space-y-1.5 list-disc pl-3">
+                    <li>This card is non-transferable and remains the property of RAVP.</li>
+                    <li>If found, please return to the nearest RAVP office.</li>
+                    <li>Keep this card safe, as it serves as your official identity within the party.</li>
+                  </ul>
+                </div>
+
+                {/* Gujarati Rules */}
+                <div>
+                  <h3 className="text-green-600 font-black text-xs uppercase mb-2 border-b border-green-200 pb-1">ગુજરાતી</h3>
+                  <ul className="text-[10px] text-slate-700 font-semibold space-y-1.5 list-disc pl-3">
+                    <li>આ કાર્ડ અન્ય કોઈને આપી શકાશે નહીં અને તે RAVP ની મિલકત છે.</li>
+                    <li>જો આ કાર્ડ મળે, તો કૃપા કરીને નજીકના RAVP કાર્યાલય પર પરત કરો.</li>
+                    <li>આ કાર્ડને સુરક્ષિત રાખો, કારણ કે આ પક્ષમાં તમારી સત્તાવાર ઓળખ છે.</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Back Footer / Return Address */}
+              <div className="mt-4 pt-3 border-t border-slate-200 text-center">
+                <p className="text-[9px] text-slate-500 font-bold uppercase mb-0.5 tracking-wider">If found, please return to:</p>
+                <p className="font-black text-slate-900 text-xs uppercase">Rashtriya Annadata Vikas Party Office</p>
+                <p className="font-semibold text-slate-700 text-[10px] mt-0.5">Gujarat, India - Website: www.ravp.org</p>
+              </div>
+
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
