@@ -2,16 +2,23 @@ import { prisma } from "@/lib/prisma";
 import DashboardClient from "./DashboardClient";
 import { format, subMonths, startOfMonth, endOfMonth } from "date-fns";
 
+import { requireAdminAuth, getMemberLocationFilter } from "@/lib/rbac";
+
 export default async function AdminDashboardPage() {
+  const session = await requireAdminAuth();
+  const locationFilter = getMemberLocationFilter(session);
+
   // 1. KPI Data
   const [totalMembers, activeLifetime, totalRevenueObj, openTickets] = await Promise.all([
-    prisma.memberProfile.count(),
     prisma.memberProfile.count({
-      where: { membershipType: "LIFETIME_ACTIVE" }
+      where: locationFilter
+    }),
+    prisma.memberProfile.count({
+      where: { ...locationFilter, membershipType: "LIFETIME_ACTIVE" }
     }),
     prisma.payment.aggregate({
       _sum: { amount: true },
-      where: { status: "SUCCESS" }
+      where: { status: "SUCCESS" } // Assuming payments are global or we need to filter via user relation
     }),
     prisma.supportTicket.count({
       where: { status: { in: ["OPEN", "IN_PROGRESS", "UNDER_REVIEW"] } }
@@ -33,6 +40,7 @@ export default async function AdminDashboardPage() {
     // Registrations for the month
     const memberCount = await prisma.memberProfile.count({
       where: {
+        ...locationFilter,
         createdAt: { gte: start, lte: end }
       }
     });

@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { requireAdminAuth, getMemberLocationFilter } from "@/lib/rbac";
 import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs";
 import { AdminStatsCard } from "@/components/admin/AdminStatsCard";
 import { Users, UserCheck, UserX, UserMinus, Search, Filter, MoreHorizontal, Mail, ShieldAlert, Edit, Eye } from "lucide-react";
@@ -9,13 +10,17 @@ export const dynamic = 'force-dynamic';
 
 // This is a Server Component
 export default async function AdminMembersPage() {
-  // Fetch actual data from DB
+  const session = await requireAdminAuth();
+  const locationFilter = getMemberLocationFilter(session);
+
+  // Fetch actual data from DB with Location Filtering
   const [totalMembers, activeMembers, suspendedMembers, pendingMembers, allProfiles] = await Promise.all([
-    prisma.memberProfile.count(),
-    prisma.memberProfile.count({ where: { status: "ACTIVE" } }),
-    prisma.memberProfile.count({ where: { status: "SUSPENDED" } }),
-    prisma.memberProfile.count({ where: { status: "PENDING_VERIFICATION" } }),
+    prisma.memberProfile.count({ where: locationFilter }),
+    prisma.memberProfile.count({ where: { ...locationFilter, status: "ACTIVE" } }),
+    prisma.memberProfile.count({ where: { ...locationFilter, status: "SUSPENDED" } }),
+    prisma.memberProfile.count({ where: { ...locationFilter, status: "PENDING_VERIFICATION" } }),
     prisma.memberProfile.findMany({
+      where: locationFilter,
       include: { user: true },
       orderBy: { createdAt: 'desc' }
     })

@@ -33,7 +33,6 @@ const ADMIN_NAV_CONFIG: NavGroup[] = [
     items: [
       { title: "All Members", href: "/admin/members", icon: Users },
       { title: "Membership Plans", href: "/admin/membership/plans", icon: FileText },
-      { title: "Upgrades", href: "/admin/membership/upgrades", icon: UserPlus },
     ]
   },
   {
@@ -49,10 +48,8 @@ const ADMIN_NAV_CONFIG: NavGroup[] = [
   {
     label: "Content Management",
     items: [
-      { title: "Homepage", href: "/admin/cms/home", icon: FileEdit },
+      { title: "Website Pages (CMS)", href: "/admin/cms/pages", icon: FileEdit },
       { title: "FAQ Management", href: "/admin/faq", icon: LifeBuoy },
-      { title: "About Pages", href: "/admin/cms/about", icon: FileText },
-      { title: "Policies", href: "/admin/cms/policies", icon: FileText },
       { title: "News & Media", href: "/admin/news", icon: Globe },
       { title: "Gallery", href: "/admin/gallery", icon: Globe },
       { title: "Events", href: "/admin/events", icon: Globe },
@@ -83,6 +80,7 @@ const ADMIN_NAV_CONFIG: NavGroup[] = [
   {
     label: "Administration",
     items: [
+      { title: "Admin Management", href: "/admin/users", icon: Users },
       { title: "Roles & Permissions", href: "/admin/roles", icon: ShieldAlert },
       { title: "System Settings", href: "/admin/settings", icon: Settings },
       { title: "Audit Logs", href: "/admin/logs", icon: History },
@@ -163,7 +161,7 @@ export function AdminSidebar({ isMobileOpen, setMobileOpen }: { isMobileOpen: bo
         </div>
 
         {/* Navigation */}
-        <div className="flex-1 overflow-y-auto py-6 scrollbar-hide relative">
+        <div className="flex-1 overflow-y-auto py-6 relative [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <div className="space-y-8 px-4">
             {ADMIN_NAV_CONFIG.map((group, i) => (
               <div key={i} className="flex flex-col">

@@ -54,9 +54,11 @@ export default async function proxy(request: NextRequest) {
   const pathWithoutLocale = pathname.replace(/^\/(en|gu)/, "") || "/";
   const isDashboard = pathWithoutLocale.startsWith("/dashboard");
   const isAdmin = pathWithoutLocale.startsWith("/admin");
+  const isSuperAdmin = pathWithoutLocale.startsWith("/super-admin");
   const isAdminLogin = pathWithoutLocale === "/admin/login";
+  const isSuperAdminLogin = pathWithoutLocale === "/super-admin/login";
 
-  if ((isDashboard || isAdmin) && !isAdminLogin) {
+  if ((isDashboard || isAdmin || isSuperAdmin) && !isAdminLogin && !isSuperAdminLogin) {
     const sessionCookie = request.cookies.get('better-auth.session_token') || request.cookies.get('__Secure-better-auth.session_token');
     
     const localeMatch = pathname.match(/^\/([a-z]{2})\//);
@@ -64,10 +66,12 @@ export default async function proxy(request: NextRequest) {
 
     if (!sessionCookie) {
       const url = request.nextUrl.clone();
-      if (isAdmin) {
+      if (isSuperAdmin) {
+        url.pathname = `/${locale}/super-admin/login`;
+      } else if (isAdmin) {
         url.pathname = `/${locale}/admin/login`;
       } else {
-        url.pathname = `/${locale}/membership/login`;
+        url.pathname = `/${locale}/login`; // Changed from /membership/login
       }
       url.searchParams.set("callbackUrl", pathname);
       return NextResponse.redirect(url);

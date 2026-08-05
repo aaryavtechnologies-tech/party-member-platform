@@ -14,7 +14,7 @@ import { Loader2, Eye, EyeOff, Mail, Lock, ArrowRight, ShieldCheck } from "lucid
 import { motion, AnimatePresence } from "framer-motion";
 
 const loginSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address" }),
+  email: z.string().min(1, { message: "Username is required" }),
   password: z.string().min(1, { message: "Password is required" }),
 });
 
@@ -39,23 +39,26 @@ export function AdminLoginForm() {
     setIsLoading(true);
     setServerError(null);
     try {
-      const { error } = await signIn.email({
-        email: data.email,
-        password: data.password,
-        callbackURL: "/admin/dashboard",
+      const response = await fetch("/api/admin/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: data.email, // using email field as username temporarily for UI compat
+          password: data.password,
+        }),
       });
 
-      if (error) {
-        setServerError(
-          error.status === 401
-            ? "Incorrect email or password. Please try again."
-            : error.message || "Login failed. Please try again."
-        );
+      const result = await response.json();
+
+      if (!response.ok) {
+        setServerError(result.error || "Login failed. Please try again.");
         return;
       }
 
       toast.success("Welcome back Admin! Redirecting...");
-      router.push("/admin/dashboard");
+      router.push(result.redirectUrl || "/admin/dashboard");
       router.refresh();
     } catch (err) {
       setServerError("Something went wrong. Please check your connection.");
@@ -110,18 +113,18 @@ export function AdminLoginForm() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             
-            {/* Email */}
+            {/* Username */}
             <div className="space-y-1.5">
               <Label htmlFor="admin-email" className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                Email Address
+                Username
               </Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
                   id="admin-email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="admin@example.com"
+                  type="text"
+                  autoComplete="username"
+                  placeholder="admin_username"
                   {...register("email")}
                   className={`pl-10 h-12 rounded-xl transition-all ${
                     errors.email

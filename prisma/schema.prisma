@@ -12,10 +12,16 @@ model User {
   email             String   @unique
   emailVerified     Boolean  @default(false)
   image             String?
-  role              String   @default("USER") // USER, ADMIN, SUPERADMIN
+  role              String   @default("USER") // USER, VILLAGE_ADMIN, TALUKA_ADMIN, DISTRICT_ADMIN, STATE_ADMIN, NATIONAL_ADMIN, SUPERADMIN
   preferredLanguage String   @default("en") // 'en' or 'gu'
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+
+  // RBAC Scope Fields
+  assignedState    String?
+  assignedDistrict String?
+  assignedTaluka   String?
+  assignedVillage  String?
 
   // Better Auth Relations
   sessions Session[]
@@ -29,6 +35,55 @@ model User {
 
   @@index([email])
   @@index([role])
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  NATIONAL_ADMIN
+  STATE_ADMIN
+  DISTRICT_ADMIN
+  TALUKA_ADMIN
+  VILLAGE_ADMIN
+}
+
+model Admin {
+  id       String    @id @default(uuid())
+  fullName String
+  email    String    @unique
+  mobile   String?   @unique
+  username String    @unique
+  password String // hashed
+  role     AdminRole
+
+  // Location Scope
+  country  String? @default("India")
+  state    String?
+  district String?
+  taluka   String?
+  village  String?
+
+  status       String  @default("ACTIVE") // ACTIVE, SUSPENDED, INACTIVE
+  profilePhoto String?
+  otpEnabled   Boolean @default(false)
+  isActive     Boolean @default(true)
+
+  // Tracking
+  lastLogin    DateTime?
+  loginHistory Json? // Store array of timestamps/IPs if needed
+  deviceLog    Json?
+  ipLog        Json?
+
+  // Hierarchy Tracking
+  createdById  String?
+  createdBy    Admin?  @relation("AdminCreator", fields: [createdById], references: [id])
+  createdUsers Admin[] @relation("AdminCreator")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([role])
+  @@index([username])
+  @@index([state, district, taluka, village])
 }
 
 model Session {
@@ -103,10 +158,16 @@ model MemberProfile {
   referrals    MemberProfile[] @relation("Referrals")
 
   // Status & Assignment
-  status       MemberStatus @default(ACTIVE)
+  status       MemberStatus @default(PENDING_VERIFICATION)
   assignedTeam String?
   assignedPost String?
   deletedAt    DateTime?
+
+  // Phase 3 Extensions
+  approvedById     String?
+  membershipExpiry DateTime?
+  occupation       String?
+  email            String?
 
   officeBearers       OfficeBearer[]
   organizationHistory OrganizationHistory[]
@@ -129,6 +190,7 @@ model MemberProfile {
 enum MemberStatus {
   PENDING_VERIFICATION
   ACTIVE
+  REJECTED
   SUSPENDED
   BLOCKED
   ARCHIVED
@@ -259,6 +321,14 @@ model SupportTicket {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   resolvedAt DateTime?
+  closedAt   DateTime?
+
+  // LBAC fields for Complaints
+  state           String?
+  district        String?
+  taluka          String?
+  village         String?
+  assignedAdminId String?
 }
 
 // ----------------------------------------------------
@@ -447,6 +517,7 @@ enum ContentStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+  PENDING_APPROVAL
 }
 
 model CmsPage {
@@ -490,7 +561,16 @@ model MediaFile {
   url          String // e.g., /uploads/images/file.webp
   folder       String? // e.g. "gallery", "news"
 
-  newsMedia NewsMedia[]
+  // RBAC tracking
+  uploaderId   String?
+  uploaderRole String?
+  state        String?
+  district     String?
+  taluka       String?
+  village      String?
+
+  newsMedia       NewsMedia[]
+  photoAlbumMedia PhotoAlbumMedia[]
 
   createdAt DateTime @default(now())
 }
@@ -648,14 +728,68 @@ model TicketActivityLog {
   createdAt   DateTime      @default(now())
 }
 
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+}
+
 model Event {
   id          String   @id @default(uuid())
   title       String
-  description String
+  description String   @db.Text
   date        DateTime
-  location    String
+  startTime   String? // e.g. "10:00 AM"
+  endTime     String? // e.g. "05:00 PM"
+  venue       String?
+  location    String? // Original general location string
   imageUrl    String?
-  createdAt   DateTime @default(now())
+
+  organizer            String?
+  registrationRequired Boolean @default(false)
+  maxParticipants      Int?
+  contactPerson        String?
+
+  status EventStatus @default(PUBLISHED)
+
+  // LBAC fields
+  country  String  @default("India")
+  state    String?
+  district String?
+  taluka   String?
+  village  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  registrations EventRegistration[]
+}
+
+model EventRegistration {
+  id      String @id @default(uuid())
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  memberId        String // Stores the member ID 
+  memberProfileId String
+
+  checkInTime DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@unique([eventId, memberProfileId])
+}
+
+model AdminNotification {
+  id      String  @id @default(uuid())
+  adminId String // The ID of the admin who should see this
+  title   String
+  message String
+  type    String // e.g. "MEMBER_APPROVAL", "NEW_COMPLAINT"
+  isRead  Boolean @default(false)
+  link    String? // Optional URL to navigate to
+
+  createdAt DateTime @default(now())
 }
 
 // ----------------------------------------------------
@@ -664,6 +798,7 @@ model Event {
 
 enum ArticleStatus {
   DRAFT
+  PENDING_APPROVAL
   REVIEW
   SCHEDULED
   PUBLISHED
@@ -672,15 +807,33 @@ enum ArticleStatus {
 }
 
 model NewsArticle {
-  id       String        @id @default(uuid())
-  authorId String // Points to Admin User ID
-  status   ArticleStatus @default(DRAFT)
+  id           String        @id @default(uuid())
+  authorId     String // Points to Admin User ID
+  creatorRole  String? // Store the role of the creator
+  approvedById String? // Store the admin who approved this
+  status       ArticleStatus @default(DRAFT)
 
   isFeatured     Boolean @default(false)
   isBreaking     Boolean @default(false)
   isPressRelease Boolean @default(false)
+  isMemberOnly   Boolean @default(false)
 
-  views Int @default(0)
+  views     Int @default(0)
+  shares    Int @default(0)
+  downloads Int @default(0)
+  prints    Int @default(0)
+
+  // Media Contact
+  contactName        String?
+  contactDesignation String?
+  contactEmail       String?
+  contactMobile      String?
+
+  // Geographical Scope (Optional)
+  state    String?
+  district String?
+  taluka   String?
+  village  String?
 
   publishedAt  DateTime?
   scheduledFor DateTime?
@@ -800,7 +953,7 @@ model ContactInquiry {
   message      String                 @db.Text
   status       ContactInquiryStatus   @default(NEW)
   priority     ContactInquiryPriority @default(MEDIUM)
-  assignedTo   String?                // User / Admin name or ID
+  assignedTo   String? // User / Admin name or ID
   archived     Boolean                @default(false)
   replyNotes   String?                @db.Text
 
@@ -840,10 +993,10 @@ model ContactWorkingHour {
   id         String         @id @default(uuid())
   officeId   String?
   office     ContactOffice? @relation(fields: [officeId], references: [id], onDelete: Cascade)
-  dayRangeEn String         // e.g. "Monday – Saturday"
-  dayRangeGu String         // e.g. "સોમવાર – શનિવાર"
-  timingEn   String         // e.g. "10:00 AM – 6:00 PM"
-  timingGu   String         // e.g. "સવારે 10:00 – સાંજે 6:00"
+  dayRangeEn String // e.g. "Monday – Saturday"
+  dayRangeGu String // e.g. "સોમવાર – શનિવાર"
+  timingEn   String // e.g. "10:00 AM – 6:00 PM"
+  timingGu   String // e.g. "સવારે 10:00 – સાંજે 6:00"
   isClosed   Boolean        @default(false)
   order      Int            @default(0)
 
@@ -891,8 +1044,8 @@ model ContactActivityLog {
   id          String         @id @default(uuid())
   inquiryId   String
   inquiry     ContactInquiry @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
-  action      String         // CREATED, STATUS_CHANGED, ASSIGNED, PRIORITY_CHANGED, REPLIED, ARCHIVED
-  performedBy String         // e.g. "System" or Admin User name
+  action      String // CREATED, STATUS_CHANGED, ASSIGNED, PRIORITY_CHANGED, REPLIED, ARCHIVED
+  performedBy String // e.g. "System" or Admin User name
   remarks     String?        @db.Text
 
   createdAt DateTime @default(now())
@@ -903,13 +1056,13 @@ model ContactActivityLog {
 // ----------------------------------------------------
 
 model FaqCategory {
-  id        String   @id @default(uuid())
+  id        String  @id @default(uuid())
   nameGu    String
   nameEn    String
-  slug      String   @unique
-  icon      String?  @default("HelpCircle")
-  sortOrder Int      @default(0)
-  status    String   @default("ACTIVE") // ACTIVE, INACTIVE
+  slug      String  @unique
+  icon      String? @default("HelpCircle")
+  sortOrder Int     @default(0)
+  status    String  @default("ACTIVE") // ACTIVE, INACTIVE
 
   faqs Faq[]
 
@@ -937,7 +1090,7 @@ model Faq {
   slug            String      @unique
   createdBy       String?
   updatedBy       String?
-  deletedAt       DateTime?   // Soft delete
+  deletedAt       DateTime? // Soft delete
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -948,4 +1101,68 @@ model Faq {
   @@index([slug])
 }
 
+// ----------------------------------------------------
+// Standalone Photo Gallery (Phase 9)
+// ----------------------------------------------------
 
+model PhotoAlbum {
+  id          String    @id @default(uuid())
+  title       String
+  description String?   @db.Text
+  category    String    @default("General") // e.g., "National-Level", "Tree Plantation"
+  eventDate   DateTime?
+
+  // Location Scope & RBAC
+  authorId    String?
+  creatorRole String?
+  state       String?
+  district    String?
+  taluka      String?
+  village     String?
+
+  status ArticleStatus @default(PUBLISHED)
+
+  media PhotoAlbumMedia[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PhotoAlbumMedia {
+  id      String     @id @default(uuid())
+  albumId String
+  album   PhotoAlbum @relation(fields: [albumId], references: [id], onDelete: Cascade)
+
+  mediaId String
+  media   MediaFile @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  order   Int     @default(0)
+  caption String?
+}
+
+// ----------------------------------------------------
+// Standalone Video Gallery (Phase 10)
+// ----------------------------------------------------
+
+model VideoEntry {
+  id           String    @id @default(uuid())
+  title        String
+  description  String?   @db.Text
+  category     String    @default("General") // e.g., "Founder Message", "Youth Conference"
+  videoUrl     String // Direct URL or YouTube Embed URL
+  thumbnailUrl String?
+  eventDate    DateTime?
+
+  // Location Scope & RBAC
+  authorId    String?
+  creatorRole String?
+  state       String?
+  district    String?
+  taluka      String?
+  village     String?
+
+  status ArticleStatus @default(PUBLISHED)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

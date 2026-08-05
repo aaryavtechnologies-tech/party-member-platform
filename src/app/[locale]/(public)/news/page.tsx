@@ -1,14 +1,85 @@
 import { prisma } from "@/lib/prisma";
 import { InnerPageHeader } from "@/components/layout/InnerPageHeader";
-import { Link } from "@/i18n/routing";
-import { ArrowRight, Calendar, Tag } from "lucide-react";
+import { NewsCard } from "@/components/news/NewsCard";
+import { NewsFilters } from "@/components/news/NewsFilters";
+import { FeaturedNewsCarousel } from "@/components/news/FeaturedNewsCarousel";
+import { Prisma } from "@prisma/client";
 
-export default async function PublicNewsPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function PublicNewsPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const { locale } = await params;
+  const search = await searchParams;
+
+  const searchQuery = typeof search.search === "string" ? search.search : undefined;
+  const categoryFilter = typeof search.category === "string" ? search.category : undefined;
+  const stateFilter = typeof search.state === "string" ? search.state : undefined;
+  const districtFilter = typeof search.district === "string" ? search.district : undefined;
   
-  // Fetch only PUBLISHED articles
+  // Construct the base where clause
+  const whereClause: Prisma.NewsArticleWhereInput = {
+    status: "PUBLISHED",
+  };
+
+  // 1. Search Query (Title or Content in Translations)
+  if (searchQuery) {
+    whereClause.translations = {
+      some: {
+        OR: [
+          { title: { contains: searchQuery, mode: "insensitive" } },
+          { content: { contains: searchQuery, mode: "insensitive" } },
+        ]
+      }
+    };
+  }
+
+  // 2. Category Filter
+  if (categoryFilter) {
+    whereClause.categories = {
+      some: {
+        name: { equals: categoryFilter, mode: "insensitive" }
+      }
+    };
+  }
+
+  // 3. Location Filters
+  if (stateFilter) {
+    whereClause.state = { equals: stateFilter, mode: "insensitive" };
+  }
+  if (districtFilter) {
+    whereClause.district = { equals: districtFilter, mode: "insensitive" };
+  }
+
+  // Check if any filters are active to decide whether to show Featured News
+  const hasActiveFilters = !!(searchQuery || categoryFilter || stateFilter || districtFilter);
+
+  // Fetch Featured News ONLY if no filters are active
+  let featuredArticles: any[] = [];
+  if (!hasActiveFilters) {
+    featuredArticles = await prisma.newsArticle.findMany({
+      where: { status: "PUBLISHED", isFeatured: true },
+      orderBy: { publishedAt: "desc" },
+      take: 2,
+      include: {
+        translations: true,
+        categories: true,
+      }
+    });
+  }
+
+  // Fetch main list of articles (excluding featured if we are showing them)
   const articles = await prisma.newsArticle.findMany({
-    where: { status: "PUBLISHED" },
+    where: {
+      ...whereClause,
+      // If we are showing featured articles at the top, don't show them again in the grid
+      ...( (!hasActiveFilters && featuredArticles.length > 0) 
+            ? { id: { notIn: featuredArticles.map(f => f.id) } } 
+            : {} )
+    },
     orderBy: { publishedAt: "desc" },
     include: {
       translations: true,
@@ -24,71 +95,46 @@ export default async function PublicNewsPage({ params }: { params: Promise<{ loc
         breadcrumbs={[{ label: "News", href: "/news" }]}
       />
 
-      <div className="py-20 container mx-auto px-4 max-w-7xl">
-        {articles.length === 0 ? (
-          <div className="text-center py-20 bg-white dark:bg-slate-950 rounded-3xl border border-slate-200 dark:border-slate-800">
-            <h2 className="text-2xl font-bold text-slate-700 dark:text-slate-300">No News Articles Found</h2>
-            <p className="text-slate-500 mt-2">Check back later for updates and press releases.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {articles.map((article) => {
-              // Try to find the translation matching the current locale, fallback to english or the first available
-              const translation = 
-                article.translations.find(t => t.language === locale) || 
-                article.translations.find(t => t.language === 'en') ||
-                article.translations[0];
+      <div className="py-12 container mx-auto px-4 max-w-7xl">
+        
+        {/* Filters Component */}
+        <NewsFilters />
 
-              if (!translation) return null;
+        {/* Featured News (Only on default view) */}
+        {!hasActiveFilters && <FeaturedNewsCarousel featuredArticles={featuredArticles} locale={locale} />}
 
-              return (
-                <Link 
-                  key={article.id} 
-                  href={`/news/${translation.slug}`}
-                  className="group bg-white dark:bg-slate-950 rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:shadow-xl transition-all hover:-translate-y-1 flex flex-col"
-                >
-                  <div className="aspect-[16/10] bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
-                    {/* Placeholder for Featured Image */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-accent/20 mix-blend-multiply" />
-                    
-                    {article.isPressRelease && (
-                      <div className="absolute top-4 left-4 bg-accent text-slate-950 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider z-10 shadow-lg">
-                        Press Release
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="p-6 sm:p-8 flex-1 flex flex-col">
-                    <div className="flex items-center gap-4 text-xs font-semibold text-slate-500 mb-4 uppercase tracking-wider">
-                      <div className="flex items-center gap-1.5">
-                        <Calendar className="w-4 h-4 text-primary" />
-                        {article.publishedAt ? new Date(article.publishedAt).toLocaleDateString() : new Date(article.createdAt).toLocaleDateString()}
-                      </div>
-                      {article.categories[0] && (
-                        <div className="flex items-center gap-1.5">
-                          <Tag className="w-4 h-4 text-accent" />
-                          {article.categories[0].name}
-                        </div>
-                      )}
-                    </div>
-                    
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-primary transition-colors line-clamp-2">
-                      {translation.title}
-                    </h3>
-                    
-                    <p className="text-slate-600 dark:text-slate-400 mb-6 line-clamp-3 text-sm leading-relaxed flex-1">
-                      {translation.summary || translation.content.replace(/<[^>]*>?/gm, '').substring(0, 150) + "..."}
-                    </p>
-                    
-                    <div className="flex items-center text-primary font-bold text-sm uppercase tracking-wider group-hover:text-accent transition-colors">
-                      Read Full Article <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        )}
+        {/* Main Grid */}
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+            <span className="w-8 h-1 bg-primary rounded-full"></span>
+            {hasActiveFilters ? "Search Results" : "Latest News"}
+          </h2>
+
+          {articles.length === 0 ? (
+            <div className="text-center py-20 bg-white dark:bg-slate-950 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <h2 className="text-2xl font-bold text-slate-700 dark:text-slate-300">No News Articles Found</h2>
+              <p className="text-slate-500 mt-2">Try adjusting your filters or search query.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {articles.map((article) => {
+                const translation = 
+                  article.translations.find((t: any) => t.language === locale) || 
+                  article.translations.find((t: any) => t.language === 'en') ||
+                  article.translations[0];
+
+                return (
+                  <NewsCard 
+                    key={article.id} 
+                    article={article} 
+                    translation={translation} 
+                    locale={locale} 
+                  />
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
     </main>
   );

@@ -7,20 +7,59 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { NewsCategory, NewsTag } from "@prisma/client";
 
-export function NewsEditorClient({ categories, tags }: { categories: NewsCategory[], tags: NewsTag[] }) {
+import { createNewsArticle } from "@/actions/admin/news";
+
+export function NewsEditorClient({ 
+  categories, 
+  tags,
+  canFeature = false,
+  canBreak = false
+}: { 
+  categories: NewsCategory[], 
+  tags: NewsTag[],
+  canFeature?: boolean,
+  canBreak?: boolean
+}) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("content");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // State for form
+  const [title, setTitle] = useState("");
+  const [slug, setSlug] = useState("");
+  const [summary, setSummary] = useState("");
+  const [content, setContent] = useState("");
+  
+  // Flags
+  const [isPressRelease, setIsPressRelease] = useState(false);
+  const [isFeatured, setIsFeatured] = useState(false);
+  const [isBreaking, setIsBreaking] = useState(false);
+  const [isMemberOnly, setIsMemberOnly] = useState(false);
 
   const handleSave = async (status: "DRAFT" | "PUBLISHED") => {
     setIsSubmitting(true);
-    // In a real implementation, we would collect all form data via react-hook-form
-    // and send a POST request to a server action.
-    toast.success(`Article saved as ${status}`);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    
+    try {
+      const actualSlug = slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      
+      await createNewsArticle({
+        title,
+        slug: actualSlug,
+        summary,
+        content,
+        isFeatured,
+        isBreaking,
+        isPressRelease,
+        isMemberOnly
+      }, status);
+      
+      toast.success(status === "DRAFT" ? "Article saved as Draft" : "Article submitted!");
       router.push("/admin/news");
-    }, 1000);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to save article");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -70,6 +109,8 @@ export function NewsEditorClient({ categories, tags }: { categories: NewsCategor
                 <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Article Title</label>
                 <input 
                   type="text" 
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
                   placeholder="Enter a compelling title..." 
                   className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-lg font-medium focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
@@ -79,6 +120,8 @@ export function NewsEditorClient({ categories, tags }: { categories: NewsCategor
                 <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Short Summary</label>
                 <textarea 
                   rows={3}
+                  value={summary}
+                  onChange={e => setSummary(e.target.value)}
                   placeholder="A brief summary for the news cards..." 
                   className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
@@ -138,15 +181,52 @@ export function NewsEditorClient({ categories, tags }: { categories: NewsCategor
 
               <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
                 <h3 className="font-bold">Flags</h3>
-                <div className="flex gap-6">
+                <div className="flex flex-col sm:flex-row gap-6">
                   <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary/20" />
+                    <input type="checkbox" checked={isPressRelease} onChange={e => setIsPressRelease(e.target.checked)} className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary/20" />
                     <span className="font-medium">Mark as Press Release</span>
                   </label>
+                  
+                  {canFeature && (
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" checked={isFeatured} onChange={e => setIsFeatured(e.target.checked)} className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary/20" />
+                      <span className="font-medium">Featured (Homepage)</span>
+                    </label>
+                  )}
+                  
+                  {canBreak && (
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" checked={isBreaking} onChange={e => setIsBreaking(e.target.checked)} className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary/20" />
+                      <span className="font-medium">Breaking News Bar</span>
+                    </label>
+                  )}
+                  
                   <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary/20" />
-                    <span className="font-medium">Featured (Homepage)</span>
+                    <input type="checkbox" checked={isMemberOnly} onChange={e => setIsMemberOnly(e.target.checked)} className="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary/20" />
+                    <span className="font-medium">Member Only</span>
                   </label>
+                </div>
+              </div>
+
+              <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+                <h3 className="font-bold">Media Contact (For Press Releases)</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold">Spokesperson Name</label>
+                    <input type="text" placeholder="e.g. Ramesh Patel" className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold">Designation</label>
+                    <input type="text" placeholder="e.g. National Media Coordinator" className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold">Email Address</label>
+                    <input type="email" placeholder="media@ravp.org" className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold">Mobile Number</label>
+                    <input type="text" placeholder="+91 XXXXX XXXXX" className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -175,9 +255,9 @@ export function NewsEditorClient({ categories, tags }: { categories: NewsCategor
             <Button 
               className="bg-primary text-slate-950 hover:bg-primary/90 rounded-xl font-bold"
               onClick={() => handleSave("PUBLISHED")}
-              disabled={isSubmitting}
+              disabled={isSubmitting || !title}
             >
-              <Send className="w-4 h-4 mr-2" /> Publish Article
+              <Send className="w-4 h-4 mr-2" /> Submit / Publish
             </Button>
           </div>
         </div>

@@ -17,6 +17,36 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        required: false,
+        defaultValue: "USER",
+      },
+      preferredLanguage: {
+        type: "string",
+        required: false,
+        defaultValue: "en",
+      },
+      assignedState: {
+        type: "string",
+        required: false,
+      },
+      assignedDistrict: {
+        type: "string",
+        required: false,
+      },
+      assignedTaluka: {
+        type: "string",
+        required: false,
+      },
+      assignedVillage: {
+        type: "string",
+        required: false,
+      },
+    }
+  },
   emailAndPassword: {
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
