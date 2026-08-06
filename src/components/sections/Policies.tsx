@@ -1,13 +1,12 @@
 "use client";
 import { motion } from "framer-motion";
-import { policies } from "@/data/mock";
 import { Wheat, GraduationCap, UserCircle, BookOpen, Activity, Leaf, ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { buttonVariants } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 
-export function Policies() {
+export function Policies({ data = [] }: { data?: any[] }) {
   const t = useTranslations("homepage.policies");
   
   const iconMap: Record<string, React.ReactNode> = {
@@ -48,33 +47,34 @@ export function Policies() {
           viewport={{ once: true }}
           className="max-w-5xl mx-auto"
         >
-          <Tabs defaultValue={policies[0]?.id} className="w-full">
+          {data.length > 0 && (
+          <Tabs defaultValue={data[0]?.id} className="w-full">
             <TabsList className="w-full h-auto flex flex-wrap justify-center gap-2 bg-transparent p-0 mb-12">
-              {policies.map((policy) => (
+              {data.map((policy) => (
                 <TabsTrigger 
                   key={policy.id} 
                   value={policy.id}
                   className="data-[state=active]:bg-primary data-[state=active]:text-slate-950 data-[state=active]:shadow-lg rounded-full px-6 py-3 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 hover:bg-slate-50 transition-all flex items-center gap-2"
                 >
                   {iconMap[policy.icon]}
-                  <span className="font-semibold">{t(`items.${policy.titleKey}` as any)}</span>
+                  <span className="font-semibold">{policy.translations[0]?.title || "Policy"}</span>
                 </TabsTrigger>
               ))}
             </TabsList>
             
-            {policies.map((policy) => (
+            {data.map((policy) => (
               <TabsContent key={policy.id} value={policy.id} className="mt-0 outline-none">
                 <div className="bg-slate-50 dark:bg-slate-900 rounded-[2.5rem] p-8 md:p-16 border border-slate-100 dark:border-slate-800 relative overflow-hidden">
                   <div className="absolute top-0 right-0 p-12 opacity-5 scale-150 pointer-events-none">
-                     {iconMap[policy.icon]}
+                     <BookOpen size={24} />
                   </div>
                   <div className="grid md:grid-cols-2 gap-12 items-center relative z-10">
                     <div>
                       <div className="w-16 h-16 bg-white dark:bg-slate-800 text-primary rounded-2xl flex items-center justify-center mb-6 shadow-sm">
-                        {iconMap[policy.icon]}
+                        <BookOpen size={24} />
                       </div>
-                      <h3 className="text-3xl font-bold mb-4">{t(`items.${policy.titleKey}` as any)}</h3>
-                      <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">{t(`items.${policy.descriptionKey}` as any)}</p>
+                      <h3 className="text-3xl font-bold mb-4">{policy.translations[0]?.title || "Policy"}</h3>
+                      <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed whitespace-pre-wrap">{policy.translations[0]?.content || ""}</p>
                       
                       <div className="space-y-4 mb-8">
                         <div className="flex items-center text-slate-700 dark:text-slate-300">
@@ -88,7 +88,7 @@ export function Policies() {
                         </div>
                       </div>
                       
-                      <Link href={policy.href} className={buttonVariants({ size: "lg", className: "rounded-full px-8" })}>
+                      <Link href={`/policies/${policy.translations[0]?.slug}`} className={buttonVariants({ size: "lg", className: "rounded-full px-8" })}>
                         {t("read_full")} <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
                     </div>
@@ -98,7 +98,7 @@ export function Policies() {
                         <div className="absolute inset-0 bg-primary/10 mix-blend-multiply" />
                         {/* Placeholder for policy specific imagery */}
                         <div className="absolute inset-0 flex items-center justify-center text-primary/20 scale-[5]">
-                          {iconMap[policy.icon]}
+                          <BookOpen size={24} />
                         </div>
                       </div>
                     </div>
@@ -107,6 +107,7 @@ export function Policies() {
               </TabsContent>
             ))}
           </Tabs>
+          )}
         </motion.div>
       </div>
     </section>

@@ -1,10 +1,9 @@
 "use client";
 import { motion } from "framer-motion";
-import { statistics } from "@/data/mock";
-import { Users, HandHeart, Map, Home, Flag } from "lucide-react";
+import { Users, HandHeart, Map, Home, Flag, CheckCircle, Lightbulb, UserCircle, Users as UsersIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-export function Stats() {
+export function Stats({ data = [] }: { data?: any[] }) {
   const t = useTranslations("homepage.stats");
   const iconMap: Record<string, React.ReactNode> = {
     Users: <Users size={32} />,
@@ -12,13 +11,17 @@ export function Stats() {
     Map: <Map size={32} />,
     Home: <Home size={32} />,
     Flag: <Flag size={32} />,
+    CheckCircle: <CheckCircle size={32} />,
+    Lightbulb: <Lightbulb size={32} />,
+    UserCircle: <UserCircle size={32} />,
+    UsersIcon: <UsersIcon size={32} />,
   };
 
   return (
     <section className="relative -mt-24 z-20 pb-24">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
-          {statistics.map((stat, i) => (
+          {data.map((stat, i) => (
             <motion.div
               key={stat.id}
               initial={{ opacity: 0, y: 30 }}

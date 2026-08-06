@@ -12,26 +12,34 @@ import { Organization } from "@/components/sections/Organization";
 import { MembershipCTA } from "@/components/sections/MembershipCTA";
 import { Media } from "@/components/sections/Media";
 import { FAQ } from "@/components/sections/FAQ";
+import { getPublicStats, getPublicCoreValues, getPublicPolicies, getPublicFAQs } from "@/actions/public/cms";
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "homepage" });
+  
+  const [statsData, coreValuesData, policiesData, faqsData] = await Promise.all([
+    getPublicStats(),
+    getPublicCoreValues(),
+    getPublicPolicies(locale),
+    getPublicFAQs(locale)
+  ]);
 
   return (
     <>
       <BreakingNewsBar locale={locale} />
       <Hero />
-      <Stats />
+      <Stats data={statsData} />
       <About />
       <Resolutions />
       <Vision />
       <Mission />
-      <CoreValues />
-      <Policies />
+      <CoreValues data={coreValuesData} />
+      <Policies data={policiesData} />
       <Organization />
       <MembershipCTA />
       <Media />
-      <FAQ />
+      <FAQ data={faqsData} />
     </>
   );
 }

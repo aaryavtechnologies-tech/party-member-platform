@@ -1,10 +1,9 @@
 "use client";
 import { motion } from "framer-motion";
-import { coreValues } from "@/data/mock";
 import { Eye, Users, Heart, ShieldCheck, Lightbulb, Zap } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-export function CoreValues() {
+export function CoreValues({ data = [] }: { data?: any[] }) {
   const t = useTranslations("homepage.core_values");
   
   const iconMap: Record<string, React.ReactNode> = {
@@ -28,20 +27,22 @@ export function CoreValues() {
           {t("title")}
         </motion.h2>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 lg:gap-12 max-w-5xl mx-auto">
-          {coreValues.map((val, i) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 max-w-4xl mx-auto">
+          {data.map((value, index) => (
             <motion.div
-              key={val.id}
+              key={value.id}
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
+              transition={{ delay: index * 0.1 }}
               className="flex flex-col items-center group"
             >
               <div className="w-20 h-20 bg-white/10 rounded-3xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-accent group-hover:text-primary group-hover:scale-110 shadow-lg">
-                {iconMap[val.icon]}
+                {iconMap[value.icon]}
               </div>
-              <h3 className="text-xl font-semibold tracking-wide">{t(val.titleKey as any)}</h3>
+              <h3 className="text-xl font-bold mb-2 group-hover:text-accent transition-colors text-center">
+                {t(value.titleKey as any)}
+              </h3>
             </motion.div>
           ))}
         </div>

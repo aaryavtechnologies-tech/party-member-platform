@@ -8,11 +8,14 @@ import {
 } from "@/components/ui/accordion";
 import { useTranslations } from "next-intl";
 
-export function FAQ() {
+export function FAQ({ data = [] }: { data?: any[] }) {
   const t = useTranslations("homepage.faq");
   
-  // Create an array of 4 items for the FAQ
-  const faqs = [
+  // Use DB data if available, fallback to static translations
+  const faqs = data.length > 0 ? data.map(d => ({
+    question: d.translations?.[0]?.question || "Question",
+    answer: d.translations?.[0]?.answer || "Answer"
+  })) : [
     { question: t("items.0.question"), answer: t("items.0.answer") },
     { question: t("items.1.question"), answer: t("items.1.answer") },
     { question: t("items.2.question"), answer: t("items.2.answer") },

@@ -1166,3 +1166,22 @@ model VideoEntry {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model CoreValue {
+  id        String   @id @default(uuid())
+  titleKey  String
+  icon      String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StatItem {
+  id        String   @id @default(uuid())
+  labelKey  String
+  value     Int
+  icon      String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

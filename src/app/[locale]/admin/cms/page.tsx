@@ -19,8 +19,10 @@ export default async function CMSOverviewPage() {
 
   const quickActions = [
     { title: "Manage Pages", href: "/admin/cms/pages", icon: FileText, color: "text-blue-600 bg-blue-100 dark:bg-blue-900/30", description: "Edit website content and static pages." },
+    { title: "Homepage Stats", href: "/admin/cms/stats", icon: FileText, color: "text-blue-600 bg-blue-100 dark:bg-blue-900/30", description: "Manage dynamic statistics shown on the home page." },
+    { title: "Core Values", href: "/admin/cms/core-values", icon: FileText, color: "text-blue-600 bg-blue-100 dark:bg-blue-900/30", description: "Edit the core values section." },
     { title: "Media Library", href: "/admin/cms/media", icon: ImageIcon, color: "text-emerald-600 bg-emerald-100 dark:bg-emerald-900/30", description: "Upload images, PDFs, and videos." },
-    { title: "FAQ Manager", href: "/admin/cms/faq", icon: BookOpen, color: "text-orange-600 bg-orange-100 dark:bg-orange-900/30", description: "Manage dynamic FAQ sections." },
+    { title: "FAQ Manager", href: "/admin/cms/faqs", icon: BookOpen, color: "text-orange-600 bg-orange-100 dark:bg-orange-900/30", description: "Manage dynamic FAQ sections." },
     { title: "Site Menus", href: "/admin/cms/menus", icon: Layers, color: "text-purple-600 bg-purple-100 dark:bg-purple-900/30", description: "Edit header and footer navigation." },
   ];
 
