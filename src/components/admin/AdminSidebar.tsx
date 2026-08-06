@@ -59,7 +59,6 @@ const ADMIN_NAV_CONFIG: NavGroup[] = [
     label: "Finance",
     items: [
       { title: "Payments", href: "/admin/payments", icon: CreditCard },
-      { title: "Invoices", href: "/admin/finance/invoices", icon: FileText },
     ]
   },
   {
