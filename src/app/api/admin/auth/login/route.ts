@@ -11,8 +11,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Username and password are required" }, { status: 400 });
     }
 
-    const admin = await prisma.admin.findUnique({
-      where: { username }
+    const admin = await prisma.admin.findFirst({
+      where: {
+        OR: [
+          { username: username },
+          { email: username }
+        ]
+      }
     });
 
     if (!admin || !admin.isActive) {

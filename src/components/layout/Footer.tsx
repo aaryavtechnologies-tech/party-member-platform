@@ -217,13 +217,22 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-6 text-sm">
             <span className="flex items-center"><MapPin size={14} className="mr-1"/> India</span>
-            <Link
-              href="/admin/dashboard"
-              className="flex items-center gap-1.5 text-slate-600 hover:text-slate-400 transition-colors text-xs"
-            >
-              <Lock size={11} />
-              Admin Login
-            </Link>
+            <div className="flex items-center gap-4">
+              <Link
+                href="/super-admin/login"
+                className="flex items-center gap-1.5 text-slate-600 hover:text-slate-400 transition-colors text-xs"
+              >
+                <Lock size={11} />
+                Super Admin Login
+              </Link>
+              <Link
+                href="/admin/login"
+                className="flex items-center gap-1.5 text-slate-600 hover:text-slate-400 transition-colors text-xs"
+              >
+                <Lock size={11} />
+                Admin Login
+              </Link>
+            </div>
           </div>
         </div>
       </div>

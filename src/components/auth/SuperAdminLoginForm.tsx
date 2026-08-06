@@ -39,23 +39,26 @@ export function SuperAdminLoginForm() {
     setIsLoading(true);
     setServerError(null);
     try {
-      const { error } = await signIn.email({
-        email: data.email,
-        password: data.password,
-        callbackURL: "/admin/dashboard",
+      const response = await fetch("/api/admin/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: data.email, // Use email field as username temporarily for UI compat
+          password: data.password,
+        }),
       });
 
-      if (error) {
-        setServerError(
-          error.status === 401
-            ? "Incorrect email or password. Please try again."
-            : error.message || "Login failed. Please try again."
-        );
+      const result = await response.json();
+
+      if (!response.ok) {
+        setServerError(result.error || "Login failed. Please try again.");
         return;
       }
 
-      toast.success("Welcome back Admin! Redirecting...");
-      router.push("/admin/dashboard");
+      toast.success("Welcome back Super Admin! Redirecting...");
+      router.push(result.redirectUrl || "/admin/dashboard");
       router.refresh();
     } catch (err) {
       setServerError("Something went wrong. Please check your connection.");
