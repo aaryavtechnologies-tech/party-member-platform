@@ -124,3 +124,65 @@ export async function revokeOfficeBearer(id: string, unitId: string) {
 
   revalidatePath(`/admin/organization/units/${unitId}`);
 }
+
+export async function updateOrganizationUnit(
+  id: string,
+  data: {
+    nameEn: string;
+    nameGu: string;
+    parentId?: string;
+  }
+) {
+  const session = await requireAdminAuth("STATE_ADMIN");
+
+  const { nameEn, nameGu, parentId } = data;
+
+  if (!nameEn || !nameGu) {
+    throw new Error("English Name and Gujarati Name are required.");
+  }
+
+  const unit = await prisma.organizationUnit.update({
+    where: { id },
+    data: {
+      nameEn,
+      nameGu,
+      parentId: parentId || null,
+      updatedBy: session.id,
+    },
+    include: {
+      level: true
+    }
+  });
+
+  revalidatePath(`/admin/organization/${unit.level.nameEn.toLowerCase()}`);
+  return unit;
+}
+
+export async function deleteOrganizationUnit(id: string) {
+  const session = await requireAdminAuth("STATE_ADMIN");
+
+  // Prevent deletion if there are active office bearers
+  const activeBearers = await prisma.officeBearer.count({
+    where: { unitId: id, status: "ACTIVE" }
+  });
+
+  if (activeBearers > 0) {
+    throw new Error("Cannot delete a unit that has active office bearers.");
+  }
+
+  const unit = await prisma.organizationUnit.findUnique({
+    where: { id },
+    include: { level: true }
+  });
+
+  if (!unit) {
+    throw new Error("Unit not found");
+  }
+
+  // Soft delete or hard delete? Usually hard delete is ok if no bearers, or we can just delete it.
+  await prisma.organizationUnit.delete({
+    where: { id }
+  });
+
+  revalidatePath(`/admin/organization/${unit.level.nameEn.toLowerCase()}`);
+}

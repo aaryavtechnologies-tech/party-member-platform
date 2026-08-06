@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Search, Filter, MoreHorizontal, Edit, Settings } from "lucide-react";
+import { Plus, Search, Filter, MoreHorizontal, Edit, Settings, Trash } from "lucide-react";
 import { toast } from "sonner";
-import { createOrganizationUnit } from "@/actions/admin/organization";
+import { createOrganizationUnit, updateOrganizationUnit, deleteOrganizationUnit } from "@/actions/admin/organization";
 import Link from "next/link";
 
 interface Unit {
@@ -27,6 +27,7 @@ export default function OrganizationLevelClient({
 }) {
   const [units, setUnits] = useState(initialUnits);
   const [isCreating, setIsCreating] = useState(false);
+  const [editingUnit, setEditingUnit] = useState<Unit | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -63,6 +64,53 @@ export default function OrganizationLevelClient({
     }
   };
 
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingUnit) return;
+    setIsSubmitting(true);
+    try {
+      const updatedUnit = await updateOrganizationUnit(editingUnit.id, {
+        ...formData
+      });
+      
+      setUnits(units.map(u => u.id === editingUnit.id ? { 
+        ...u, 
+        nameEn: updatedUnit.nameEn, 
+        nameGu: updatedUnit.nameGu, 
+        parent: parentUnits.find(p => p.id === updatedUnit.parentId) || null 
+      } : u));
+      
+      setEditingUnit(null);
+      setFormData({ nameEn: "", nameGu: "", parentId: "" });
+      toast.success("Unit updated successfully!");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update unit.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this unit?")) return;
+    try {
+      await deleteOrganizationUnit(id);
+      setUnits(units.filter(u => u.id !== id));
+      toast.success("Unit deleted successfully.");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete unit.");
+    }
+  };
+
+  const openEdit = (unit: Unit) => {
+    setEditingUnit(unit);
+    setFormData({
+      nameEn: unit.nameEn,
+      nameGu: unit.nameGu,
+      parentId: unit.parent?.id || "" // might not perfectly match if it's not in parentUnits array but it should
+    });
+    setIsCreating(false);
+  };
+
   return (
     <>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2">
@@ -85,9 +133,18 @@ export default function OrganizationLevelClient({
         </div>
       </div>
 
-      {isCreating && (
-        <form onSubmit={handleCreate} className="p-6 bg-slate-50 dark:bg-slate-900 rounded-xl space-y-4 mb-6 border border-slate-200 dark:border-slate-800">
-          <h3 className="font-bold text-lg mb-2">Create New {levelName.charAt(0).toUpperCase() + levelName.slice(1)} Unit</h3>
+      {(isCreating || editingUnit) && (
+        <form onSubmit={editingUnit ? handleEditSubmit : handleCreate} className="p-6 bg-slate-50 dark:bg-slate-900 rounded-xl space-y-4 mb-6 border border-slate-200 dark:border-slate-800 relative">
+          
+          {editingUnit && (
+            <button type="button" onClick={() => setEditingUnit(null)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+              ✕
+            </button>
+          )}
+
+          <h3 className="font-bold text-lg mb-2">
+            {editingUnit ? `Edit Unit: ${editingUnit.nameEn}` : `Create New ${levelName.charAt(0).toUpperCase() + levelName.slice(1)} Unit`}
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-500 mb-1">Unit Name (English)</label>
@@ -114,7 +171,7 @@ export default function OrganizationLevelClient({
             )}
           </div>
           <button type="submit" disabled={isSubmitting} className="px-6 py-2 bg-slate-900 text-white font-bold rounded-lg hover:bg-slate-800 disabled:opacity-50">
-            {isSubmitting ? "Creating..." : "Save Unit"}
+            {isSubmitting ? "Saving..." : (editingUnit ? "Update Unit" : "Save Unit")}
           </button>
         </form>
       )}
@@ -191,11 +248,11 @@ export default function OrganizationLevelClient({
                             <Plus className="w-4 h-4" />
                           </button>
                         </Link>
-                        <button className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors" title="Edit Unit">
+                        <button onClick={() => openEdit(unit)} className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors" title="Edit Unit">
                           <Edit className="w-4 h-4" />
                         </button>
-                        <button className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors" title="More Actions">
-                          <MoreHorizontal className="w-4 h-4" />
+                        <button onClick={() => handleDelete(unit.id)} className="p-1.5 rounded-lg bg-slate-100 hover:bg-red-100 dark:bg-slate-800 dark:hover:bg-red-900/30 text-slate-600 hover:text-red-600 dark:text-slate-300 dark:hover:text-red-400 transition-colors" title="Delete Unit">
+                          <Trash className="w-4 h-4" />
                         </button>
                       </div>
                     </td>
