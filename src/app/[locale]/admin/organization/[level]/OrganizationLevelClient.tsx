@@ -10,7 +10,7 @@ interface Unit {
   id: string;
   nameEn: string;
   nameGu: string;
-  parent: { nameEn: string } | null;
+  parent: { id: string; nameEn: string } | null;
   _count: { officeBearers: number };
 }
 
