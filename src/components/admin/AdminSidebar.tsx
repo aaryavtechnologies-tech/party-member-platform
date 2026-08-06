@@ -6,8 +6,9 @@ import { cn } from "@/lib/utils";
 import { 
   ChevronDown, ChevronRight, LayoutDashboard, Users, UserPlus, 
   MapPin, Globe, FileText, Settings, ShieldAlert, CreditCard, 
-  PieChart, LifeBuoy, Bell, History, Menu, FileEdit
+  PieChart, LifeBuoy, Bell, History, Menu, FileEdit, Send, LogOut
 } from "lucide-react";
+import { logoutAdmin } from "@/actions/admin/auth";
 
 type NavItem = {
   title: string;
@@ -67,6 +68,7 @@ const ADMIN_NAV_CONFIG: NavGroup[] = [
       { title: "Analytics Overview", href: "/admin/reports", icon: PieChart },
       { title: "Member Reports", href: "/admin/reports/members", icon: Users },
       { title: "Referral Reports", href: "/admin/reports/referrals", icon: Users },
+      { title: "Broadcasts & News", href: "/admin/broadcasts", icon: Send },
     ]
   },
   {
@@ -80,14 +82,25 @@ const ADMIN_NAV_CONFIG: NavGroup[] = [
     label: "Administration",
     items: [
       { title: "Admin Management", href: "/admin/users", icon: Users },
-      { title: "Roles & Permissions", href: "/admin/roles", icon: ShieldAlert },
-      { title: "System Settings", href: "/admin/settings", icon: Settings },
-      { title: "Audit Logs", href: "/admin/logs", icon: History },
     ]
   }
 ];
 
-export function AdminSidebar({ isMobileOpen, setMobileOpen }: { isMobileOpen: boolean; setMobileOpen: (v: boolean) => void }) {
+import { AdminRole } from "@prisma/client";
+
+// Define a list of groups/items only Super Admin can see
+const SUPER_ADMIN_ONLY_GROUPS = ["Organization", "Finance", "Administration", "Dashboard", "Reports & Analytics"];
+const SUPER_ADMIN_ONLY_ITEMS = ["Website Pages (CMS)", "FAQ Management", "Gallery", "Events", "Membership Plans"];
+
+export function AdminSidebar({ 
+  isMobileOpen, 
+  setMobileOpen,
+  adminRole = null
+}: { 
+  isMobileOpen: boolean; 
+  setMobileOpen: (v: boolean) => void;
+  adminRole?: AdminRole | null;
+}) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
@@ -127,6 +140,38 @@ export function AdminSidebar({ isMobileOpen, setMobileOpen }: { isMobileOpen: bo
     isMobileOpen ? "translate-x-0" : "-translate-x-full"
   );
 
+  // Filter navigation based on role
+  const filteredNavConfig = ADMIN_NAV_CONFIG.map(group => {
+    if (adminRole !== "SUPER_ADMIN" && SUPER_ADMIN_ONLY_GROUPS.includes(group.label)) {
+      return null;
+    }
+
+    const filteredItems = group.items.filter(item => {
+      if (adminRole !== "SUPER_ADMIN" && SUPER_ADMIN_ONLY_ITEMS.includes(item.title)) {
+        return false;
+      }
+      return true;
+    });
+
+    if (filteredItems.length === 0) return null;
+
+    // Adjust dashboard link based on role
+    const adjustedItems = filteredItems.map(item => {
+      if (item.title === "Overview") {
+        let href = "/admin/dashboard";
+        if (adminRole === "NATIONAL_ADMIN") href = "/admin/national";
+        else if (adminRole === "STATE_ADMIN") href = "/admin/state";
+        else if (adminRole === "DISTRICT_ADMIN") href = "/admin/district";
+        else if (adminRole === "TALUKA_ADMIN") href = "/admin/taluka";
+        else if (adminRole === "VILLAGE_ADMIN") href = "/admin/village";
+        return { ...item, href };
+      }
+      return item;
+    });
+
+    return { ...group, items: adjustedItems };
+  }).filter(Boolean) as NavGroup[];
+
   return (
     <>
       {/* Mobile Backdrop */}
@@ -147,7 +192,7 @@ export function AdminSidebar({ isMobileOpen, setMobileOpen }: { isMobileOpen: bo
             {!isCollapsed && (
               <div className="flex flex-col">
                 <span className="font-extrabold text-white text-lg tracking-tight whitespace-nowrap leading-tight">Admin Portal</span>
-                <span className="text-[10px] text-primary font-bold uppercase tracking-widest">Platform Management</span>
+                <span className="text-[10px] text-primary font-bold uppercase tracking-widest">{adminRole ? adminRole.replace("_ADMIN", " ADMIN") : "Platform Management"}</span>
               </div>
             )}
           </Link>
@@ -162,7 +207,7 @@ export function AdminSidebar({ isMobileOpen, setMobileOpen }: { isMobileOpen: bo
         {/* Navigation */}
         <div className="flex-1 overflow-y-auto py-6 relative [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <div className="space-y-8 px-4">
-            {ADMIN_NAV_CONFIG.map((group, i) => (
+            {filteredNavConfig.map((group, i) => (
               <div key={i} className="flex flex-col">
                 {!isCollapsed ? (
                   <button 
@@ -209,6 +254,19 @@ export function AdminSidebar({ isMobileOpen, setMobileOpen }: { isMobileOpen: bo
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="p-4 mt-auto border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
+            <button
+              onClick={() => logoutAdmin()}
+              className={cn(
+                "w-full flex items-center justify-start gap-3 p-3 rounded-xl font-bold text-sm transition-all text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20",
+                isCollapsed && "justify-center px-0"
+              )}
+            >
+              <LogOut className="w-5 h-5 shrink-0" />
+              {!isCollapsed && <span>Logout</span>}
+            </button>
           </div>
         </div>
       </aside>

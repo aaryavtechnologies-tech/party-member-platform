@@ -1,42 +1,13 @@
-"use client";
+import { getAdminSession } from "@/lib/admin-auth";
+import { AdminLayoutClient } from "@/components/admin/AdminLayoutClient";
 
-import { useState } from "react";
-import { usePathname } from "next/navigation";
-import { AdminSidebar } from "@/components/admin/AdminSidebar";
-import { AdminTopbar } from "@/components/admin/AdminTopbar";
-
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
-  const pathname = usePathname();
-  const isLoginPage = pathname.includes("/admin/login");
-
-  if (isLoginPage) {
-    return <div className="min-h-screen bg-slate-50 dark:bg-slate-900">{children}</div>;
-  }
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const session = await getAdminSession();
+  const role = session?.role || null;
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-slate-900 font-sans">
-      
-      {/* Sidebar Navigation */}
-      <AdminSidebar 
-        isMobileOpen={isMobileSidebarOpen} 
-        setMobileOpen={setIsMobileSidebarOpen} 
-      />
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        
-        {/* Top Navbar */}
-        <AdminTopbar setMobileOpen={setIsMobileSidebarOpen} />
-
-        {/* Scrollable Content */}
-        <main className="flex-1 overflow-y-auto scrollbar-hide p-4 sm:p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto w-full">
-            {children}
-          </div>
-        </main>
-        
-      </div>
-    </div>
+    <AdminLayoutClient adminRole={role}>
+      {children}
+    </AdminLayoutClient>
   );
 }

@@ -19,7 +19,15 @@ interface DashboardData {
   recentActivities: { id: string; action: string; details: string; createdAt: Date }[];
 }
 
-export default function DashboardClient({ data }: { data: DashboardData }) {
+export default function DashboardClient({ 
+  data, 
+  title = "Dashboard Overview",
+  subtitle = "Welcome to the RAVP Admin Portal."
+}: { 
+  data: DashboardData;
+  title?: string;
+  subtitle?: string;
+}) {
   // Format revenue helper
   const formatLakhs = (paise: number) => {
     const rupees = paise / 100;
@@ -35,8 +43,8 @@ export default function DashboardClient({ data }: { data: DashboardData }) {
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Dashboard Overview</h1>
-          <p className="text-slate-500">Welcome to the RAVP Admin Portal.</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{title}</h1>
+          <p className="text-slate-500">{subtitle}</p>
         </div>
         <div className="flex gap-2">
           <button className="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-semibold shadow-sm hover:bg-slate-50 transition-colors">

@@ -39,11 +39,9 @@ export async function POST(req: NextRequest) {
 
     // Determine dashboard URL based on role
     let redirectUrl = "/admin/dashboard"; // Fallback/Super Admin
-    if (admin.role === "NATIONAL_ADMIN") redirectUrl = "/admin/national";
-    else if (admin.role === "STATE_ADMIN") redirectUrl = "/admin/state";
-    else if (admin.role === "DISTRICT_ADMIN") redirectUrl = "/admin/district";
-    else if (admin.role === "TALUKA_ADMIN") redirectUrl = "/admin/taluka";
-    else if (admin.role === "VILLAGE_ADMIN") redirectUrl = "/admin/village";
+    if (admin.role !== "SUPER_ADMIN") {
+      redirectUrl = "/admin/members";
+    }
 
     return NextResponse.json({ 
       success: true, 
