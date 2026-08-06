@@ -56,3 +56,71 @@ export async function createOrganizationUnit(data: {
   revalidatePath(`/admin/organization/${levelName.toLowerCase()}`);
   return unit;
 }
+
+export async function createPosition(data: {
+  nameEn: string;
+  nameGu: string;
+  priority: number;
+}) {
+  const session = await requireAdminAuth("STATE_ADMIN");
+
+  const { nameEn, nameGu, priority } = data;
+
+  if (!nameEn || !nameGu) {
+    throw new Error("English Name and Gujarati Name are required.");
+  }
+
+  const position = await prisma.position.create({
+    data: {
+      nameEn,
+      nameGu,
+      priority,
+      createdBy: session.id,
+    }
+  });
+
+  revalidatePath("/admin/organization/positions");
+  return position;
+}
+
+export async function assignOfficeBearer(data: {
+  memberId: string;
+  positionId: string;
+  unitId: string;
+}) {
+  const session = await requireAdminAuth("STATE_ADMIN");
+
+  const { memberId, positionId, unitId } = data;
+
+  if (!memberId || !positionId || !unitId) {
+    throw new Error("Member, Position, and Unit are required.");
+  }
+
+  // Optionally check if the member already holds a position in this unit
+
+  const bearer = await prisma.officeBearer.create({
+    data: {
+      memberId,
+      positionId,
+      unitId,
+      startDate: new Date(),
+    }
+  });
+
+  revalidatePath(`/admin/organization/units/${unitId}`);
+  return bearer;
+}
+
+export async function revokeOfficeBearer(id: string, unitId: string) {
+  const session = await requireAdminAuth("STATE_ADMIN");
+
+  await prisma.officeBearer.update({
+    where: { id },
+    data: {
+      status: "REVOKED",
+      endDate: new Date()
+    }
+  });
+
+  revalidatePath(`/admin/organization/units/${unitId}`);
+}

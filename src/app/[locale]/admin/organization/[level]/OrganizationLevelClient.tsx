@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Plus, Search, Filter, MoreHorizontal, Edit, Settings } from "lucide-react";
 import { toast } from "sonner";
 import { createOrganizationUnit } from "@/actions/admin/organization";
+import Link from "next/link";
 
 interface Unit {
   id: string;
@@ -70,9 +71,11 @@ export default function OrganizationLevelClient({
           <p className="text-slate-500">Manage organizational units and leadership assignments at the {levelName} level.</p>
         </div>
         <div className="flex gap-2">
-          <button className="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-semibold shadow-sm hover:bg-slate-50 transition-colors flex items-center gap-2">
-            <Settings className="w-4 h-4" /> Manage Positions
-          </button>
+          <Link href="/admin/organization/positions">
+            <button className="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-semibold shadow-sm hover:bg-slate-50 transition-colors flex items-center gap-2">
+              <Settings className="w-4 h-4" /> Manage Positions
+            </button>
+          </Link>
           <button 
             onClick={() => setIsCreating(!isCreating)}
             className="px-4 py-2 bg-primary text-slate-950 rounded-lg text-sm font-bold shadow-sm hover:bg-primary/90 transition-colors flex items-center gap-2"
@@ -158,7 +161,9 @@ export default function OrganizationLevelClient({
                 units.map((unit) => (
                   <tr key={unit.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30 transition-colors group">
                     <td className="p-4">
-                      <p className="font-bold text-slate-900 dark:text-white text-sm">{unit.nameEn}</p>
+                      <Link href={`/admin/organization/units/${unit.id}`} className="hover:underline">
+                        <p className="font-bold text-primary dark:text-primary-light text-sm">{unit.nameEn}</p>
+                      </Link>
                       <p className="text-xs text-slate-500 font-mono">ID: {unit.id.substring(0,8)}</p>
                     </td>
                     {enumLevel !== "NATIONAL" && (
@@ -181,9 +186,11 @@ export default function OrganizationLevelClient({
                     </td>
                     <td className="p-4">
                       <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors" title="Manage Assignments">
-                          <Plus className="w-4 h-4" />
-                        </button>
+                        <Link href={`/admin/organization/units/${unit.id}`}>
+                          <button className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors" title="Manage Assignments">
+                            <Plus className="w-4 h-4" />
+                          </button>
+                        </Link>
                         <button className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors" title="Edit Unit">
                           <Edit className="w-4 h-4" />
                         </button>

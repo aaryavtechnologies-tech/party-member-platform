@@ -98,3 +98,27 @@ export async function updateMemberStatus(memberId: string, status: MemberStatus)
   
   return updated;
 }
+
+export async function searchMembers(query: string) {
+  const session = await requireAdminAuth();
+  const locationFilter = getCmsLocationFilter(session);
+
+  if (!query || query.length < 3) return [];
+
+  return prisma.memberProfile.findMany({
+    where: {
+      AND: [
+        locationFilter,
+        {
+          OR: [
+            { memberId: { contains: query, mode: "insensitive" } },
+            { mobile: { contains: query } },
+            { user: { is: { name: { contains: query, mode: "insensitive" } } } }
+          ]
+        }
+      ]
+    },
+    include: { user: true },
+    take: 10
+  });
+}
