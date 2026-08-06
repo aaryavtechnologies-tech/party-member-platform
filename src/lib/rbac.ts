@@ -1,5 +1,6 @@
 import { AdminRole, MemberProfile } from "@prisma/client";
 import { getAdminSession, AdminJwtPayload } from "./admin-auth";
+import { redirect } from "next/navigation";
 
 /**
  * Checks if the logged-in admin has the required role or a higher role.
@@ -105,11 +106,11 @@ export function hasMemberAccess(admin: AdminJwtPayload, member: MemberProfile): 
 export async function requireAdminAuth(requiredRole: AdminRole = "VILLAGE_ADMIN") {
   const session = await getAdminSession();
   if (!session) {
-    throw new Error("Unauthorized: Please log in as an Admin.");
+    redirect("/admin/login");
   }
 
   if (!hasRequiredRole(session.role, requiredRole)) {
-    throw new Error("Forbidden: You do not have permission to perform this action.");
+    redirect("/admin/dashboard");
   }
 
   return session;
