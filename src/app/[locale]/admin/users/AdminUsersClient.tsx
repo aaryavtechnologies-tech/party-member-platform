@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AdminRole, Admin } from "@prisma/client";
 import { toast } from "sonner";
 import { createAdmin, deleteAdmin } from "@/actions/admin/users";
+import { GUJARAT_DISTRICTS, getTalukasForDistrict } from "@/lib/gujarat-locations";
 
 // Helper to determine allowed roles based on hierarchy
 function getAllowedRoles(currentRole: AdminRole): AdminRole[] {
@@ -105,20 +106,46 @@ export default function AdminUsersClient({
               disabled={!!currentState} 
               onChange={e => setFormData({...formData, state: e.target.value})} 
             />
-            <input 
-              placeholder="District" 
-              className="p-2 border rounded" 
-              value={formData.district} 
-              disabled={!!currentDistrict} 
-              onChange={e => setFormData({...formData, district: e.target.value})} 
-            />
-            <input 
-              placeholder="Taluka" 
-              className="p-2 border rounded" 
-              value={formData.taluka} 
-              disabled={!!currentTaluka} 
-              onChange={e => setFormData({...formData, taluka: e.target.value})} 
-            />
+            {!!currentDistrict ? (
+              <input 
+                placeholder="District" 
+                className="p-2 border rounded bg-slate-100 dark:bg-slate-800 text-slate-500" 
+                value={formData.district} 
+                disabled={true} 
+              />
+            ) : (
+              <select 
+                className="p-2 border rounded bg-white dark:bg-slate-950" 
+                value={formData.district} 
+                onChange={e => setFormData({
+                  ...formData, 
+                  district: e.target.value, 
+                  taluka: "" // Reset taluka when district changes
+                })}
+              >
+                <option value="">Select District</option>
+                {GUJARAT_DISTRICTS.map(d => <option key={d} value={d}>{d}</option>)}
+              </select>
+            )}
+
+            {!!currentTaluka ? (
+              <input 
+                placeholder="Taluka" 
+                className="p-2 border rounded bg-slate-100 dark:bg-slate-800 text-slate-500" 
+                value={formData.taluka} 
+                disabled={true} 
+              />
+            ) : (
+              <select 
+                className="p-2 border rounded bg-white dark:bg-slate-950" 
+                value={formData.taluka} 
+                disabled={!formData.district}
+                onChange={e => setFormData({...formData, taluka: e.target.value})} 
+              >
+                <option value="">Select Taluka</option>
+                {getTalukasForDistrict(formData.district).map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
+            )}
             <input 
               placeholder="Village" 
               className="p-2 border rounded" 
