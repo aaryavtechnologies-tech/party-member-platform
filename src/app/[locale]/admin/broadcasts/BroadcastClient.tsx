@@ -9,10 +9,12 @@ export default function BroadcastClient({ adminCount, memberCount }: { adminCoun
   const [formData, setFormData] = useState({
     title: "",
     message: "",
-    audience: "ALL" as "ALL" | "MEMBERS_ONLY" | "ADMINS_ONLY",
-    type: "GENERAL",
-    link: ""
+    audience: "ALL" as "ALL" | "MEMBER_ONLY" | "ADMIN_ONLY",
+    imageUrl: "",
+    fileUrl: ""
   });
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [isUploadingFile, setIsUploadingFile] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -34,8 +36,8 @@ export default function BroadcastClient({ adminCount, memberCount }: { adminCoun
         title: "",
         message: "",
         audience: "ALL",
-        type: "GENERAL",
-        link: ""
+        imageUrl: "",
+        fileUrl: ""
       });
     } catch (error: any) {
       toast.error(error.message || "Failed to send broadcast");
@@ -46,8 +48,34 @@ export default function BroadcastClient({ adminCount, memberCount }: { adminCoun
 
   const audienceStats = {
     ALL: adminCount + memberCount,
-    MEMBERS_ONLY: memberCount,
-    ADMINS_ONLY: adminCount,
+    MEMBER_ONLY: memberCount,
+    ADMIN_ONLY: adminCount,
+  };
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: "image" | "file") => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (type === "image") setIsUploadingImage(true);
+    else setIsUploadingFile(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+      
+      if (type === "image") setFormData(prev => ({ ...prev, imageUrl: data.url }));
+      else setFormData(prev => ({ ...prev, fileUrl: data.url }));
+      
+      toast.success(`${type === "image" ? "Image" : "File"} uploaded successfully`);
+    } catch (err) {
+      toast.error(`Failed to upload ${type}`);
+    } finally {
+      if (type === "image") setIsUploadingImage(false);
+      else setIsUploadingFile(false);
+    }
   };
 
   return (
@@ -99,39 +127,37 @@ export default function BroadcastClient({ adminCount, memberCount }: { adminCoun
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 font-bold focus:outline-none focus:ring-2 focus:ring-primary/50"
                 >
                   <option value="ALL">Everyone (Members + Admins)</option>
-                  <option value="MEMBERS_ONLY">Registered Members Only</option>
-                  <option value="ADMINS_ONLY">System Admins Only</option>
+                  <option value="MEMBER_ONLY">Registered Members Only</option>
+                  <option value="ADMIN_ONLY">System Admins Only</option>
                 </select>
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-                  Notification Type
+                  Attach Image (Optional)
                 </label>
-                <select 
-                  value={formData.type}
-                  onChange={(e) => setFormData({...formData, type: e.target.value})}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 font-bold focus:outline-none focus:ring-2 focus:ring-primary/50"
-                >
-                  <option value="GENERAL">General Notice</option>
-                  <option value="NEWS">News / Press Release</option>
-                  <option value="ALERT">Urgent Alert</option>
-                  <option value="EVENT">Event Invitation</option>
-                </select>
+                <input 
+                  type="file"
+                  accept="image/*"
+                  onChange={e => handleUpload(e, "image")}
+                  className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-sm focus:outline-none"
+                />
+                {isUploadingImage && <p className="text-xs text-primary mt-1">Uploading image...</p>}
+                {formData.imageUrl && <p className="text-xs text-green-600 mt-1">Image attached</p>}
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
-                <Link2 className="w-3 h-3" /> Optional Action Link
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                Attach Document/File (Optional)
               </label>
               <input 
-                type="url"
-                value={formData.link}
-                onChange={(e) => setFormData({...formData, link: e.target.value})}
-                placeholder="https://example.com/news/123"
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                type="file"
+                onChange={e => handleUpload(e, "file")}
+                className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-sm focus:outline-none"
               />
+              {isUploadingFile && <p className="text-xs text-primary mt-1">Uploading file...</p>}
+              {formData.fileUrl && <p className="text-xs text-green-600 mt-1">File attached</p>}
             </div>
             
             <div className="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800">
@@ -168,20 +194,20 @@ export default function BroadcastClient({ adminCount, memberCount }: { adminCoun
               <span className="font-black font-mono text-lg">{audienceStats.ALL.toLocaleString()}</span>
             </div>
 
-            <div className={`p-4 rounded-xl border ${formData.audience === 'MEMBERS_ONLY' ? 'border-primary bg-primary/5' : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950'} transition-all flex justify-between items-center`}>
+            <div className={`p-4 rounded-xl border ${formData.audience === 'MEMBER_ONLY' ? 'border-primary bg-primary/5' : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950'} transition-all flex justify-between items-center`}>
               <div className="flex items-center gap-3">
-                <Users className={`w-5 h-5 ${formData.audience === 'MEMBERS_ONLY' ? 'text-primary' : 'text-slate-400'}`} />
+                <Users className={`w-5 h-5 ${formData.audience === 'MEMBER_ONLY' ? 'text-primary' : 'text-slate-400'}`} />
                 <span className="font-bold">Members</span>
               </div>
-              <span className="font-black font-mono text-lg">{audienceStats.MEMBERS_ONLY.toLocaleString()}</span>
+              <span className="font-black font-mono text-lg">{audienceStats.MEMBER_ONLY.toLocaleString()}</span>
             </div>
 
-            <div className={`p-4 rounded-xl border ${formData.audience === 'ADMINS_ONLY' ? 'border-primary bg-primary/5' : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950'} transition-all flex justify-between items-center`}>
+            <div className={`p-4 rounded-xl border ${formData.audience === 'ADMIN_ONLY' ? 'border-primary bg-primary/5' : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950'} transition-all flex justify-between items-center`}>
               <div className="flex items-center gap-3">
-                <ShieldAlert className={`w-5 h-5 ${formData.audience === 'ADMINS_ONLY' ? 'text-primary' : 'text-slate-400'}`} />
+                <ShieldAlert className={`w-5 h-5 ${formData.audience === 'ADMIN_ONLY' ? 'text-primary' : 'text-slate-400'}`} />
                 <span className="font-bold">Admins</span>
               </div>
-              <span className="font-black font-mono text-lg">{audienceStats.ADMINS_ONLY.toLocaleString()}</span>
+              <span className="font-black font-mono text-lg">{audienceStats.ADMIN_ONLY.toLocaleString()}</span>
             </div>
           </div>
           

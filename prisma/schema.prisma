@@ -149,7 +149,8 @@ model MemberProfile {
   issueDate      DateTime       @default(now())
 
   // Assets
-  qrCodeUrl String?
+  qrCodeUrl  String?
+  profilePic String?
 
   // Referrals
   referralCode String          @unique // e.g., RAVP458963
@@ -179,6 +180,9 @@ model MemberProfile {
   membershipHistory MembershipHistory[]
   referralHistory   ReferralHistory[]   @relation("ReferredMember")
   referralsMade     ReferralHistory[]   @relation("Referrer")
+  
+  communityMembers  CommunityMember[]
+  communityRequests CommunityJoinRequest[]
 
   @@index([memberId])
   @@index([referralCode])
@@ -237,7 +241,7 @@ enum ReferralStatus {
 model Payment {
   id                String         @id @default(uuid())
   userId            String
-  user              User           @relation(fields: [userId], references: [id])
+  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   razorpayOrderId   String         @unique
   razorpayPaymentId String?        @unique
   amount            Int // In paise (100 = ₹1)
@@ -272,7 +276,7 @@ model Invoice {
   id            String  @id @default(uuid())
   invoiceNumber String  @unique // e.g., INV-2026-000001
   paymentId     String  @unique
-  payment       Payment @relation(fields: [paymentId], references: [id])
+  payment       Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
 
   fileUrl   String?
   createdAt DateTime @default(now())
@@ -282,7 +286,7 @@ model Receipt {
   id            String  @id @default(uuid())
   receiptNumber String  @unique // e.g., REC-2026-000001
   paymentId     String  @unique
-  payment       Payment @relation(fields: [paymentId], references: [id])
+  payment       Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
 
   fileUrl   String?
   createdAt DateTime @default(now())
@@ -291,7 +295,7 @@ model Receipt {
 model AuditLog {
   id        String   @id @default(uuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   action    String
   details   String
   ipAddress String?
@@ -307,7 +311,7 @@ model SupportTicket {
   id           String @id @default(uuid())
   ticketNumber String @unique // e.g., TKT-2026-000001
   userId       String
-  user         User   @relation(fields: [userId], references: [id])
+  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   subject      String
   category     String
   priority     String @default("LOW") // LOW, MEDIUM, HIGH, URGENT
@@ -792,6 +796,23 @@ model AdminNotification {
   createdAt DateTime @default(now())
 }
 
+enum BroadcastAudience {
+  ALL
+  ADMIN_ONLY
+  MEMBER_ONLY
+}
+
+model BroadcastNotification {
+  id        String            @id @default(uuid())
+  title     String
+  message   String            @db.Text
+  audience  BroadcastAudience @default(ALL)
+  imageUrl  String?
+  fileUrl   String?
+  authorId  String            // Admin who sent it
+  createdAt DateTime          @default(now())
+}
+
 // ----------------------------------------------------
 // Enterprise News & Press Release System (Phase 8)
 // ----------------------------------------------------
@@ -817,6 +838,7 @@ model NewsArticle {
   isBreaking     Boolean @default(false)
   isPressRelease Boolean @default(false)
   isMemberOnly   Boolean @default(false)
+  featuredImage  String?
   audience       AudienceType @default(ALL)
 
   views     Int @default(0)
@@ -1203,4 +1225,99 @@ model MemberNotification {
   link      String?
 
   createdAt DateTime @default(now())
+}
+
+// ----------------------------------------------------
+// Communities System (Phase 9)
+// ----------------------------------------------------
+
+model Community {
+  id          String   @id @default(uuid())
+  name        String
+  description String?  @db.Text
+  logoUrl     String?
+  isPublic    Boolean  @default(true) // Public or Private
+  
+  createdById String   // Admin who created it
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members      CommunityMember[]
+  joinRequests CommunityJoinRequest[]
+  posts        CommunityPost[]
+  chats        CommunityChat[]
+}
+
+enum CommunityRole {
+  ADMIN
+  MEMBER
+}
+
+model CommunityMember {
+  id              String        @id @default(uuid())
+  communityId     String
+  community       Community     @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  memberProfileId String
+  memberProfile   MemberProfile @relation(fields: [memberProfileId], references: [id], onDelete: Cascade)
+  
+  role            CommunityRole @default(MEMBER)
+  joinedAt        DateTime      @default(now())
+
+  @@unique([communityId, memberProfileId])
+}
+
+model CommunityJoinRequest {
+  id              String        @id @default(uuid())
+  communityId     String
+  community       Community     @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  memberProfileId String
+  memberProfile   MemberProfile @relation(fields: [memberProfileId], references: [id], onDelete: Cascade)
+  
+  status          String        @default("PENDING") // PENDING, APPROVED, REJECTED
+  requestedAt     DateTime      @default(now())
+
+  @@unique([communityId, memberProfileId])
+}
+
+model CommunityPost {
+  id          String   @id @default(uuid())
+  communityId String
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  
+  authorId    String   // could be admin or member
+  authorType  String   // 'ADMIN' or 'MEMBER'
+  
+  content     String   @db.Text
+  imageUrls   String[] // Array of image URLs
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  comments    CommunityComment[]
+}
+
+model CommunityComment {
+  id          String   @id @default(uuid())
+  postId      String
+  post        CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  authorId    String
+  authorType  String
+  
+  content     String   @db.Text
+  createdAt   DateTime @default(now())
+}
+
+model CommunityChat {
+  id          String   @id @default(uuid())
+  communityId String
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  
+  authorId    String
+  authorType  String // 'ADMIN' or 'MEMBER'
+  
+  message     String?  @db.Text
+  imageUrl    String?
+  
+  createdAt   DateTime @default(now())
 }

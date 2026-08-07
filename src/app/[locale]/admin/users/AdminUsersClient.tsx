@@ -4,15 +4,14 @@ import { useState } from "react";
 import { AdminRole, Admin } from "@prisma/client";
 import { toast } from "sonner";
 import { createAdmin, deleteAdmin } from "@/actions/admin/users";
-import { GUJARAT_DISTRICTS, getTalukasForDistrict } from "@/lib/gujarat-locations";
 
 // Helper to determine allowed roles based on hierarchy
 function getAllowedRoles(currentRole: AdminRole): AdminRole[] {
   switch(currentRole) {
     case "SUPER_ADMIN": return ["NATIONAL_ADMIN", "STATE_ADMIN", "DISTRICT_ADMIN", "TALUKA_ADMIN", "VILLAGE_ADMIN"];
-    case "NATIONAL_ADMIN": return ["STATE_ADMIN", "DISTRICT_ADMIN", "TALUKA_ADMIN", "VILLAGE_ADMIN"];
-    case "STATE_ADMIN": return ["DISTRICT_ADMIN", "TALUKA_ADMIN", "VILLAGE_ADMIN"];
-    case "DISTRICT_ADMIN": return ["TALUKA_ADMIN", "VILLAGE_ADMIN"];
+    case "NATIONAL_ADMIN": return ["STATE_ADMIN"];
+    case "STATE_ADMIN": return ["DISTRICT_ADMIN"];
+    case "DISTRICT_ADMIN": return ["TALUKA_ADMIN"];
     case "TALUKA_ADMIN": return ["VILLAGE_ADMIN"];
     default: return [];
   }
@@ -46,7 +45,29 @@ export default function AdminUsersClient({
     district: currentDistrict || "",
     taluka: currentTaluka || "",
     village: "",
+    profilePhoto: "",
   });
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+      setFormData({ ...formData, profilePhoto: data.url });
+      toast.success("Profile photo uploaded");
+    } catch (err) {
+      toast.error("Failed to upload photo");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,52 +127,39 @@ export default function AdminUsersClient({
               disabled={!!currentState} 
               onChange={e => setFormData({...formData, state: e.target.value})} 
             />
-            {!!currentDistrict ? (
-              <input 
-                placeholder="District" 
-                className="p-2 border rounded bg-slate-100 dark:bg-slate-800 text-slate-500" 
-                value={formData.district} 
-                disabled={true} 
-              />
-            ) : (
-              <select 
-                className="p-2 border rounded bg-white dark:bg-slate-950" 
-                value={formData.district} 
-                onChange={e => setFormData({
-                  ...formData, 
-                  district: e.target.value, 
-                  taluka: "" // Reset taluka when district changes
-                })}
-              >
-                <option value="">Select District</option>
-                {GUJARAT_DISTRICTS.map(d => <option key={d} value={d}>{d}</option>)}
-              </select>
-            )}
-
-            {!!currentTaluka ? (
-              <input 
-                placeholder="Taluka" 
-                className="p-2 border rounded bg-slate-100 dark:bg-slate-800 text-slate-500" 
-                value={formData.taluka} 
-                disabled={true} 
-              />
-            ) : (
-              <select 
-                className="p-2 border rounded bg-white dark:bg-slate-950" 
-                value={formData.taluka} 
-                disabled={!formData.district}
-                onChange={e => setFormData({...formData, taluka: e.target.value})} 
-              >
-                <option value="">Select Taluka</option>
-                {getTalukasForDistrict(formData.district).map(t => <option key={t} value={t}>{t}</option>)}
-              </select>
-            )}
+            <input 
+              placeholder="District" 
+              className="p-2 border rounded" 
+              value={formData.district} 
+              disabled={!!currentDistrict} 
+              onChange={e => setFormData({...formData, district: e.target.value})} 
+            />
+            <input 
+              placeholder="Taluka" 
+              className="p-2 border rounded" 
+              value={formData.taluka} 
+              disabled={!!currentTaluka} 
+              onChange={e => setFormData({...formData, taluka: e.target.value})} 
+            />
             <input 
               placeholder="Village" 
               className="p-2 border rounded" 
               value={formData.village} 
               onChange={e => setFormData({...formData, village: e.target.value})} 
             />
+            
+            <div className="md:col-span-2 flex items-center gap-4 border p-2 rounded">
+              {formData.profilePhoto ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={formData.profilePhoto} alt="Profile" className="w-12 h-12 rounded object-cover" />
+              ) : (
+                <div className="w-12 h-12 bg-slate-200 rounded flex items-center justify-center text-xs text-slate-500">No Img</div>
+              )}
+              <label className="cursor-pointer px-4 py-2 bg-slate-200 rounded hover:bg-slate-300 text-sm font-semibold transition">
+                {isUploading ? "Uploading..." : "Upload Profile Photo"}
+                <input type="file" className="hidden" accept="image/*" onChange={handlePhotoUpload} disabled={isUploading} />
+              </label>
+            </div>
           </div>
           <button type="submit" className="w-full py-2 bg-slate-900 text-white font-bold rounded-lg hover:bg-slate-800">
             Save Admin

@@ -287,7 +287,51 @@
   },
   "admin": {
     "dashboard": "ડેશબોર્ડ",
-    "users": "વપરાશકર્તાઓ"
+    "users": "વપરાશકર્તાઓ",
+    "portal": "એડમિન પોર્ટલ",
+    "platformManagement": "પ્લેટફોર્મ મેનેજમેન્ટ",
+    "groups": {
+      "Dashboard": "ડેશબોર્ડ",
+      "Member Management": "સભ્ય વ્યવસ્થાપન",
+      "Organization": "સંગઠન",
+      "Content Management": "કન્ટેન્ટ મેનેજમેન્ટ",
+      "Finance": "નાણાકીય",
+      "Reports & Analytics": "રિપોર્ટ્સ અને એનાલિટિક્સ",
+      "Support": "સપોર્ટ",
+      "Administration": "વહીવટ"
+    },
+    "items": {
+      "Overview": "ઝાંખી",
+      "All Members": "તમામ સભ્યો",
+      "Membership Plans": "સભ્યપદ યોજનાઓ",
+      "National Team": "રાષ્ટ્રીય ટીમ",
+      "State Team": "રાજ્ય ટીમ",
+      "District Team": "જિલ્લા ટીમ",
+      "Taluka Team": "તાલુકા ટીમ",
+      "Village Team": "ગ્રામ્ય ટીમ",
+      "Website Pages (CMS)": "વેબસાઇટ પેજીસ (CMS)",
+      "FAQ Management": "FAQ મેનેજમેન્ટ",
+      "News & Media": "સમાચાર અને મીડિયા",
+      "Gallery": "ગેલેરી",
+      "Events": "ઇવેન્ટ્સ",
+      "Payments": "ચૂકવણીઓ",
+      "Analytics Overview": "એનાલિટિક્સ ઝાંખી",
+      "Member Reports": "સભ્ય રિપોર્ટ્સ",
+      "Referral Reports": "રેફરલ રિપોર્ટ્સ",
+      "Broadcasts & News": "બ્રોડકાસ્ટ્સ અને સમાચાર",
+      "Contact & Inquiries": "સંપર્ક અને પૂછપરછ",
+      "Support Tickets": "સપોર્ટ ટિકિટ્સ",
+      "Admin Management": "એડમિન મેનેજમેન્ટ"
+    },
+    "logout": "સુરક્ષિત લોગઆઉટ",
+    "topbar": {
+      "searchPlaceholder": "સભ્યો, વ્યવહારો, ટિકિટ્સ શોધો...",
+      "myAccount": "મારું ખાતું",
+      "updateProfile": "પ્રોફાઇલ અપડેટ કરો",
+      "updatePassword": "પાસવર્ડ અપડેટ કરો",
+      "adminUser": "એડમિન યુઝર",
+      "superadmin": "સુપરએડમિન"
+    }
   },
   "footer": {
     "get_in_touch": "સંપર્ક કરો",

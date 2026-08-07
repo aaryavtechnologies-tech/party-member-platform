@@ -34,18 +34,10 @@ const ADMIN_NAV_CONFIG: NavGroup[] = [
     items: [
       { title: "All Members", href: "/admin/members", icon: Users },
       { title: "Membership Plans", href: "/admin/membership/plans", icon: FileText },
+      { title: "Communities", href: "/admin/communities", icon: Users },
     ]
   },
-  {
-    label: "Organization",
-    items: [
-      { title: "National Team", href: "/admin/organization/national", icon: Globe },
-      { title: "State Team", href: "/admin/organization/state", icon: MapPin },
-      { title: "District Team", href: "/admin/organization/district", icon: MapPin },
-      { title: "Taluka Team", href: "/admin/organization/taluka", icon: MapPin },
-      { title: "Village Team", href: "/admin/organization/village", icon: MapPin },
-    ]
-  },
+
   {
     label: "Content Management",
     items: [
@@ -104,6 +96,10 @@ export function AdminSidebar({
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
+
+  const safeT = (key: string, fallback: string) => {
+    return fallback;
+  };
 
   // Initialize from local storage on mount
   useEffect(() => {
@@ -191,8 +187,8 @@ export function AdminSidebar({
             </div>
             {!isCollapsed && (
               <div className="flex flex-col">
-                <span className="font-extrabold text-white text-lg tracking-tight whitespace-nowrap leading-tight">Admin Portal</span>
-                <span className="text-[10px] text-primary font-bold uppercase tracking-widest">{adminRole ? adminRole.replace("_ADMIN", " ADMIN") : "Platform Management"}</span>
+                <span className="font-extrabold text-white text-lg tracking-tight whitespace-nowrap leading-tight">{safeT("portal", "Portal")}</span>
+                <span className="text-[10px] text-primary font-bold uppercase tracking-widest">{adminRole ? adminRole.replace("_ADMIN", " ADMIN") : safeT("platformManagement", "Platform Management")}</span>
               </div>
             )}
           </Link>
@@ -214,7 +210,9 @@ export function AdminSidebar({
                     onClick={() => toggleGroup(group.label)}
                     className="flex items-center justify-between px-3 py-2 text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-primary transition-colors group/header"
                   >
-                    <span className="group-hover/header:translate-x-1 transition-transform duration-300">{group.label}</span>
+                    <span className="group-hover/header:translate-x-1 transition-transform duration-300">
+                      {safeT(`groups.${group.label}`, group.label)}
+                    </span>
                     {expandedGroups[group.label] ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
                   </button>
                 ) : (
@@ -225,6 +223,7 @@ export function AdminSidebar({
                   {group.items.map((item, j) => {
                     const isActive = pathname.startsWith(item.href);
                     const Icon = item.icon || LayoutDashboard;
+                    const displayTitle = safeT(`items.${item.title}`, item.title);
                     
                     return (
                       <Link 
@@ -238,7 +237,7 @@ export function AdminSidebar({
                             ? "bg-gradient-to-r from-primary to-orange-500 text-slate-950 font-bold shadow-[0_4px_15px_rgba(251,146,60,0.3)]" 
                             : "hover:bg-slate-800/50 hover:text-white"
                         )}
-                        title={isCollapsed ? item.title : undefined}
+                        title={isCollapsed ? displayTitle : undefined}
                       >
                         {isActive && !isCollapsed && (
                           <div className="absolute left-0 top-0 bottom-0 w-1 bg-white/30 rounded-r-full" />
@@ -247,7 +246,7 @@ export function AdminSidebar({
                           "w-5 h-5 shrink-0 transition-transform duration-300", 
                           isActive ? "text-slate-950 scale-110" : "text-slate-400 group-hover:text-primary group-hover:scale-110"
                         )} />
-                        {!isCollapsed && <span className={cn("truncate transition-transform duration-300", !isActive && "group-hover:translate-x-1")}>{item.title}</span>}
+                        {!isCollapsed && <span className={cn("truncate transition-transform duration-300", !isActive && "group-hover:translate-x-1")}>{displayTitle}</span>}
                       </Link>
                     );
                   })}
@@ -256,16 +255,26 @@ export function AdminSidebar({
             ))}
           </div>
 
-          <div className="p-4 mt-auto border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
+          <div className="p-4 mt-auto border-t border-slate-800/60 bg-slate-950/50 backdrop-blur-md">
             <button
               onClick={() => logoutAdmin()}
               className={cn(
-                "w-full flex items-center justify-start gap-3 p-3 rounded-xl font-bold text-sm transition-all text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20",
-                isCollapsed && "justify-center px-0"
+                "w-full flex items-center gap-3 p-3 rounded-xl font-bold text-sm transition-all duration-300 relative overflow-hidden group border",
+                isCollapsed 
+                  ? "justify-center px-0 border-transparent hover:border-red-500/30 hover:bg-red-500/10" 
+                  : "justify-start border-slate-800/60 hover:border-red-500/50 hover:shadow-[0_0_20px_rgba(239,68,68,0.2)] bg-slate-900/50 hover:bg-slate-900"
               )}
             >
-              <LogOut className="w-5 h-5 shrink-0" />
-              {!isCollapsed && <span>Logout</span>}
+              <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <LogOut className={cn(
+                "w-5 h-5 shrink-0 transition-transform duration-300",
+                isCollapsed 
+                  ? "text-slate-400 group-hover:text-red-500 group-hover:scale-110" 
+                  : "text-red-400 group-hover:text-red-500 group-hover:-translate-x-1"
+              )} />
+              {!isCollapsed && (
+                <span className="text-slate-300 group-hover:text-white transition-colors relative z-10 tracking-wide">{safeT("logout", "Logout")}</span>
+              )}
             </button>
           </div>
         </div>

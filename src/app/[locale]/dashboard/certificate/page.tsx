@@ -3,6 +3,8 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import CertificateClient from "./CertificateClient";
+import { FeatureLock } from "@/components/shared/FeatureLock";
+import { isMembershipActiveOrInGracePeriod } from "@/lib/membership-check";
 
 export default async function CertificatePage() {
   const session = await auth.api.getSession({
@@ -17,13 +19,23 @@ export default async function CertificatePage() {
   const memberProfile = await prisma.memberProfile.findUnique({
     where: { userId: session.user.id },
     include: {
-      user: true,
+      user: {
+        include: {
+          payments: {
+            where: { status: "SUCCESS" }
+          }
+        }
+      }
     }
   });
 
   if (!memberProfile) {
     redirect("/dashboard/membership");
   }
+
+  // Check if member has paid or is within 30 days
+  const hasSuccessfulPayment = memberProfile.user.payments.length > 0;
+  const canAccess = isMembershipActiveOrInGracePeriod(memberProfile.createdAt, hasSuccessfulPayment);
 
   const certData = {
     name: memberProfile.user.name,
@@ -36,5 +48,9 @@ export default async function CertificatePage() {
     })
   };
 
-  return <CertificateClient data={certData} />;
+  return (
+    <FeatureLock isPaidOrInGracePeriod={canAccess}>
+      <CertificateClient data={certData} />
+    </FeatureLock>
+  );
 }

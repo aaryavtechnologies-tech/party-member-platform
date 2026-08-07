@@ -5,19 +5,30 @@ import { requireAdminAuth, canManageRole } from "@/lib/rbac";
 import bcryptjs from "bcryptjs";
 import { AdminRole } from "@prisma/client";
 
+import { getCmsLocationFilter } from "@/lib/cms-rbac";
+
 export async function getAdmins() {
   const session = await requireAdminAuth();
+  
+  const locationFilter = getCmsLocationFilter(session);
 
-  // Super Admins can see all other admins
+  // Super Admins see all
   if (session.role === "SUPER_ADMIN") {
     return prisma.admin.findMany({
       orderBy: { createdAt: "desc" }
     });
   }
 
-  // Other admins can only see admins they created
+  // Other admins see admins within their jurisdiction (excluding themselves or higher roles if needed, 
+  // but for now, they see all admins matching the location filter).
+  // We can filter out SUPER_ADMINs so lower level admins don't see them.
   return prisma.admin.findMany({
-    where: { createdById: session.id },
+    where: {
+      ...locationFilter,
+      role: {
+        not: "SUPER_ADMIN"
+      }
+    },
     orderBy: { createdAt: "desc" }
   });
 }
@@ -33,6 +44,7 @@ export async function createAdmin(data: {
   district?: string;
   taluka?: string;
   village?: string;
+  profilePhoto?: string;
 }) {
   const session = await requireAdminAuth();
 
@@ -70,6 +82,7 @@ export async function createAdmin(data: {
       district: data.district,
       taluka: data.taluka,
       village: data.village,
+      profilePhoto: data.profilePhoto,
       createdById: session.id,
     }
   });

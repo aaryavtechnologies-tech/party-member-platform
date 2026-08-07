@@ -5,6 +5,7 @@ import { AdminStatsCard } from "@/components/admin/AdminStatsCard";
 import { Users, UserCheck, UserX, UserMinus, Search, Filter, MoreHorizontal, Mail, ShieldAlert, Edit, Eye } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { DeleteMemberButton } from "@/components/admin/DeleteMemberButton";
+import { ExportMembersButton } from "@/components/admin/ExportMembersButton";
 
 export const dynamic = 'force-dynamic';
 
@@ -54,15 +55,12 @@ export default async function AdminMembersPage() {
           <p className="text-slate-500">View and manage all registered members.</p>
         </div>
         <div className="flex gap-2">
-          <a 
-            href="/api/admin/members/export"
-            className="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-semibold shadow-sm hover:bg-slate-50 transition-colors inline-block"
-          >
-            Export Excel
-          </a>
-          <button className="px-4 py-2 bg-primary text-slate-950 rounded-lg text-sm font-bold shadow-sm hover:bg-primary/90 transition-colors">
-            Add Member
-          </button>
+          <ExportMembersButton />
+          <Link href="/admin/members/create">
+            <button className="px-4 py-2 bg-primary text-slate-950 rounded-lg text-sm font-bold shadow-sm hover:bg-primary/90 transition-colors">
+              Add Member
+            </button>
+          </Link>
         </div>
       </div>
 

@@ -174,12 +174,11 @@ export function MembershipUpgradeClient({ currentTier }: { currentTier: string }
         )}
 
         {/* Tier 2 */}
-        <div className={`bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 flex flex-col ${currentTier === 'PRIMARY' ? 'opacity-75 grayscale hover:grayscale-0 hover:opacity-100 transition-all' : 'border-2 border-primary shadow-xl shadow-primary/10 relative'}`}>
-          {currentTier === 'LIFETIME_PRIMARY' && (
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-slate-950 px-4 py-1 rounded-full text-sm font-bold shadow-sm">
-              Recommended Upgrade
-            </div>
-          )}
+        <div className={`bg-white dark:bg-slate-900 rounded-3xl p-8 border-2 border-primary shadow-xl shadow-primary/10 relative flex flex-col`}>
+          <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-slate-950 px-4 py-1 rounded-full text-sm font-bold shadow-sm">
+            Premium Access
+          </div>
+          
           <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Lifetime Active</h3>
           <p className="text-slate-500 text-sm mb-6">For core party workers</p>
           <div className="text-4xl font-black text-slate-900 dark:text-white mb-8">
@@ -187,21 +186,20 @@ export function MembershipUpgradeClient({ currentTier }: { currentTier: string }
           </div>
           
           <ul className="space-y-4 mb-8 flex-1">
-            {['All Lifetime Primary Benefits', 'Eligible for Party Posts', 'Voting Rights in Internal Elections', 'Direct Access to State Committees', 'Special Recognition Badge'].map((benefit, i) => (
+            {['All Lifetime Primary Benefits', 'Access to Member Communities', 'Eligible for Party Posts', 'Voting Rights in Internal Elections', 'Direct Access to State Committees'].map((benefit, i) => (
               <li key={i} className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" />
-                <span className="text-slate-600 dark:text-slate-400 text-sm font-medium">{benefit}</span>
+                <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
+                <span className="text-slate-700 dark:text-slate-300 text-sm font-medium">{benefit}</span>
               </li>
             ))}
           </ul>
           
           <Button 
-            variant={currentTier === 'PRIMARY' ? 'outline' : 'default'}
-            className={`w-full h-14 rounded-full font-bold text-lg ${currentTier === 'LIFETIME_PRIMARY' ? 'bg-primary text-slate-950 hover:bg-primary/90' : ''}`} 
+            className="w-full h-14 rounded-full font-bold text-lg bg-primary text-slate-950 hover:bg-primary/90" 
             onClick={() => handleUpgrade("LIFETIME_ACTIVE", 1000)}
-            disabled={isLoading || currentTier === "PRIMARY"}
+            disabled={isLoading}
           >
-            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : currentTier === "PRIMARY" ? "Upgrade First to Lifetime Primary" : "Upgrade for ₹1000"}
+            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Upgrade for ₹1000"}
           </Button>
         </div>
 

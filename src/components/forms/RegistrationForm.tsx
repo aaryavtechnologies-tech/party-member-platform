@@ -51,6 +51,9 @@ const formSchema = z.object({
   
   // Step 3: Referral
   referralCode: z.string().optional(),
+  
+  // Step 4: Profile Picture
+  profilePic: z.string().min(1, "Profile picture is required"),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -59,7 +62,8 @@ const STEPS = [
   { id: 1, title: "Personal Details" },
   { id: 2, title: "Address Info" },
   { id: 3, title: "Verification" },
-  { id: 4, title: "Review" },
+  { id: 4, title: "Profile Photo" },
+  { id: 5, title: "Review" },
 ];
 
 export function RegistrationForm() {
@@ -74,6 +78,7 @@ export function RegistrationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMemberId, setSuccessMemberId] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const router = useRouter();
 
   const form = useForm<FormData>({
@@ -100,6 +105,7 @@ export function RegistrationForm() {
       fullAddress: "",
       pincode: "",
       referralCode: "",
+      profilePic: "",
     },
   });
 
@@ -134,10 +140,15 @@ export function RegistrationForm() {
         return;
       }
       isValid = true;
+    } else if (step === 4) {
+      isValid = await form.trigger(["profilePic"]);
+      if (!isValid) {
+        toast.error("Please upload a profile picture to continue.");
+      }
     }
 
     if (isValid) {
-      setStep((prev) => Math.min(prev + 1, 4));
+      setStep((prev) => Math.min(prev + 1, 5));
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
@@ -206,6 +217,27 @@ export function RegistrationForm() {
   const prevStep = () => {
     setStep((prev) => Math.max(prev - 1, 1));
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleProfilePicUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+      
+      form.setValue("profilePic", data.url, { shouldValidate: true });
+      toast.success("Profile picture uploaded successfully");
+    } catch (err) {
+      toast.error("Failed to upload image");
+    } finally {
+      setIsUploadingImage(false);
+    }
   };
 
   const onSubmit = async (data: FormData) => {
@@ -636,10 +668,78 @@ export function RegistrationForm() {
             </motion.div>
           )}
 
-          {/* STEP 4: Review */}
+          {/* STEP 4: Profile Picture */}
           {step === 4 && (
             <motion.div 
               key="step4"
+              initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="mb-8">
+                <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Upload Profile Photo</h2>
+                <p className="text-slate-500">Please provide a professional passport-sized photograph for your Digital ID Card.</p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div className="space-y-6">
+                  <div className={`p-8 border-2 border-dashed rounded-3xl text-center bg-slate-50 dark:bg-slate-900/50 transition-colors ${form.formState.errors.profilePic ? 'border-red-500 bg-red-50 dark:bg-red-950/20' : 'border-slate-200 dark:border-slate-700'}`}>
+                    {form.watch("profilePic") ? (
+                      <div className="relative w-40 h-48 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-800">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={form.watch("profilePic")} alt="Profile" className="w-full h-full object-cover" />
+                      </div>
+                    ) : (
+                      <div className="w-24 h-24 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <User className="w-10 h-10 text-slate-400" />
+                      </div>
+                    )}
+                    
+                    <h3 className="text-lg font-bold mb-2">Select a Photo</h3>
+                    <p className="text-slate-500 text-sm mb-6">JPG, PNG up to 5MB.</p>
+                    
+                    <label className="cursor-pointer">
+                      <input type="file" className="hidden" accept="image/*" onChange={handleProfilePicUpload} disabled={isUploadingImage} />
+                      <span className="px-6 py-3 bg-primary text-slate-950 font-bold rounded-xl hover:bg-primary/90 transition-colors inline-block disabled:opacity-50">
+                        {isUploadingImage ? "Uploading..." : "Browse Files"}
+                      </span>
+                    </label>
+
+                    {form.formState.errors.profilePic && (
+                      <p className="text-red-500 text-sm font-bold mt-4 animate-pulse">
+                        {form.formState.errors.profilePic.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="bg-slate-100 dark:bg-slate-800/30 p-6 rounded-3xl border border-slate-200 dark:border-slate-700">
+                  <h3 className="font-bold text-slate-900 dark:text-white mb-4">Photo Requirements</h3>
+                  <div className="flex gap-4 items-start mb-6">
+                    <div className="w-24 h-28 bg-white dark:bg-slate-900 rounded-lg overflow-hidden shrink-0 border-2 border-green-500 p-1">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/placeholder-passport.png" alt="Example" className="w-full h-full object-cover rounded bg-slate-200" />
+                    </div>
+                    <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-2 list-disc pl-4">
+                      <li>Clear front-facing passport style photo</li>
+                      <li>Plain white or light background</li>
+                      <li>Face should cover 70-80% of photo</li>
+                      <li>No sunglasses or hats</li>
+                    </ul>
+                  </div>
+                  <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl">
+                    <p className="text-xs text-amber-800 dark:text-amber-400 font-medium">
+                      <strong>Note:</strong> This photo will be printed on your official Party ID Card. Applications with improper photos will be rejected.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* STEP 5: Review */}
+          {step === 5 && (
+            <motion.div 
+              key="step5"
               initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >

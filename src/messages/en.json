@@ -287,7 +287,51 @@
   },
   "admin": {
     "dashboard": "Dashboard",
-    "users": "Users"
+    "users": "Users",
+    "portal": "Admin Portal",
+    "platformManagement": "Platform Management",
+    "groups": {
+      "Dashboard": "Dashboard",
+      "Member Management": "Member Management",
+      "Organization": "Organization",
+      "Content Management": "Content Management",
+      "Finance": "Finance",
+      "Reports & Analytics": "Reports & Analytics",
+      "Support": "Support",
+      "Administration": "Administration"
+    },
+    "items": {
+      "Overview": "Overview",
+      "All Members": "All Members",
+      "Membership Plans": "Membership Plans",
+      "National Team": "National Team",
+      "State Team": "State Team",
+      "District Team": "District Team",
+      "Taluka Team": "Taluka Team",
+      "Village Team": "Village Team",
+      "Website Pages (CMS)": "Website Pages (CMS)",
+      "FAQ Management": "FAQ Management",
+      "News & Media": "News & Media",
+      "Gallery": "Gallery",
+      "Events": "Events",
+      "Payments": "Payments",
+      "Analytics Overview": "Analytics Overview",
+      "Member Reports": "Member Reports",
+      "Referral Reports": "Referral Reports",
+      "Broadcasts & News": "Broadcasts & News",
+      "Contact & Inquiries": "Contact & Inquiries",
+      "Support Tickets": "Support Tickets",
+      "Admin Management": "Admin Management"
+    },
+    "logout": "Secure Logout",
+    "topbar": {
+      "searchPlaceholder": "Search members, transactions, tickets...",
+      "myAccount": "My Account",
+      "updateProfile": "Update Profile",
+      "updatePassword": "Update Password",
+      "adminUser": "Admin User",
+      "superadmin": "Superadmin"
+    }
   },
   "footer": {
     "get_in_touch": "Get in Touch",

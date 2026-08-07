@@ -3,6 +3,8 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import DigitalCardClient from "./DigitalCardClient";
+import { FeatureLock } from "@/components/shared/FeatureLock";
+import { isMembershipActiveOrInGracePeriod } from "@/lib/membership-check";
 
 export default async function DigitalCardPage() {
   const session = await auth.api.getSession({
@@ -17,7 +19,13 @@ export default async function DigitalCardPage() {
   const memberProfile = await prisma.memberProfile.findUnique({
     where: { userId: session.user.id },
     include: {
-      user: true,
+      user: {
+        include: {
+          payments: {
+            where: { status: "SUCCESS" }
+          }
+        }
+      },
       officeBearers: {
         include: {
           unit: true
@@ -30,6 +38,10 @@ export default async function DigitalCardPage() {
     // If not a registered member, redirect to membership
     redirect("/dashboard/membership");
   }
+
+  // Check if member has paid or is within 30 days
+  const hasSuccessfulPayment = memberProfile.user.payments.length > 0;
+  const canAccess = isMembershipActiveOrInGracePeriod(memberProfile.createdAt, hasSuccessfulPayment);
 
   // Determine official assignment
   const assignment = memberProfile.officeBearers.find(a => a.status === "ACTIVE");
@@ -60,5 +72,9 @@ export default async function DigitalCardPage() {
     membershipType: memberProfile.membershipType.replace("_", " ") + " Member"
   };
 
-  return <DigitalCardClient data={cardData} />;
+  return (
+    <FeatureLock isPaidOrInGracePeriod={canAccess}>
+      <DigitalCardClient data={cardData} />
+    </FeatureLock>
+  );
 }

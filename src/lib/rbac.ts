@@ -33,7 +33,17 @@ export function canManageRole(adminRole: AdminRole, targetRole: AdminRole): bool
     VILLAGE_ADMIN: 10,
   };
 
-  return roleHierarchy[adminRole] > roleHierarchy[targetRole];
+  if (adminRole === "SUPER_ADMIN") {
+    return roleHierarchy[adminRole] > roleHierarchy[targetRole];
+  }
+
+  // Strict one-level down for other roles
+  if (adminRole === "NATIONAL_ADMIN") return targetRole === "STATE_ADMIN";
+  if (adminRole === "STATE_ADMIN") return targetRole === "DISTRICT_ADMIN";
+  if (adminRole === "DISTRICT_ADMIN") return targetRole === "TALUKA_ADMIN";
+  if (adminRole === "TALUKA_ADMIN") return targetRole === "VILLAGE_ADMIN";
+
+  return false;
 }
 
 /**

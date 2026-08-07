@@ -6,6 +6,7 @@ import { Save, Send, Settings, Image as ImageIcon, LayoutTemplate } from "lucide
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { NewsCategory, NewsTag } from "@prisma/client";
+import { TiptapEditor } from "@/components/admin/TiptapEditor";
 
 import { createNewsArticle } from "@/actions/admin/news";
 
@@ -29,12 +30,30 @@ export function NewsEditorClient({
   const [slug, setSlug] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   
   // Flags
   const [isPressRelease, setIsPressRelease] = useState(false);
   const [isFeatured, setIsFeatured] = useState(false);
   const [isBreaking, setIsBreaking] = useState(false);
   const [isMemberOnly, setIsMemberOnly] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+      setImageUrl(data.url);
+      toast.success("Image uploaded successfully");
+    } catch (err) {
+      toast.error("Failed to upload image");
+    }
+  };
 
   const handleSave = async (status: "DRAFT" | "PUBLISHED") => {
     setIsSubmitting(true);
@@ -50,7 +69,8 @@ export function NewsEditorClient({
         isFeatured,
         isBreaking,
         isPressRelease,
-        isMemberOnly
+        isMemberOnly,
+        featuredImage: imageUrl
       }, status);
       
       toast.success(status === "DRAFT" ? "Article saved as Draft" : "Article submitted!");
@@ -128,10 +148,8 @@ export function NewsEditorClient({
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Full Content (Tiptap Editor Placeholder)</label>
-                <div className="min-h-[300px] w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center p-8 text-center text-slate-500">
-                  <p>Enterprise Rich Text Editor initialized here.<br/>(Supports Tables, Images, YouTube embeds, etc)</p>
-                </div>
+                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Full Content</label>
+                <TiptapEditor content={content} onChange={setContent} />
               </div>
             </div>
           )}
@@ -142,10 +160,18 @@ export function NewsEditorClient({
               <h2 className="text-xl font-bold">Media & Gallery</h2>
               
               <div className="p-8 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-center bg-slate-50 dark:bg-slate-900/50">
-                <ImageIcon className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                {imageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={imageUrl} alt="Featured" className="mx-auto max-h-48 rounded-lg mb-4 object-cover shadow-sm" />
+                ) : (
+                  <ImageIcon className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                )}
                 <h3 className="text-lg font-bold mb-2">Featured Image</h3>
-                <p className="text-slate-500 text-sm mb-4">Upload or select from VPS Local Storage</p>
-                <Button variant="outline">Browse Media Library</Button>
+                <p className="text-slate-500 text-sm mb-4">Upload a high-quality image</p>
+                <label className="cursor-pointer">
+                  <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
+                  <span className="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors inline-block">Upload Image</span>
+                </label>
               </div>
 
               <div className="p-8 border border-slate-200 dark:border-slate-700 rounded-2xl bg-white dark:bg-slate-950">

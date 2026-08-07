@@ -6,6 +6,7 @@ import { getCmsLocationFilter } from "@/lib/cms-rbac";
 import { MemberStatus, MembershipTier } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { sendAdminNotification } from "@/lib/notifications";
+import bcrypt from "bcryptjs";
 
 export async function getAdminMembers() {
   const session = await requireAdminAuth();
@@ -120,5 +121,63 @@ export async function searchMembers(query: string) {
     },
     include: { user: true },
     take: 10
+  });
+}
+
+export async function createMemberByAdmin(data: any) {
+  const session = await requireAdminAuth();
+  
+  // Hash password
+  const hashedPassword = await bcrypt.hash(data.password, 10);
+  
+  // Generate unique Member ID
+  const memberCount = await prisma.memberProfile.count();
+  const memberId = `RAVP-${new Date().getFullYear()}-${String(memberCount + 1).padStart(6, '0')}`;
+
+  return prisma.$transaction(async (tx) => {
+    // 1. Create User
+    const user = await tx.user.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        emailVerified: true,
+      }
+    });
+
+    // 2. Create Account with credentials
+    await tx.account.create({
+      data: {
+        userId: user.id,
+        providerId: "credentials",
+        accountId: data.email,
+        provider: "credentials",
+        password: hashedPassword,
+      }
+    });
+
+    // 3. Create Member Profile
+    const profile = await tx.memberProfile.create({
+      data: {
+        userId: user.id,
+        memberId,
+        fatherName: data.fatherName || "",
+        gender: data.gender,
+        dob: new Date(data.dob),
+        mobile: data.mobile,
+        state: data.state,
+        district: data.district,
+        taluka: data.taluka,
+        village: data.village,
+        fullAddress: data.fullAddress || "",
+        pincode: data.pincode || "",
+        status: "ACTIVE", // Auto approve since created by admin
+        approvedById: session.id,
+        membershipExpiry: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
+        membershipType: data.membershipType || "PRIMARY",
+        referralCode: `REF-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+      }
+    });
+
+    return profile;
   });
 }

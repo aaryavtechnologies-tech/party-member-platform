@@ -24,6 +24,7 @@ export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (va
     { title: t("digitalCard"), href: "/dashboard/card", icon: Award },
     { title: t("certificate"), href: "/dashboard/certificate", icon: QrCode },
     { title: t("referrals"), href: "/dashboard/referrals", icon: Users },
+    { title: "Communities", href: "/dashboard/communities", icon: Users },
     { title: t("payments"), href: "/dashboard/payments", icon: CreditCard },
   ];
 

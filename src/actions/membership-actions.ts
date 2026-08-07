@@ -36,6 +36,7 @@ const formSchema = z.object({
   fullAddress: z.string().min(10),
   pincode: z.string().regex(/^[1-9][0-9]{5}$/),
   referralCode: z.string().optional(),
+  profilePic: z.string().min(1),
 });
 
 type RegistrationData = z.infer<typeof formSchema>;
@@ -142,6 +143,7 @@ export async function registerMember(data: RegistrationData) {
           village: validatedData.village,
           fullAddress: validatedData.fullAddress,
           pincode: validatedData.pincode,
+          profilePic: validatedData.profilePic,
           referredById: referringMember?.id || null,
         }
       });

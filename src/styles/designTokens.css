@@ -1,0 +1,44 @@
+/* src/styles/designTokens.css */
+
+:root {
+  /* Primary gradient (dark mode friendly) */
+  --color-primary-start: #FF9933;
+  --color-primary-end: #FFAA55;
+  --color-accent: hsl(340, 70%, 60%);
+  --color-bg: #ffffff;
+  --color-bg-dark: #0a0a0a;
+  --color-text: #111827;
+  --color-text-dark: #e5e7eb;
+  --border-radius: 12px;
+  --transition-speed: 0.3s;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: var(--color-bg-dark);
+    --color-text: var(--color-text-dark);
+  }
+}
+
+/* Utility classes */
+.bg-primary {
+  background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
+}
+.text-primary {
+  color: var(--color-primary-start);
+}
+.rounded {
+  border-radius: var(--border-radius);
+}
+.shadow-glass {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+.transition {
+  transition: all var(--transition-speed) ease;
+}

@@ -34,7 +34,7 @@ export function AdminLayoutClient({ children, adminRole }: AdminLayoutClientProp
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         
         {/* Top Navbar */}
-        <AdminTopbar setMobileOpen={setIsMobileSidebarOpen} />
+        <AdminTopbar setMobileOpen={setIsMobileSidebarOpen} adminRole={adminRole} />
 
         {/* Scrollable Content */}
         <main className="flex-1 overflow-y-auto scrollbar-hide p-4 sm:p-6 lg:p-8">
