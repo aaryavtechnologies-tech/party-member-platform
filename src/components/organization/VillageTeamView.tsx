@@ -200,7 +200,7 @@ export function VillageTeamView({
                 { i: <Home />, t: isGu ? "આદર્શ ગામ" : "Model Village" },
                 { i: <Zap />, t: isGu ? "ઝડપી ન્યાય" : "Quick Justice" },
                 { i: <ShieldCheck />, t: isGu ? "સામાજિક સુરક્ષા" : "Social Security" },
-                { i: <Target />, t: "ખેડૂત કલ્યાણ" : "Farmer Welfare" },
+                { i: <Target />, t: isGu ? "ખેડૂત કલ્યાણ" : "Farmer Welfare" },
                 { i: <Users />, t: isGu ? "ગ્રામ સભા" : "Village Assembly" },
                 { i: <Heart />, t: isGu ? "ભાઈચારો" : "Brotherhood" },
               ].map((v, idx) => (
