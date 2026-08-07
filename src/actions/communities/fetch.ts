@@ -67,7 +67,14 @@ export async function getCommunityDetails(communityId: string) {
   return prisma.community.findUnique({
     where: { id: communityId },
     include: {
-      _count: { select: { members: true } }
+      _count: { select: { members: true } },
+      members: {
+        include: {
+          memberProfile: {
+            include: { user: true }
+          }
+        }
+      }
     }
   });
 }

@@ -27,16 +27,30 @@ export default function DigitalCardClient({ data }: { data: CardData }) {
     if (isDownloading) return;
     setIsDownloading(true);
     try {
+      const { toast } = await import("sonner");
+      toast.info("Generating ID Card...");
+      
+      // Fix for html2canvas scrolling bug
+      window.scrollTo(0, 0);
+      
       const html2canvas = (await import("html2canvas")).default;
       if (cardRef.current) {
-        const canvas = await html2canvas(cardRef.current, { scale: 3, useCORS: true });
+        const canvas = await html2canvas(cardRef.current, { 
+          scale: 3, 
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: null
+        });
         const link = document.createElement("a");
         link.download = `RAVP_ID_${data.memberId}.png`;
-        link.href = canvas.toDataURL("image/png");
+        link.href = canvas.toDataURL("image/png", 1.0);
         link.click();
+        toast.success("ID Card downloaded successfully!");
       }
     } catch (error) {
       console.error("Failed to generate ID card image", error);
+      const { toast } = await import("sonner");
+      toast.error("Failed to download ID card. Please try again.");
     } finally {
       setIsDownloading(false);
     }

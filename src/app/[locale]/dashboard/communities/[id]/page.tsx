@@ -1,5 +1,4 @@
 import { getCommunityDetails, getCommunityPosts } from "@/actions/communities/fetch";
-import { InnerPageHeader } from "@/components/layout/InnerPageHeader";
 import CommunityFeedClient from "./CommunityFeedClient";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
@@ -53,23 +52,13 @@ export default async function CommunityDetailPage({
 
   return (
     <FeatureLock isPaidOrInGracePeriod={canAccess} requiredTier="LIFETIME_ACTIVE">
-      <main>
-        <InnerPageHeader 
-          title={community.name} 
-          breadcrumbs={[
-            { label: "Communities", href: "/dashboard/communities" },
-            { label: community.name, href: `/dashboard/communities/${id}` }
-          ]}
+      <main className="h-[calc(100vh-4rem)] flex overflow-hidden bg-slate-900 text-slate-200">
+        <CommunityFeedClient 
+          community={community} 
+          initialPosts={posts} 
+          memberProfileId={memberProfile.id}
+          authorType="MEMBER"
         />
-        
-        <div className="p-6 max-w-4xl mx-auto">
-          <CommunityFeedClient 
-            community={community} 
-            initialPosts={posts} 
-            memberProfileId={memberProfile.id}
-            authorType="MEMBER"
-          />
-        </div>
       </main>
     </FeatureLock>
   );

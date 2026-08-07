@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, Printer, Share2 } from "lucide-react";
 
@@ -13,15 +13,38 @@ interface CertificateData {
 
 export default function CertificateClient({ data }: { data: CertificateData }) {
   const certRef = useRef<HTMLDivElement>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const downloadCert = async () => {
-    const html2canvas = (await import("html2canvas")).default;
-    if (certRef.current) {
-      const canvas = await html2canvas(certRef.current, { scale: 2 });
-      const link = document.createElement("a");
-      link.download = `ravp_certificate_${data.memberId}.png`;
-      link.href = canvas.toDataURL("image/png");
-      link.click();
+    if (isDownloading) return;
+    setIsDownloading(true);
+    try {
+      const { toast } = await import("sonner");
+      toast.info("Generating Certificate...");
+      
+      // Fix for html2canvas scrolling bug
+      window.scrollTo(0, 0);
+
+      const html2canvas = (await import("html2canvas")).default;
+      if (certRef.current) {
+        const canvas = await html2canvas(certRef.current, { 
+          scale: 3,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: "#ffffff"
+        });
+        const link = document.createElement("a");
+        link.download = `RAVP_Certificate_${data.memberId}.png`;
+        link.href = canvas.toDataURL("image/png", 1.0);
+        link.click();
+        toast.success("Certificate downloaded successfully!");
+      }
+    } catch (error) {
+      console.error("Failed to generate certificate", error);
+      const { toast } = await import("sonner");
+      toast.error("Failed to download Certificate. Please try again.");
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -33,8 +56,8 @@ export default function CertificateClient({ data }: { data: CertificateData }) {
           <p className="text-slate-500">Your official certificate of membership.</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" className="rounded-full" onClick={downloadCert}>
-            <Download className="w-4 h-4 mr-2" /> Download
+          <Button variant="outline" className="rounded-full" onClick={downloadCert} disabled={isDownloading}>
+            <Download className="w-4 h-4 mr-2" /> {isDownloading ? "Processing..." : "Download"}
           </Button>
           <Button variant="outline" className="rounded-full">
             <Printer className="w-4 h-4 mr-2" /> Print

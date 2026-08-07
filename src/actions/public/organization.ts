@@ -55,9 +55,8 @@ export async function countMembersByLocation(location: {
   return prisma.memberProfile.count({ where });
 }
 
-/**
- * Get up to 100 random active members, optionally filtered by location.
- */
+import { Prisma } from "@prisma/client";
+
 export async function getMembers(params?: {
   state?: string;
   district?: string;
@@ -66,17 +65,23 @@ export async function getMembers(params?: {
   limit?: number;
 }) {
   const limit = params?.limit ?? 100;
-  const members = await prisma.$queryRaw<any>(`
+  
+  const conditions: Prisma.Sql[] = [Prisma.sql`"status" = 'ACTIVE'`];
+  
+  if (params?.state) conditions.push(Prisma.sql`"state" = ${params.state}`);
+  if (params?.district) conditions.push(Prisma.sql`"district" = ${params.district}`);
+  if (params?.taluka) conditions.push(Prisma.sql`"taluka" = ${params.taluka}`);
+  if (params?.village) conditions.push(Prisma.sql`"village" = ${params.village}`);
+
+  const whereClause = Prisma.join(conditions, ' AND ');
+
+  const members = await prisma.$queryRaw<any[]>`
     SELECT "id", "fullName", "profilePic", "state", "district", "taluka", "village", "memberId", "dob"
     FROM "MemberProfile"
-    WHERE "status" = 'ACTIVE'
-    ${params?.state ? `AND "state" = $1` : ''}
-    ${params?.district ? `AND "district" = $2` : ''}
-    ${params?.taluka ? `AND "taluka" = $3` : ''}
-    ${params?.village ? `AND "village" = $4` : ''}
+    WHERE ${whereClause}
     ORDER BY RANDOM()
-    LIMIT $5
-  `, ...(params?.state ? [params.state] : []), ...(params?.district ? [params.district] : []), ...(params?.taluka ? [params.taluka] : []), ...(params?.village ? [params.village] : []), limit);
+    LIMIT ${limit}
+  `;
 
   return members.map((m: any) => {
     const age = Math.floor((Date.now() - new Date(m.dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000));

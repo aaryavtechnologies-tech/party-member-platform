@@ -33,6 +33,20 @@ export async function joinCommunity(communityId: string) {
 
   if (!community) throw new Error("Community not found");
 
+  // Check if already a member
+  const existingMember = await prisma.communityMember.findUnique({
+    where: {
+      communityId_memberProfileId: {
+        communityId,
+        memberProfileId: memberProfile.id
+      }
+    }
+  });
+
+  if (existingMember) {
+    return { success: true }; // Already joined
+  }
+
   if (community.isPublic) {
     // Join directly
     await prisma.communityMember.create({
@@ -43,14 +57,25 @@ export async function joinCommunity(communityId: string) {
       }
     });
   } else {
-    // Create join request
-    await prisma.communityJoinRequest.create({
-      data: {
+    // Check if already requested
+    const existingRequest = await prisma.communityJoinRequest.findFirst({
+      where: {
         communityId,
         memberProfileId: memberProfile.id,
         status: "PENDING"
       }
     });
+
+    if (!existingRequest) {
+      // Create join request
+      await prisma.communityJoinRequest.create({
+        data: {
+          communityId,
+          memberProfileId: memberProfile.id,
+          status: "PENDING"
+        }
+      });
+    }
   }
 
   revalidatePath("/dashboard/communities");

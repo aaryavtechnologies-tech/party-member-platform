@@ -7,14 +7,6 @@ export default async function AdminCommunitiesPage() {
 
   return (
     <main>
-      <InnerPageHeader 
-        title="Manage Communities" 
-        breadcrumbs={[
-          { label: "Dashboard", href: "/admin/dashboard" },
-          { label: "Communities", href: "/admin/communities" }
-        ]}
-      />
-      
       <div className="p-6">
         <CommunitiesClient initialData={communities} />
       </div>

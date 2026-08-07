@@ -59,7 +59,7 @@ export function AdminTopbar({
 
         {/* Admin Profile Dropdown */}
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger className="focus:outline-none">
             <div className="flex items-center gap-3 cursor-pointer group p-1 pr-3 rounded-full hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-800">
               <div className="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-sm shrink-0">
                 A
@@ -73,14 +73,14 @@ export function AdminTopbar({
           <DropdownMenuContent align="end" className="w-56 mt-2 rounded-xl">
             <DropdownMenuLabel>{t("myAccount")}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild className="cursor-pointer">
-              <Link href="/admin/profile" className="flex items-center gap-2">
+            <DropdownMenuItem className="cursor-pointer">
+              <Link href="/admin/profile" className="flex items-center gap-2 w-full">
                 <UserIcon className="w-4 h-4 text-slate-500" />
                 <span>{t("updateProfile")}</span>
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild className="cursor-pointer">
-              <Link href="/admin/settings/password" className="flex items-center gap-2">
+            <DropdownMenuItem className="cursor-pointer">
+              <Link href="/admin/settings/password" className="flex items-center gap-2 w-full">
                 <Lock className="w-4 h-4 text-slate-500" />
                 <span>{t("updatePassword")}</span>
               </Link>

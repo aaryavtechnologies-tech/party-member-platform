@@ -24,13 +24,11 @@ export function BroadcastBell() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative rounded-full text-slate-500 hover:text-slate-900 dark:hover:text-white">
-          <Bell className="w-5 h-5" />
-          {broadcasts.length > 0 && (
-            <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-slate-950" />
-          )}
-        </Button>
+      <DropdownMenuTrigger className="relative p-2 rounded-full text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none flex items-center justify-center">
+        <Bell className="w-5 h-5" />
+        {broadcasts.length > 0 && (
+          <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-slate-950" />
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80 mt-2 rounded-xl">
         <DropdownMenuLabel>Notifications</DropdownMenuLabel>
