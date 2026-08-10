@@ -19,10 +19,10 @@ export default function FounderMessagePage() {
         <div className="container mx-auto px-4 max-w-6xl flex flex-col md:flex-row gap-16 items-start">
           {/* Left Column: Photo & Signature */}
           <div className="w-full md:w-1/3 flex flex-col items-center space-y-6 sticky top-24 order-2 md:order-1">
-            <div className="w-full aspect-[3/4] bg-slate-200 dark:bg-slate-800 rounded-3xl overflow-hidden shadow-2xl relative border-4 border-white dark:border-slate-800">
+            <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-3xl overflow-hidden shadow-2xl relative border-4 border-white dark:border-slate-800">
               {/* Professional Photo */}
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent z-10" />
-              <img src="/foundr-image.png" alt="Founder" className="w-full h-full object-cover relative z-0" />
+              <img src="/foundr-image.png" alt="Founder" className="w-full h-auto object-contain relative z-0" />
             </div>
             
             <div className="text-center w-full bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-md border border-slate-100 dark:border-slate-800">
