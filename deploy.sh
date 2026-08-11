@@ -7,7 +7,7 @@
 
 set -e  # exit on first error
 
-APP_DIR="/var/www/party-member-platform"
+APP_DIR="/root/party-member-platform"
 DOMAIN="rashtriyaannadatavikasparty.org"
 APP_PORT=5032
 
