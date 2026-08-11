@@ -15,19 +15,6 @@ echo "======================================================"
 echo "  Party Member Platform — VPS Deployment"
 echo "======================================================"
 
-# ── 5. Pull latest code ───────────────────────────────────
-echo "[5/9] Pulling latest code to $APP_DIR..."
-if [ -d "$APP_DIR/.git" ]; then
-    echo "   Repository exists — pulling latest changes..."
-    cd "$APP_DIR"
-    git pull origin main
-else
-    echo "   Cloning repository..."
-    # Replace the URL below with your actual GitHub repo URL
-    git clone https://github.com/YOUR_ORG/party-member-platform.git "$APP_DIR"
-    cd "$APP_DIR"
-fi
-
 # ── 6. Environment file ───────────────────────────────────
 echo "[6/9] Checking .env..."
 if [ ! -f "$APP_DIR/.env" ]; then
