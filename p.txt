@@ -1,0 +1,16 @@
+
+DOM
+Functions 
+types 
+awwait / async 
+ES6 
+
+import / export 
+if 
+else 
+for 
+
+JSON 
+Objects 
+
+
