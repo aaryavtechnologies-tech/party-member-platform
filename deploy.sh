@@ -15,16 +15,6 @@ echo "======================================================"
 echo "  Party Member Platform — VPS Deployment"
 echo "======================================================"
 
-# ── 6. Environment file ───────────────────────────────────
-echo "[6/9] Checking .env..."
-if [ ! -f "$APP_DIR/.env" ]; then
-    echo "   ⚠  No .env found at $APP_DIR/.env"
-    echo "   Please create it manually (see .env.example) and re-run."
-    exit 1
-else
-    echo "   .env already present — skipping."
-fi
-
 # ── 7. Install deps & build ───────────────────────────────
 echo "[7/9] Installing dependencies & building..."
 cd "$APP_DIR"
