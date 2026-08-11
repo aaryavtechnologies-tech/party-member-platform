@@ -18,7 +18,7 @@ echo "======================================================"
 # ── 7. Install deps & build ───────────────────────────────
 echo "[7/9] Installing dependencies & building..."
 cd "$APP_DIR"
-npm ci --omit=dev
+npm ci
 npx prisma generate
 npx prisma migrate deploy   # safe for NeonDB; applies pending migrations
 npm run build
