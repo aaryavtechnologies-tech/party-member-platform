@@ -13,7 +13,7 @@ export async function logoutAdmin() {
   cookieStore.delete("admin_session");
 
   if (isSuperAdmin) {
-    redirect("/super-admin/login");
+    redirect("/login");
   } else {
     redirect("/admin/login");
   }
