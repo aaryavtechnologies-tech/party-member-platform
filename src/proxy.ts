@@ -149,24 +149,34 @@ export default async function proxy(request: NextRequest) {
   const isSuperAdminLogin = pathWithoutLocale === "/super-admin/login";
 
   if ((isDashboard || isAdmin || isSuperAdmin) && !isAdminLogin && !isSuperAdminLogin) {
-    const sessionCookie = request.cookies.get('better-auth.session_token') || request.cookies.get('__Secure-better-auth.session_token');
-    
     const localeMatch = pathname.match(/^\/([a-z]{2})\//);
     const locale = localeMatch ? localeMatch[1] : 'en';
 
-    if (!sessionCookie) {
-      const url = request.nextUrl.clone();
-      if (isSuperAdmin) {
-        url.pathname = `/${locale}/super-admin/login`;
-      } else if (isAdmin) {
-        url.pathname = `/${locale}/admin/login`;
-      } else {
-        url.pathname = `/${locale}/login`; // Changed from /membership/login
+    if (isDashboard) {
+      // Regular user dashboard — protected by better-auth session
+      const sessionCookie = request.cookies.get('better-auth.session_token') || request.cookies.get('__Secure-better-auth.session_token');
+      if (!sessionCookie) {
+        const url = request.nextUrl.clone();
+        url.pathname = `/${locale}/login`;
+        url.searchParams.set("callbackUrl", pathname);
+        return NextResponse.redirect(url);
       }
-      url.searchParams.set("callbackUrl", pathname);
-      return NextResponse.redirect(url);
+    } else {
+      // Admin / Super-Admin routes — protected by admin_session JWT cookie
+      const adminSessionCookie = request.cookies.get('admin_session');
+      if (!adminSessionCookie) {
+        const url = request.nextUrl.clone();
+        if (isSuperAdmin) {
+          url.pathname = `/${locale}/super-admin/login`;
+        } else {
+          url.pathname = `/${locale}/admin/login`;
+        }
+        url.searchParams.set("callbackUrl", pathname);
+        return NextResponse.redirect(url);
+      }
     }
   }
+
 
   // 3. Internationalization (next-intl)
   if (

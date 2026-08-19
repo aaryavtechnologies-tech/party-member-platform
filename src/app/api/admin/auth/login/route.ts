@@ -38,9 +38,9 @@ export async function POST(req: NextRequest) {
     await createAdminSession(admin);
 
     // Determine dashboard URL based on role
-    let redirectUrl = "/admin/dashboard"; // Fallback/Super Admin
-    if (admin.role !== "SUPER_ADMIN") {
-      redirectUrl = "/admin/members";
+    let redirectUrl = "/admin/members"; // Default for non-super admins
+    if (admin.role === "SUPER_ADMIN") {
+      redirectUrl = "/super-admin/dashboard";
     }
 
     return NextResponse.json({ 

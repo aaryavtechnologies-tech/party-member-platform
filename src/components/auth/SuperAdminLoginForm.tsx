@@ -58,7 +58,7 @@ export function SuperAdminLoginForm() {
       }
 
       toast.success("Welcome back Super Admin! Redirecting...");
-      router.push(result.redirectUrl || "/admin/dashboard");
+      router.push(result.redirectUrl || "/super-admin/dashboard");
       router.refresh();
     } catch (err) {
       setServerError("Something went wrong. Please check your connection.");
