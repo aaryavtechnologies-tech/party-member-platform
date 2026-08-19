@@ -4,10 +4,12 @@ module.exports = {
       name: "party-member-platform",
       script: "node_modules/next/dist/bin/next",
       args: "start -p 5032",
-      instances: "1", // Or a specific number of instances
-      exec_mode: "cluster", // Uses all available CPU cores
+      cwd: "/root/party-member-platform",
+      instances: 1,
+      exec_mode: "fork",
       env: {
         NODE_ENV: "production",
+        PORT: 5032,
       },
     },
   ],
