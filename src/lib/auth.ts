@@ -51,9 +51,7 @@ export const auth = betterAuth({
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
       console.log(`[Auth Email] Attempting to send reset password email to: ${user.email}`);
-      console.log(`\n========================================`);
-      console.log(`🔑 Reset Password URL for ${user.email} is: ${url}`);
-      console.log(`========================================\n`);
+      // SECURITY: Do NOT log the reset URL — it contains a secret token
       
       try {
         const result = await sendEmail({
@@ -100,9 +98,7 @@ export const auth = betterAuth({
     sendOnSignUp: false,
     sendVerificationEmail: async ({ user, url }) => {
       console.log(`[Auth Email] Attempting to send verification email to: ${user.email}`);
-      console.log(`\n========================================`);
-      console.log(`🔑 Verification URL for ${user.email} is: ${url}`);
-      console.log(`========================================\n`);
+      // SECURITY: Do NOT log the verification URL — it contains a secret token
 
       try {
         const result = await sendEmail({
@@ -146,9 +142,7 @@ export const auth = betterAuth({
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
         console.log(`[Auth Email] Attempting to send ${type} OTP to: ${email}`);
-        console.log(`\n========================================`);
-        console.log(`🔑 OTP for ${email} is: ${otp}`);
-        console.log(`========================================\n`);
+        // SECURITY: Do NOT log OTP values — they are authentication secrets
 
         try {
           const result = await sendEmail({

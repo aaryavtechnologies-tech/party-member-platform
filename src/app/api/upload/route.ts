@@ -1,52 +1,95 @@
 import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
+import { join, extname } from "path";
 import { v4 as uuidv4 } from "uuid";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-// Note: Local storage is only suitable for single-instance or dev environments.
-// For production multi-server deployments, use AWS S3, Cloudinary, etc.
+// Allowed MIME types and their expected extensions
+const ALLOWED_TYPES: Record<string, string[]> = {
+  "image/jpeg": [".jpg", ".jpeg"],
+  "image/png": [".png"],
+  "image/webp": [".webp"],
+  "image/gif": [".gif"],
+};
+
+const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5MB (was 10MB — reduced)
 
 export async function POST(req: NextRequest) {
   try {
+    // SECURITY: Require authentication — was missing entirely
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: "Unauthorized: You must be logged in to upload files." },
+        { status: 401 }
+      );
+    }
+
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
-    
+
     if (!file) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
 
-    // Validate size (10MB limit)
-    if (file.size > 10 * 1024 * 1024) {
-      return NextResponse.json({ error: "File exceeds 10MB limit" }, { status: 400 });
+    // SECURITY: Validate file size
+    if (file.size > MAX_SIZE_BYTES) {
+      return NextResponse.json(
+        { error: "File exceeds 5MB limit" },
+        { status: 400 }
+      );
     }
+
+    // SECURITY: Validate MIME type against allowlist
+    const mimeType = file.type;
+    if (!ALLOWED_TYPES[mimeType]) {
+      return NextResponse.json(
+        { error: "File type not allowed. Only JPEG, PNG, WebP, and GIF images are accepted." },
+        { status: 400 }
+      );
+    }
+
+    // SECURITY: Derive extension from MIME type (not from original filename)
+    // This prevents extension spoofing (e.g. shell.php renamed to shell.png)
+    const allowedExtensions = ALLOWED_TYPES[mimeType];
+    const originalExt = extname(file.name).toLowerCase();
+    
+    // Use first allowed extension as canonical if original doesn't match
+    const safeExtension = allowedExtensions.includes(originalExt)
+      ? originalExt
+      : allowedExtensions[0];
+
+    // SECURITY: UUID filename — never use original filename
+    const uniqueFileName = `${uuidv4()}${safeExtension}`;
 
     // Process file
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Create unique filename
-    const extension = file.name.split(".").pop();
-    const uniqueFileName = `${uuidv4()}.${extension}`;
-    
     // Save to public/uploads directory
     const uploadDir = join(process.cwd(), "public", "uploads");
-    await mkdir(uploadDir, { recursive: true }); // Ensure directory exists
-    
+    await mkdir(uploadDir, { recursive: true });
+
     const filePath = join(uploadDir, uniqueFileName);
-    
     await writeFile(filePath, buffer);
 
     const fileUrl = `/uploads/${uniqueFileName}`;
 
-    return NextResponse.json({ 
-      success: true, 
-      url: fileUrl, 
-      fileName: file.name,
-      fileType: file.type
+    return NextResponse.json({
+      success: true,
+      url: fileUrl,
+      fileName: uniqueFileName, // Return safe name, not original
     });
-    
   } catch (error) {
     console.error("Upload error:", error);
-    return NextResponse.json({ error: "Failed to upload file" }, { status: 500 });
+    // SECURITY: Don't expose internal error details
+    return NextResponse.json(
+      { error: "Failed to upload file. Please try again." },
+      { status: 500 }
+    );
   }
 }

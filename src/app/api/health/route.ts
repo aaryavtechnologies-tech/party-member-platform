@@ -10,19 +10,18 @@ export async function GET() {
       {
         status: 'ok',
         timestamp: new Date().toISOString(),
-        database: 'connected',
-        environment: process.env.NODE_ENV,
+        // SECURITY: Removed environment disclosure — don't leak NODE_ENV publicly
       },
       { status: 200 }
     );
   } catch (error) {
     console.error('Health Check Failed:', error);
-    
+
     return NextResponse.json(
       {
         status: 'error',
         timestamp: new Date().toISOString(),
-        database: 'disconnected',
+        // SECURITY: No internal error details returned to client
       },
       { status: 503 }
     );

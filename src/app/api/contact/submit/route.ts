@@ -1,7 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { sendUserInquiryConfirmationEmail, sendAdminInquiryNotificationEmail } from "@/lib/email/contact-emails";
+import { checkRateLimit } from "@/lib/rate-limiter";
 
 const submitSchema = z.object({
   fullName: z.string().min(2, "Full name is required"),
@@ -15,7 +16,24 @@ const submitSchema = z.object({
   website_url_hp: z.string().optional(), // Honeypot field
 });
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  // SECURITY: Rate limit contact form to 3 submissions per IP per 10 minutes
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const rateLimit = checkRateLimit("contact-form", ip, {
+    maxRequests: 3,
+    windowMs: 10 * 60 * 1000, // 10 minutes
+  });
+
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { success: false, message: "Too many submissions. Please wait before trying again." },
+      {
+        status: 429,
+        headers: { "Retry-After": String(rateLimit.retryAfterSeconds ?? 600) },
+      }
+    );
+  }
+
   try {
     const body = await req.json();
     const result = submitSchema.safeParse(body);

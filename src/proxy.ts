@@ -146,7 +146,7 @@ export default async function proxy(request: NextRequest) {
   const isAdmin = pathWithoutLocale.startsWith("/admin");
   const isSuperAdmin = pathWithoutLocale.startsWith("/super-admin");
   const isAdminLogin = pathWithoutLocale === "/admin/login";
-  const isSuperAdminLogin = pathWithoutLocale === "/login"; // Changed from /super-admin/login
+  const isSuperAdminLogin = pathWithoutLocale === "/super-admin-login"; 
 
   if ((isDashboard || isAdmin || isSuperAdmin) && !isAdminLogin && !isSuperAdminLogin) {
     const localeMatch = pathname.match(/^\/([a-z]{2})\//);
@@ -157,7 +157,7 @@ export default async function proxy(request: NextRequest) {
       const sessionCookie = request.cookies.get('better-auth.session_token') || request.cookies.get('__Secure-better-auth.session_token');
       if (!sessionCookie) {
         const url = request.nextUrl.clone();
-        url.pathname = `/${locale}/login`;
+        url.pathname = `/${locale}/membership/login`;
         url.searchParams.set("callbackUrl", pathname);
         return NextResponse.redirect(url);
       }
@@ -167,7 +167,7 @@ export default async function proxy(request: NextRequest) {
       if (!adminSessionCookie) {
         const url = request.nextUrl.clone();
         if (isSuperAdmin) {
-          url.pathname = `/${locale}/login`; // Changed from /super-admin/login
+          url.pathname = `/${locale}/super-admin-login`; 
         } else {
           url.pathname = `/${locale}/admin/login`;
         }

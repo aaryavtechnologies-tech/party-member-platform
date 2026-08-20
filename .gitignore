@@ -42,3 +42,7 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# User uploaded files — never commit to Git
+/public/uploads/*
+!/public/uploads/.gitkeep

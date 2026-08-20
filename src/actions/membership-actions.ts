@@ -213,7 +213,7 @@ export async function sendRegistrationOtp(email: string) {
       }
     });
 
-    console.log(`[Registration] Generated OTP for ${email}: ${otp}`);
+    // SECURITY: Do NOT log OTP values — they are authentication secrets
 
     // 4. Send email using unified sendEmail helper (supports SMTP & Resend)
     const emailResult = await sendEmail({
@@ -355,6 +355,14 @@ export async function checkStep1Availability(data: {
 }
 
 export async function deleteMemberAction(profileId: string) {
+  // SECURITY: Require SUPER_ADMIN authorization — was completely missing
+  const { requireAdminAuth } = await import("@/lib/rbac");
+  const adminSession = await requireAdminAuth("NATIONAL_ADMIN");
+  
+  if (!adminSession) {
+    return { success: false, error: "Unauthorized." };
+  }
+
   try {
     const profile = await prisma.memberProfile.findUnique({
       where: { id: profileId },
@@ -370,10 +378,12 @@ export async function deleteMemberAction(profileId: string) {
       where: { id: profile.userId }
     });
 
-    console.log(`[deleteMemberAction] Successfully deleted member ${profile.memberId} (User ID: ${profile.userId})`);
+    console.log(`[deleteMemberAction] Admin ${adminSession.id} (${adminSession.role}) deleted member ${profile.memberId}`);
     return { success: true };
   } catch (error: any) {
     console.error("[deleteMemberAction] Exception:", error);
-    return { success: false, error: error?.message || "Failed to delete member." };
+    // SECURITY: Don't expose internal error messages to client
+    return { success: false, error: "Failed to delete member. Please try again." };
   }
 }
+

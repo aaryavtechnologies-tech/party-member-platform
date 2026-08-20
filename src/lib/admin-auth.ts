@@ -2,9 +2,14 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { Admin, AdminRole } from "@prisma/client";
 
-const SECRET_KEY = new TextEncoder().encode(
-  process.env.ADMIN_JWT_SECRET || "fallback-super-secret-key-12345"
-);
+const rawSecret = process.env.ADMIN_JWT_SECRET;
+if (!rawSecret || rawSecret.length < 32) {
+  throw new Error(
+    "[Security] ADMIN_JWT_SECRET is not set or is too short (minimum 32 characters). " +
+    "Set it in your environment variables before starting the server."
+  );
+}
+const SECRET_KEY = new TextEncoder().encode(rawSecret);
 
 export type AdminJwtPayload = {
   id: string;
@@ -35,9 +40,9 @@ export async function createAdminSession(admin: Admin) {
   cookieStore.set("admin_session", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: "strict", // Hardened: was 'lax' — strict prevents CSRF via cross-site navigations
     path: "/",
-    maxAge: 60 * 60 * 24, // 1 day
+    maxAge: 60 * 60 * 8, // 8 hours (was 24h — reduced attack window)
   });
 }
 
