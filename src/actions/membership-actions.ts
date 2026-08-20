@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { hashPassword } from "@better-auth/utils/password";
 import { sendEmail } from "@/lib/email/send-email";
+import { checkRateLimit } from "@/lib/rate-limiter";
 
 const formSchema = z.object({
   firstName: z.string().min(2),
@@ -189,10 +190,27 @@ export async function registerMember(data: RegistrationData) {
 }
 
 export async function sendRegistrationOtp(email: string) {
+  // SECURITY: Rate limit OTP generation per email (3 attempts per 15 minutes)
+  const rateLimit = checkRateLimit("registration-otp", email.toLowerCase().trim(), {
+    maxRequests: 3,
+    windowMs: 15 * 60 * 1000,
+    blockDurationMs: 30 * 60 * 1000, // 30 minute lockout if abused
+  });
+
+  if (!rateLimit.allowed) {
+    return { 
+      success: false, 
+      error: `Too many OTP requests. Please try again in ${Math.ceil((rateLimit.retryAfterSeconds || 0) / 60)} minutes.` 
+    };
+  }
+
   try {
     // 1. Check if user already exists
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
+      // SECURITY: Return generic success-like message to prevent email enumeration,
+      // OR in a registration flow, it might be acceptable to say "already registered".
+      // We will stick to the existing behavior but note it's an enumeration vector.
       return { success: false, error: "A user with this email already exists." };
     }
 

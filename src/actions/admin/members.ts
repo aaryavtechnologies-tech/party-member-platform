@@ -7,6 +7,25 @@ import { MemberStatus, MembershipTier } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { sendAdminNotification } from "@/lib/notifications";
 import bcrypt from "bcryptjs";
+import { z } from "zod";
+import crypto from "crypto";
+
+const createMemberSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  password: z.string().min(8),
+  fatherName: z.string().optional(),
+  gender: z.string(),
+  dob: z.string(), // Assuming YYYY-MM-DD
+  mobile: z.string(),
+  state: z.string(),
+  district: z.string(),
+  taluka: z.string(),
+  village: z.string().optional(),
+  fullAddress: z.string().optional(),
+  pincode: z.string().optional(),
+  membershipType: z.nativeEnum(MembershipTier).optional(),
+});
 
 export async function getAdminMembers() {
   const session = await requireAdminAuth();
@@ -127,19 +146,25 @@ export async function searchMembers(query: string) {
 export async function createMemberByAdmin(data: any) {
   const session = await requireAdminAuth();
   
+  // SECURITY (Phase 3): Validate data to prevent mass assignment (HIGH-010)
+  const validatedData = createMemberSchema.parse(data);
+  
   // Hash password
-  const hashedPassword = await bcrypt.hash(data.password, 10);
+  const hashedPassword = await bcrypt.hash(validatedData.password, 10);
   
   // Generate unique Member ID
   const memberCount = await prisma.memberProfile.count();
   const memberId = `RAVP-${new Date().getFullYear()}-${String(memberCount + 1).padStart(6, '0')}`;
 
+  // SECURITY: Cryptographically secure referral code (LOW-005)
+  const secureReferralCode = `REF-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
+
   return prisma.$transaction(async (tx) => {
     // 1. Create User
     const user = await tx.user.create({
       data: {
-        name: data.name,
-        email: data.email,
+        name: validatedData.name,
+        email: validatedData.email,
         emailVerified: true,
       }
     });
@@ -149,7 +174,7 @@ export async function createMemberByAdmin(data: any) {
       data: {
         userId: user.id,
         providerId: "credentials",
-        accountId: data.email,
+        accountId: validatedData.email,
         provider: "credentials",
         password: hashedPassword,
       }
@@ -160,21 +185,21 @@ export async function createMemberByAdmin(data: any) {
       data: {
         userId: user.id,
         memberId,
-        fatherName: data.fatherName || "",
-        gender: data.gender,
-        dob: new Date(data.dob),
-        mobile: data.mobile,
-        state: data.state,
-        district: data.district,
-        taluka: data.taluka,
-        village: data.village,
-        fullAddress: data.fullAddress || "",
-        pincode: data.pincode || "",
+        fatherName: validatedData.fatherName || "",
+        gender: validatedData.gender,
+        dob: new Date(validatedData.dob),
+        mobile: validatedData.mobile,
+        state: validatedData.state,
+        district: validatedData.district,
+        taluka: validatedData.taluka,
+        village: validatedData.village || "",
+        fullAddress: validatedData.fullAddress || "",
+        pincode: validatedData.pincode || "",
         status: "ACTIVE", // Auto approve since created by admin
         approvedById: session.id,
         membershipExpiry: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
-        membershipType: data.membershipType || "PRIMARY",
-        referralCode: `REF-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+        membershipType: validatedData.membershipType || "PRIMARY",
+        referralCode: secureReferralCode,
       }
     });
 

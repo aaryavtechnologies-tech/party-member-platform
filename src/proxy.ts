@@ -12,21 +12,22 @@ const RATE_LIMITS = {
 
 const rateLimitMap = new Map<string, { count: number; expiresAt: number }>();
 
-function checkRateLimit(ip: string, limit: number, windowMs: number): boolean {
+function checkRateLimit(ip: string, limit: number, windowMs: number): { allowed: boolean; retryAfter: number } {
   const now = Date.now();
   const record = rateLimitMap.get(ip);
 
   if (!record || now > record.expiresAt) {
     rateLimitMap.set(ip, { count: 1, expiresAt: now + windowMs });
-    return true; // Allowed
+    return { allowed: true, retryAfter: 0 };
   }
 
   if (record.count >= limit) {
-    return false; // Rate limited
+    const retryAfter = Math.ceil((record.expiresAt - now) / 1000);
+    return { allowed: false, retryAfter };
   }
 
   record.count += 1;
-  return true; // Allowed
+  return { allowed: true, retryAfter: 0 };
 }
 
 const intlMiddleware = createMiddleware(routing);
@@ -37,16 +38,16 @@ export default async function proxy(request: NextRequest) {
   // 1. IP extraction for Rate Limiting
   const ip = request.headers.get('x-forwarded-for') ?? 'unknown-ip';
 
-  let isAllowed = true;
+  let rateLimitResult = { allowed: true, retryAfter: 0 };
   if (pathname.startsWith('/api/auth')) {
-    isAllowed = checkRateLimit(`${ip}-auth`, RATE_LIMITS.auth.limit, RATE_LIMITS.auth.windowMs);
+    rateLimitResult = checkRateLimit(`${ip}-auth`, RATE_LIMITS.auth.limit, RATE_LIMITS.auth.windowMs);
   } else if (pathname.startsWith('/admin') || pathname.startsWith('/api/admin')) {
-    isAllowed = checkRateLimit(`${ip}-admin`, RATE_LIMITS.admin.limit, RATE_LIMITS.admin.windowMs);
+    rateLimitResult = checkRateLimit(`${ip}-admin`, RATE_LIMITS.admin.limit, RATE_LIMITS.admin.windowMs);
   } else if (pathname.startsWith('/api')) {
-    isAllowed = checkRateLimit(`${ip}-public`, RATE_LIMITS.public.limit, RATE_LIMITS.public.windowMs);
+    rateLimitResult = checkRateLimit(`${ip}-public`, RATE_LIMITS.public.limit, RATE_LIMITS.public.windowMs);
   }
 
-  if (!isAllowed) {
+  if (!rateLimitResult.allowed) {
     return new NextResponse(
       `
       <!DOCTYPE html>
@@ -134,7 +135,7 @@ export default async function proxy(request: NextRequest) {
         status: 429,
         headers: {
           'Content-Type': 'text/html; charset=utf-8',
-          'Retry-After': '60',
+          'Retry-After': String(rateLimitResult.retryAfter),
         },
       }
     );
@@ -178,16 +179,28 @@ export default async function proxy(request: NextRequest) {
   }
 
 
-  // 3. Internationalization (next-intl)
+  // 3. Internationalization (next-intl) and CORS
+  let response: NextResponse;
   if (
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next') ||
     pathname.includes('.')
   ) {
-    return NextResponse.next();
+    response = NextResponse.next();
+  } else {
+    response = intlMiddleware(request);
   }
 
-  return intlMiddleware(request);
+  // SECURITY: Add CORS headers for API routes (MEDIUM-006)
+  if (pathname.startsWith('/api')) {
+    // Only allow specific domains in production, or * for public APIs
+    // Using * here for public APIs, but restrict Methods/Headers.
+    response.headers.set('Access-Control-Allow-Origin', '*'); 
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  }
+
+  return response;
 }
 
 export const config = {
