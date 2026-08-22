@@ -6,6 +6,7 @@ import { getCmsLocationFilter } from "@/lib/cms-rbac";
 import { MemberStatus, MembershipTier } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { sendAdminNotification } from "@/lib/notifications";
+import { logAudit } from "@/lib/audit";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import crypto from "crypto";
@@ -93,13 +94,11 @@ export async function updateMemberStatus(memberId: string, status: MemberStatus)
     }
   });
 
-  await prisma.auditLog.create({
-    data: {
-      userId: session.id,
-      action: "UPDATE_MEMBER_STATUS",
-      details: `Updated member ${member.memberId} status to ${status}`,
-    }
-  });
+  await logAudit(
+    session.id,
+    "UPDATE_MEMBER_STATUS",
+    `Updated member ${member.memberId} status to ${status}`
+  );
 
   // Notify upper levels if needed, or notify member directly (omitted complex push logic for brevity, simulated below)
   if (status === "ACTIVE") {

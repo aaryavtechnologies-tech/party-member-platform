@@ -5,6 +5,7 @@ import { requireAdminAuth } from "@/lib/rbac";
 import { getCmsLocationFilter } from "@/lib/cms-rbac";
 import { revalidatePath } from "next/cache";
 import { sendAdminNotification } from "@/lib/notifications";
+import { logAudit } from "@/lib/audit";
 
 export async function getAdminComplaints() {
   const session = await requireAdminAuth();
@@ -47,13 +48,11 @@ export async function updateComplaintStatus(ticketId: string, status: string, re
     }
   });
 
-  await prisma.auditLog.create({
-    data: {
-      userId: session.id,
-      action: "UPDATE_COMPLAINT_STATUS",
-      details: `Updated complaint ${ticket.ticketNumber} to ${status}. ${resolutionMessage ? 'Resolution attached.' : ''}`,
-    }
-  });
+  await logAudit(
+    session.id,
+    "UPDATE_COMPLAINT_STATUS",
+    `Updated complaint ${ticket.ticketNumber} to ${status}. ${resolutionMessage ? 'Resolution attached.' : ''}`
+  );
 
   if (status === "RESOLVED" || status === "CLOSED") {
     sendAdminNotification(

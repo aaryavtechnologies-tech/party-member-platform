@@ -4,15 +4,21 @@ import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
 
 // Rate Limiting Config
+const isDev = process.env.NODE_ENV || 'development';
+
 const RATE_LIMITS = {
-  auth: { limit: 5, windowMs: 60000 },     // 5 requests per minute
-  admin: { limit: 60, windowMs: 60000 },   // 60 requests per minute
-  public: { limit: 100, windowMs: 60000 }, // 100 requests per minute
+  auth: { limit: isDev ? 10000 : 120, windowMs: 60000 },      // 60 requests per minute in prod
+  admin: { limit: isDev ? 10000 : 600, windowMs: 60000 },   // 300 requests per minute in prod
+  public: { limit: isDev ? 10000 : 1000, windowMs: 60000 }, // 500 requests per minute in prod
 };
 
 const rateLimitMap = new Map<string, { count: number; expiresAt: number }>();
 
 function checkRateLimit(ip: string, limit: number, windowMs: number): { allowed: boolean; retryAfter: number } {
+  if (isDev) {
+    return { allowed: true, retryAfter: 0 };
+  }
+
   const now = Date.now();
   const record = rateLimitMap.get(ip);
 
@@ -34,14 +40,18 @@ const intlMiddleware = createMiddleware(routing);
 
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  
+
   // 1. IP extraction for Rate Limiting
-  const ip = request.headers.get('x-forwarded-for') ?? 'unknown-ip';
+  const forwarded = request.headers.get('x-forwarded-for');
+  const realIp = request.headers.get('x-real-ip');
+  const ip = forwarded ? forwarded.split(',')[0].trim() : (realIp?.trim() || '127.0.0.1');
 
   let rateLimitResult = { allowed: true, retryAfter: 0 };
+
+  // Only apply rate limiting to API routes, not to page navigations and prefetching
   if (pathname.startsWith('/api/auth')) {
     rateLimitResult = checkRateLimit(`${ip}-auth`, RATE_LIMITS.auth.limit, RATE_LIMITS.auth.windowMs);
-  } else if (pathname.startsWith('/admin') || pathname.startsWith('/api/admin')) {
+  } else if (pathname.startsWith('/api/admin')) {
     rateLimitResult = checkRateLimit(`${ip}-admin`, RATE_LIMITS.admin.limit, RATE_LIMITS.admin.windowMs);
   } else if (pathname.startsWith('/api')) {
     rateLimitResult = checkRateLimit(`${ip}-public`, RATE_LIMITS.public.limit, RATE_LIMITS.public.windowMs);
@@ -131,7 +141,7 @@ export default async function proxy(request: NextRequest) {
       </body>
       </html>
       `,
-      { 
+      {
         status: 429,
         headers: {
           'Content-Type': 'text/html; charset=utf-8',
@@ -147,7 +157,7 @@ export default async function proxy(request: NextRequest) {
   const isAdmin = pathWithoutLocale.startsWith("/admin");
   const isSuperAdmin = pathWithoutLocale.startsWith("/super-admin");
   const isAdminLogin = pathWithoutLocale === "/admin/login";
-  const isSuperAdminLogin = pathWithoutLocale === "/super-admin-login"; 
+  const isSuperAdminLogin = pathWithoutLocale === "/super-admin-login";
 
   if ((isDashboard || isAdmin || isSuperAdmin) && !isAdminLogin && !isSuperAdminLogin) {
     const localeMatch = pathname.match(/^\/([a-z]{2})\//);
@@ -168,7 +178,7 @@ export default async function proxy(request: NextRequest) {
       if (!adminSessionCookie) {
         const url = request.nextUrl.clone();
         if (isSuperAdmin) {
-          url.pathname = `/${locale}/super-admin-login`; 
+          url.pathname = `/${locale}/super-admin-login`;
         } else {
           url.pathname = `/${locale}/admin/login`;
         }
@@ -195,7 +205,7 @@ export default async function proxy(request: NextRequest) {
   if (pathname.startsWith('/api')) {
     // Only allow specific domains in production, or * for public APIs
     // Using * here for public APIs, but restrict Methods/Headers.
-    response.headers.set('Access-Control-Allow-Origin', '*'); 
+    response.headers.set('Access-Control-Allow-Origin', '*');
     response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   }

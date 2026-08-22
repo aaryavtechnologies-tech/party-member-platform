@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Save, Send, Settings, Image as ImageIcon, LayoutTemplate } from "lucide-react";
+import { Save, Send, Settings, Image as ImageIcon, LayoutTemplate, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { NewsCategory, NewsTag } from "@prisma/client";
@@ -23,14 +23,30 @@ export function NewsEditorClient({
 }) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("content");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submittingAction, setSubmittingAction] = useState<"DRAFT" | "PUBLISHED" | null>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   
-  // State for form
+  // English Content State
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
+
+  // Gujarati Content State
+  const [titleGu, setTitleGu] = useState("");
+  const [slugGu, setSlugGu] = useState("");
+  const [summaryGu, setSummaryGu] = useState("");
+  const [contentGu, setContentGu] = useState("");
+
   const [imageUrl, setImageUrl] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [tagId, setTagId] = useState("");
+
+  // Media Contact
+  const [contactName, setContactName] = useState("");
+  const [contactDesignation, setContactDesignation] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactMobile, setContactMobile] = useState("");
   
   // Flags
   const [isPressRelease, setIsPressRelease] = useState(false);
@@ -38,47 +54,67 @@ export function NewsEditorClient({
   const [isBreaking, setIsBreaking] = useState(false);
   const [isMemberOnly, setIsMemberOnly] = useState(false);
 
+  const isSubmitting = submittingAction !== null;
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    setIsUploadingImage(true);
     try {
       const formData = new FormData();
       formData.append("file", file);
       const res = await fetch("/api/upload", { method: "POST", body: formData });
-      if (!res.ok) throw new Error("Upload failed");
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || "Upload failed");
+      }
       const data = await res.json();
       setImageUrl(data.url);
-      toast.success("Image uploaded successfully");
-    } catch (err) {
-      toast.error("Failed to upload image");
+      toast.success("Featured image uploaded successfully");
+    } catch (err: any) {
+      console.error("Featured image upload error:", err);
+      toast.error(err.message || "Failed to upload image");
+    } finally {
+      setIsUploadingImage(false);
     }
   };
 
   const handleSave = async (status: "DRAFT" | "PUBLISHED") => {
-    setIsSubmitting(true);
+    setSubmittingAction(status);
     
     try {
       const actualSlug = slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      const actualSlugGu = slugGu || (titleGu ? titleGu.toLowerCase().replace(/[^a-z0-9\u0A80-\u0AFF]+/g, '-').replace(/(^-|-$)+/g, '') : "");
       
       await createNewsArticle({
         title,
         slug: actualSlug,
         summary,
         content,
+        titleGu: titleGu || undefined,
+        slugGu: actualSlugGu || undefined,
+        summaryGu: summaryGu || undefined,
+        contentGu: contentGu || undefined,
         isFeatured,
         isBreaking,
         isPressRelease,
         isMemberOnly,
-        featuredImage: imageUrl
+        featuredImage: imageUrl,
+        categoryId: categoryId || undefined,
+        tagId: tagId || undefined,
+        contactName: contactName || undefined,
+        contactDesignation: contactDesignation || undefined,
+        contactEmail: contactEmail || undefined,
+        contactMobile: contactMobile || undefined,
       }, status);
       
-      toast.success(status === "DRAFT" ? "Article saved as Draft" : "Article submitted!");
+      toast.success(status === "DRAFT" ? "Article saved as Draft!" : "Article published successfully!");
       router.push("/admin/news");
     } catch (err: any) {
       toast.error(err.message || "Failed to save article");
     } finally {
-      setIsSubmitting(false);
+      setSubmittingAction(null);
     }
   };
 
@@ -118,38 +154,80 @@ export function NewsEditorClient({
       <div className="flex-1 flex flex-col">
         <div className="flex-1 p-6 sm:p-8">
           
-          {/* CONTENT TAB */}
-          {(activeTab === "content" || activeTab === "content-gu") && (
+          {/* ENGLISH CONTENT TAB */}
+          {activeTab === "content" && (
             <div className="space-y-6 max-w-4xl animate-in fade-in slide-in-from-bottom-4">
-              <h2 className="text-xl font-bold">
-                {activeTab === "content" ? "English Content" : "Gujarati Content"}
-              </h2>
+              <div className="flex justify-between items-center">
+                <h2 className="text-xl font-bold">English Content</h2>
+                <span className="text-xs bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-full text-slate-600 dark:text-slate-400 font-medium">Primary Language</span>
+              </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Article Title</label>
+                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Article Title (English) <span className="text-red-500">*</span></label>
                 <input 
                   type="text" 
                   value={title}
+                  disabled={isSubmitting}
                   onChange={e => setTitle(e.target.value)}
-                  placeholder="Enter a compelling title..." 
-                  className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-lg font-medium focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  placeholder="Enter a compelling English title..." 
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-lg font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Short Summary</label>
+                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Short Summary (English)</label>
                 <textarea 
                   rows={3}
                   value={summary}
+                  disabled={isSubmitting}
                   onChange={e => setSummary(e.target.value)}
-                  placeholder="A brief summary for the news cards..." 
-                  className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  placeholder="A brief English summary for news cards and SEO..." 
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Full Content</label>
+                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Full Content (English)</label>
                 <TiptapEditor content={content} onChange={setContent} />
+              </div>
+            </div>
+          )}
+
+          {/* GUJARATI CONTENT TAB */}
+          {activeTab === "content-gu" && (
+            <div className="space-y-6 max-w-4xl animate-in fade-in slide-in-from-bottom-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-xl font-bold">Gujarati Content (ગુજરાતી)</h2>
+                <span className="text-xs bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 px-2.5 py-1 rounded-full font-medium">Regional Language</span>
+              </div>
+              
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">લેખનું શીર્ષક (Article Title)</label>
+                <input 
+                  type="text" 
+                  value={titleGu}
+                  disabled={isSubmitting}
+                  onChange={e => setTitleGu(e.target.value)}
+                  placeholder="સમાચારનું શીર્ષક દાખલ કરો..." 
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-lg font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">ટૂંકો સારાંશ (Short Summary)</label>
+                <textarea 
+                  rows={3}
+                  value={summaryGu}
+                  disabled={isSubmitting}
+                  onChange={e => setSummaryGu(e.target.value)}
+                  placeholder="સમાચાર કાર્ડ માટે સંક્ષિપ્ત સારાંશ..." 
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">સંપૂર્ણ વિગતો (Full Content)</label>
+                <TiptapEditor content={contentGu} onChange={setContentGu} />
               </div>
             </div>
           )}
@@ -161,23 +239,42 @@ export function NewsEditorClient({
               
               <div className="p-8 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-center bg-slate-50 dark:bg-slate-900/50">
                 {imageUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={imageUrl} alt="Featured" className="mx-auto max-h-48 rounded-lg mb-4 object-cover shadow-sm" />
+                  <div className="relative inline-block mb-4">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={imageUrl} alt="Featured" className="mx-auto max-h-56 rounded-lg object-cover shadow-md border border-slate-200 dark:border-slate-700" />
+                    <button 
+                      type="button" 
+                      onClick={() => setImageUrl("")}
+                      className="absolute top-2 right-2 p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-full shadow-lg transition-colors"
+                      title="Remove image"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 ) : (
                   <ImageIcon className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                 )}
-                <h3 className="text-lg font-bold mb-2">Featured Image</h3>
-                <p className="text-slate-500 text-sm mb-4">Upload a high-quality image</p>
-                <label className="cursor-pointer">
-                  <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
-                  <span className="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors inline-block">Upload Image</span>
+                <h3 className="text-lg font-bold mb-2">Featured Cover Image</h3>
+                <p className="text-slate-500 text-sm mb-4">Upload a high-quality image (JPEG, PNG, WebP, GIF up to 5MB)</p>
+                <label className={`cursor-pointer inline-flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium transition-colors ${isUploadingImage ? 'bg-slate-100 dark:bg-slate-800 opacity-60 cursor-not-allowed' : 'hover:bg-slate-100 dark:hover:bg-slate-800'}`}>
+                  <input type="file" className="hidden" accept="image/*" disabled={isUploadingImage} onChange={handleImageUpload} />
+                  {isUploadingImage ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                      <span>Uploading...</span>
+                    </>
+                  ) : (
+                    <span>{imageUrl ? "Replace Image" : "Upload Image"}</span>
+                  )}
                 </label>
               </div>
 
               <div className="p-8 border border-slate-200 dark:border-slate-700 rounded-2xl bg-white dark:bg-slate-950">
-                <h3 className="text-lg font-bold mb-4">Photo Gallery (Optional)</h3>
+                <h3 className="text-lg font-bold mb-2">Photo Gallery (Optional)</h3>
                 <p className="text-slate-500 text-sm mb-4">Attach multiple images to create an inline masonry gallery.</p>
-                <Button variant="outline">Add Images to Gallery</Button>
+                <Button variant="outline" type="button" onClick={() => toast.info("Gallery attachments will be available with full CMS release")}>
+                  Add Images to Gallery
+                </Button>
               </div>
             </div>
           )}
@@ -187,10 +284,14 @@ export function NewsEditorClient({
             <div className="space-y-6 max-w-4xl animate-in fade-in slide-in-from-bottom-4">
               <h2 className="text-xl font-bold">Publishing Settings & SEO</h2>
               
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-semibold">Category</label>
-                  <select className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20">
+                  <select 
+                    value={categoryId} 
+                    onChange={e => setCategoryId(e.target.value)}
+                    className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  >
                     <option value="">Select Category...</option>
                     {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
                   </select>
@@ -198,7 +299,11 @@ export function NewsEditorClient({
 
                 <div className="space-y-2">
                   <label className="text-sm font-semibold">Tags</label>
-                  <select className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20">
+                  <select 
+                    value={tagId} 
+                    onChange={e => setTagId(e.target.value)}
+                    className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  >
                     <option value="">Select Tags...</option>
                     {tags.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
                   </select>
@@ -239,19 +344,43 @@ export function NewsEditorClient({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-semibold">Spokesperson Name</label>
-                    <input type="text" placeholder="e.g. Ramesh Patel" className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20" />
+                    <input 
+                      type="text" 
+                      value={contactName}
+                      onChange={e => setContactName(e.target.value)}
+                      placeholder="e.g. Ramesh Patel" 
+                      className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20" 
+                    />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold">Designation</label>
-                    <input type="text" placeholder="e.g. National Media Coordinator" className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20" />
+                    <input 
+                      type="text" 
+                      value={contactDesignation}
+                      onChange={e => setContactDesignation(e.target.value)}
+                      placeholder="e.g. National Media Coordinator" 
+                      className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20" 
+                    />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold">Email Address</label>
-                    <input type="email" placeholder="media@ravp.org" className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20" />
+                    <input 
+                      type="email" 
+                      value={contactEmail}
+                      onChange={e => setContactEmail(e.target.value)}
+                      placeholder="media@ravp.org" 
+                      className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20" 
+                    />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold">Mobile Number</label>
-                    <input type="text" placeholder="+91 XXXXX XXXXX" className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20" />
+                    <input 
+                      type="text" 
+                      value={contactMobile}
+                      onChange={e => setContactMobile(e.target.value)}
+                      placeholder="+91 XXXXX XXXXX" 
+                      className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20" 
+                    />
                   </div>
                 </div>
               </div>
@@ -266,24 +395,45 @@ export function NewsEditorClient({
             variant="ghost" 
             className="text-slate-500" 
             onClick={() => router.back()}
+            disabled={isSubmitting}
           >
             Cancel
           </Button>
-          <div className="flex gap-3">
+          <div className="flex items-center gap-3">
             <Button 
               variant="outline" 
-              className="rounded-xl"
+              className="rounded-xl min-w-[120px]"
               onClick={() => handleSave("DRAFT")}
               disabled={isSubmitting}
             >
-              <Save className="w-4 h-4 mr-2" /> Save Draft
+              {submittingAction === "DRAFT" ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin text-slate-700 dark:text-slate-300" />
+                  <span>Saving Draft...</span>
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4 mr-2" />
+                  <span>Save Draft</span>
+                </>
+              )}
             </Button>
             <Button 
-              className="bg-primary text-slate-950 hover:bg-primary/90 rounded-xl font-bold"
+              className="bg-primary text-slate-950 hover:bg-primary/90 rounded-xl font-bold min-w-[160px] shadow-sm disabled:opacity-50"
               onClick={() => handleSave("PUBLISHED")}
-              disabled={isSubmitting || !title}
+              disabled={isSubmitting || !title.trim()}
             >
-              <Send className="w-4 h-4 mr-2" /> Submit / Publish
+              {submittingAction === "PUBLISHED" ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin text-slate-950" />
+                  <span>Publishing News...</span>
+                </>
+              ) : (
+                <>
+                  <Send className="w-4 h-4 mr-2" />
+                  <span>Submit / Publish</span>
+                </>
+              )}
             </Button>
           </div>
         </div>

@@ -13,6 +13,33 @@ export default function CreateEventPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
+  const [imageUrl, setImageUrl] = useState("");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || "Upload failed");
+      }
+      const data = await res.json();
+      setImageUrl(data.url);
+      toast.success("Event cover image uploaded successfully");
+    } catch (err: any) {
+      console.error("Cover image upload error:", err);
+      toast.error(err.message || "Failed to upload cover image");
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -21,7 +48,10 @@ export default function CreateEventPage() {
     const data = Object.fromEntries(formData.entries());
     
     try {
-      await createAdminEvent(data);
+      await createAdminEvent({
+        ...data,
+        imageUrl: imageUrl || undefined,
+      });
       toast.success("Event created successfully");
       router.push("/admin/events");
     } catch (err: any) {
@@ -44,7 +74,36 @@ export default function CreateEventPage() {
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           
-          <div className="space-y-4">
+          {/* Cover Image Upload */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider">Event Cover Image</h3>
+            <div className="p-6 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-center bg-slate-50 dark:bg-slate-950/50">
+              {imageUrl ? (
+                <div className="relative inline-block mb-4">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={imageUrl} alt="Event Cover" className="mx-auto max-h-56 rounded-xl object-cover shadow-md border border-slate-200 dark:border-slate-700" />
+                  <button 
+                    type="button" 
+                    onClick={() => setImageUrl("")}
+                    className="absolute top-2 right-2 p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-full shadow-lg transition-colors"
+                    title="Remove cover image"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ) : null}
+              
+              <div>
+                <label className={`cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold shadow-sm transition-colors ${isUploadingImage ? 'opacity-60 cursor-not-allowed' : 'hover:bg-slate-100 dark:hover:bg-slate-800'}`}>
+                  <input type="file" className="hidden" accept="image/*" disabled={isUploadingImage} onChange={handleImageUpload} />
+                  <span>{isUploadingImage ? "Uploading Cover..." : imageUrl ? "Change Cover Image" : "Upload Event Cover Image"}</span>
+                </label>
+                <p className="text-xs text-slate-400 mt-2">JPEG, PNG, WebP or GIF up to 5MB</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
             <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider">Basic Info</h3>
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Event Title *</label>

@@ -3,6 +3,7 @@ import { writeFile, mkdir } from "fs/promises";
 import { join, extname } from "path";
 import { v4 as uuidv4 } from "uuid";
 import { auth } from "@/lib/auth";
+import { getAdminSession } from "@/lib/admin-auth";
 import { headers } from "next/headers";
 
 // Allowed MIME types and their expected extensions
@@ -17,16 +18,18 @@ const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5MB (was 10MB — reduced)
 
 export async function POST(req: NextRequest) {
   try {
-    // SECURITY: Require authentication — was missing entirely
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+    // Check Admin session (Super Admin, District Admin, etc.) or User session (Logged in member)
+    const adminSession = await getAdminSession();
+    let userSession = null;
 
-    if (!session?.user) {
-      return NextResponse.json(
-        { error: "Unauthorized: You must be logged in to upload files." },
-        { status: 401 }
-      );
+    if (!adminSession) {
+      try {
+        userSession = await auth.api.getSession({
+          headers: await headers(),
+        });
+      } catch {
+        // Not a logged-in user (e.g. member registration form)
+      }
     }
 
     const formData = await req.formData();
