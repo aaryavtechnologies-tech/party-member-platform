@@ -7,9 +7,9 @@ import { routing } from './i18n/routing';
 const isDev = process.env.NODE_ENV || 'development';
 
 const RATE_LIMITS = {
-  auth: { limit: isDev ? 10000 : 120, windowMs: 60000 },      // 60 requests per minute in prod
-  admin: { limit: isDev ? 10000 : 600, windowMs: 60000 },   // 300 requests per minute in prod
-  public: { limit: isDev ? 10000 : 1000, windowMs: 60000 }, // 500 requests per minute in prod
+  auth: { limit: isDev ? 10000 : 240, windowMs: 60000 },      // 120 requests per minute in prod
+  admin: { limit: isDev ? 10000 : 1200, windowMs: 60000 },   // 600 requests per minute in prod
+  public: { limit: isDev ? 10000 : 2000, windowMs: 60000 }, // 1000 requests per minute in prod
 };
 
 const rateLimitMap = new Map<string, { count: number; expiresAt: number }>();

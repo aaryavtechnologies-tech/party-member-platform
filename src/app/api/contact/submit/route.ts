@@ -17,10 +17,10 @@ const submitSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
-  // SECURITY: Rate limit contact form to 3 submissions per IP per 10 minutes
+  // SECURITY: Rate limit contact form to 6 submissions per IP per 10 minutes
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   const rateLimit = checkRateLimit("contact-form", ip, {
-    maxRequests: 3,
+    maxRequests: 6,
     windowMs: 10 * 60 * 1000, // 10 minutes
   });
 

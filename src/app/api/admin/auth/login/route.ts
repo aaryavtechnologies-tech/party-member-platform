@@ -7,7 +7,7 @@ import { createAdminSession } from "@/lib/admin-auth";
 // For multi-instance production, replace with Redis/Upstash
 const loginAttempts = new Map<string, { count: number; windowStart: number; blockedUntil?: number }>();
 
-const LOGIN_MAX_ATTEMPTS = 5;        // 5 attempts
+const LOGIN_MAX_ATTEMPTS = 10;        // 10 attempts
 const LOGIN_WINDOW_MS = 10 * 60 * 1000; // per 10 minutes
 const LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minute lockout after max attempts
 

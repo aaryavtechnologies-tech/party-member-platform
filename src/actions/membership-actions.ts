@@ -190,9 +190,9 @@ export async function registerMember(data: RegistrationData) {
 }
 
 export async function sendRegistrationOtp(email: string) {
-  // SECURITY: Rate limit OTP generation per email (3 attempts per 15 minutes)
+  // SECURITY: Rate limit OTP generation per email (6 attempts per 15 minutes)
   const rateLimit = checkRateLimit("registration-otp", email.toLowerCase().trim(), {
-    maxRequests: 3,
+    maxRequests: 6,
     windowMs: 15 * 60 * 1000,
     blockDurationMs: 30 * 60 * 1000, // 30 minute lockout if abused
   });
