@@ -6,6 +6,11 @@ export default async function BroadcastsPage() {
   const adminCount = await prisma.admin.count({ where: { isActive: true } });
   const memberCount = await prisma.memberProfile.count();
 
+  // Fetch past broadcasts
+  const pastBroadcasts = await prisma.broadcastNotification.findMany({
+    orderBy: { createdAt: "desc" }
+  });
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
       <AdminBreadcrumbs />
@@ -15,7 +20,11 @@ export default async function BroadcastsPage() {
         <p className="text-slate-500 mt-1">Send in-app notifications and announcements to Admins, Members, or Everyone.</p>
       </div>
 
-      <BroadcastClient adminCount={adminCount} memberCount={memberCount} />
+      <BroadcastClient 
+        adminCount={adminCount} 
+        memberCount={memberCount} 
+        pastBroadcasts={pastBroadcasts}
+      />
     </div>
   );
 }

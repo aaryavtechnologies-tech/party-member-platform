@@ -5,7 +5,17 @@ import { Send, Users, ShieldAlert, Globe, Link2, Type, MessageSquare, Loader2 } 
 import { toast } from "sonner";
 import { sendBroadcast } from "@/actions/admin/broadcasts";
 
-export default function BroadcastClient({ adminCount, memberCount }: { adminCount: number, memberCount: number }) {
+import { format } from "date-fns";
+
+export default function BroadcastClient({ 
+  adminCount, 
+  memberCount,
+  pastBroadcasts = []
+}: { 
+  adminCount: number;
+  memberCount: number;
+  pastBroadcasts?: any[];
+}) {
   const [formData, setFormData] = useState({
     title: "",
     message: "",
@@ -216,6 +226,62 @@ export default function BroadcastClient({ adminCount, memberCount }: { adminCoun
               <strong className="block mb-1">Notice:</strong>
               Broadcasts are delivered instantly to the users' in-app notification center. For members over 10,000, the system batches the delivery to prevent server timeout.
             </p>
+          </div>
+        </div>
+      </div>
+      
+      {/* Broadcast History Table */}
+      <div className="md:col-span-3 mt-8">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+          <div className="p-4 sm:p-6 border-b border-slate-200 dark:border-slate-800">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Broadcast History</h2>
+            <p className="text-sm text-slate-500 mt-1">Recently sent broadcasts and announcements.</p>
+          </div>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+                  <th className="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Message Details</th>
+                  <th className="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Audience</th>
+                  <th className="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Sent At</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+                {pastBroadcasts.length === 0 ? (
+                  <tr>
+                    <td colSpan={3} className="p-8 text-center text-slate-500">
+                      No broadcasts found.
+                    </td>
+                  </tr>
+                ) : (
+                  pastBroadcasts.map((broadcast) => (
+                    <tr key={broadcast.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30 transition-colors">
+                      <td className="p-4">
+                        <p className="font-bold text-slate-900 dark:text-white text-sm">
+                          {broadcast.title}
+                        </p>
+                        <p className="text-xs text-slate-500 mt-1 line-clamp-1 max-w-md">
+                          {broadcast.message}
+                        </p>
+                      </td>
+                      <td className="p-4">
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-bold ${
+                          broadcast.audience === 'ALL' ? 'bg-blue-100 text-blue-700' : 
+                          broadcast.audience === 'MEMBER_ONLY' ? 'bg-green-100 text-green-700' :
+                          'bg-purple-100 text-purple-700'
+                        }`}>
+                          {broadcast.audience.replace("_", " ")}
+                        </span>
+                      </td>
+                      <td className="p-4 text-sm text-slate-500">
+                        {format(new Date(broadcast.createdAt), "MMM d, yyyy • h:mm a")}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

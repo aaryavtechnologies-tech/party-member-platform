@@ -1765,5 +1765,193 @@
       "\"Green Environment – Secure Future.\"",
       "\"Conservation of nature, protection of the next generation.\""
     ]
+  },
+  "OrganizationStructure": {
+    "title": "Organization Structure",
+    "meta_title": "Organization Structure | Rashtriya Annadata Vikas Party",
+    "meta_description": "Explore the organizational structure of Rashtriya Annadata Vikas Party, from national leadership to state, district, taluka, city and village-level organizations.",
+    "hero_label": "004-01 • Organization",
+    "hero_title": "Organization Structure",
+    "hero_statement": "“Strong Organization – Strong Nation”",
+    "hero_description": "Building a disciplined, transparent and people-driven organizational network from the national level to every village.",
+    "intro_eyebrow": "Our Foundation",
+    "intro_heading": "An Organization Built Around People",
+    "intro_p1": "Rashtriya Annadata Vikas Party believes that the greatest strength of any political party is a strong, responsible, disciplined, and continuously connected organization.",
+    "intro_p2": "An organization is not merely a structure of positions and designations. It is an active team that works on the principles of public service, discipline, transparency, accountability, and responsibility.",
+    "intro_p3": "Our organization will be developed through a multi-level structure reaching every State, District, Taluka, City, Ward, and Village of the country so that every citizen receives an equal opportunity to connect with the party and participate in the process of development.",
+    "intro_p4": "We firmly believe that only through a strong organization can the issues of the people be understood effectively, meaningful policies be formulated, and democracy be strengthened.",
+    "intro_keywords": {
+      "public_service": "Public Service",
+      "discipline": "Discipline",
+      "transparency": "Transparency",
+      "accountability": "Accountability"
+    },
+    "vision_heading": "Our Vision",
+    "vision_subheading": "A nationwide organization that empowers every level of society.",
+    "vision_cards": {
+      "nationwide": {
+        "title": "Nationwide Presence",
+        "description": "Work actively in every corner of the country."
+      },
+      "service": {
+        "title": "Public Service First",
+        "description": "Give the highest priority to serving citizens."
+      },
+      "opportunity": {
+        "title": "Equal Opportunity",
+        "description": "Provide every member a fair opportunity to participate and lead."
+      },
+      "transparency": {
+        "title": "Transparent Leadership",
+        "description": "Operate with accountability and transparency."
+      },
+      "inclusive": {
+        "title": "Inclusive Representation",
+        "description": "Provide leadership opportunities to youth, women, farmers, traders and professionals."
+      },
+      "modern": {
+        "title": "Modern Organization",
+        "description": "Adopt technology-driven and modern working methods."
+      }
+    },
+    "hierarchy_heading": "From National Leadership to Every Village",
+    "hierarchy_subheading": "Our multi-level structure connects national strategy with grassroots public service.",
+    "levels": {
+      "national": {
+        "label": "01 • National Level",
+        "heading": "National Leadership",
+        "description": "At the national level, the National Executive will be responsible for policy formulation, organizational expansion, strategic planning, and coordination across the country.",
+        "positions": [
+          "National President",
+          "National Working President",
+          "National Vice President",
+          "National General Secretary",
+          "National Organization General Secretary",
+          "National Secretary",
+          "National Spokesperson",
+          "National Treasurer",
+          "National Executive Committee"
+        ]
+      },
+      "state": {
+        "label": "02 • State Level",
+        "heading": "State Organization",
+        "description": "In every state, the State Organization will implement the policies of the party while considering local circumstances, regional priorities, and the needs of the people.",
+        "positions": [
+          "State President",
+          "State Vice President",
+          "State General Secretary",
+          "State Secretary",
+          "State Treasurer",
+          "State Media Coordinator",
+          "State Executive Committee"
+        ]
+      },
+      "district": {
+        "label": "03 • District Level",
+        "heading": "District Organization",
+        "description": "The District Organization will be responsible for membership registration, public engagement, coordination of local issues, and organization of party programs and campaigns.",
+        "positions": [
+          "District President",
+          "District Vice President",
+          "District General Secretary",
+          "District Secretary",
+          "District Treasurer",
+          "District Media Coordinator",
+          "District Executive Committee"
+        ]
+      },
+      "taluka": {
+        "label": "04 • Taluka Level",
+        "heading": "Taluka Organization",
+        "description": "The Taluka Organization will serve as the primary coordination center between villages and the district organization.",
+        "positions": [
+          "Taluka President",
+          "Taluka Vice President",
+          "Taluka General Secretary",
+          "Taluka Secretary",
+          "Taluka Treasurer",
+          "Taluka Executive Committee"
+        ]
+      },
+      "city": {
+        "label": "05 • City Level",
+        "heading": "City & Ward Organization",
+        "description": "In urban areas, the City Organization will manage party activities, membership registration, public outreach, and coordination at the ward level.",
+        "positions": [
+          "City President",
+          "Ward President",
+          "Ward Executive Committee"
+        ]
+      },
+      "village": {
+        "label": "06 • Village Level",
+        "heading": "The Heart of Our Organization",
+        "description": "The Village Organization will be one of the most important units of the party. It will maintain direct engagement with local citizens and will work on local issues, membership registration, public welfare initiatives, and development-oriented activities.",
+        "positions": [
+          "Village President",
+          "Vice President",
+          "Secretary",
+          "Women Coordinator",
+          "Youth Coordinator",
+          "Village Executive Committee"
+        ]
+      }
+    },
+    "wings_heading": "Special Wings",
+    "wings_subheading": "Dedicated platforms representing and empowering different sections of society.",
+    "wings": [
+      "Farmers Wing",
+      "Youth Wing",
+      "Women’s Wing",
+      "Student Wing",
+      "Traders Wing",
+      "Professionals Forum",
+      "Environment Forum",
+      "Social Service Forum"
+    ],
+    "journey_heading": "Your Journey from Member to Leadership",
+    "journey_description": "Every member receives an equal opportunity to progress through performance, commitment, discipline, leadership ability, and service to the people.",
+    "journey_steps": [
+      "General Member",
+      "Active Member",
+      "Village Team",
+      "Taluka Team",
+      "District Team",
+      "State Team",
+      "National Team"
+    ],
+    "principles_heading": "How We Work",
+    "principles": [
+      "Public Service First",
+      "Transparency and Accountability",
+      "Regular Meetings",
+      "Training and Capacity Development",
+      "Teamwork",
+      "Time-Bound Execution",
+      "Digital Management",
+      "Continuous Communication with the People",
+      "Compliance with the Constitution and Law"
+    ],
+    "tech_label": "Modern Organization",
+    "tech_heading": "Technology That Strengthens Organization",
+    "tech_description": "To ensure effective and modern organizational management, the party will increasingly adopt technology-based systems.",
+    "tech_features": [
+      "Online Member Management",
+      "Digital ID Cards",
+      "Mobile Application",
+      "District-Wise Dashboards",
+      "Event Management System",
+      "Digital Communication Platform",
+      "Online Training Portal",
+      "Data Security and Privacy Standards"
+    ],
+    "commitment_heading": "Our Commitment",
+    "commitment_p1": "The organization of Rashtriya Annadata Vikas Party will not merely be a hierarchy of office bearers. It will be a living and active family of dedicated workers committed to the overall development of the nation.",
+    "commitment_p2": "We are committed to building an organization where every member is respected, every worker receives an equal opportunity to develop as a leader, and every decision is guided by public interest, transparency, accountability, and democratic principles.",
+    "motto_main": "“Strong Organization – Strong Democracy – Strong India”",
+    "motto_secondary": "“Our workers are our greatest strength, and public service is our highest duty.”",
+    "cta_join": "Join RAVP",
+    "cta_learn": "Learn About Membership"
   }
 }

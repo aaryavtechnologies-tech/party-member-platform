@@ -80,7 +80,7 @@ const nextConfig: NextConfig = {
               // Default: block everything not explicitly allowed
               "default-src 'self'",
               // Scripts: self + Razorpay checkout (required for payments)
-              "script-src 'self' 'unsafe-inline' https://checkout.razorpay.com",
+              `script-src 'self' 'unsafe-inline' ${process.env.NODE_ENV === 'production' ? '' : "'unsafe-eval'"} https://checkout.razorpay.com`,
               // Note: 'unsafe-inline' is required by Next.js for inline scripts.
               // If you can use nonces (custom server), remove unsafe-inline.
               // Styles: self + inline (required by Tailwind/Next.js) + Google Fonts

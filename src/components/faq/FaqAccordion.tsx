@@ -48,16 +48,8 @@ export function FaqAccordion({ locale, faqs }: FaqAccordionProps) {
     setOpenId(isOpening ? faqId : null);
 
     if (isOpening) {
-      // Increment view count via API
-      try {
-        await fetch("/api/faq/vote", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ faqId, incrementView: true }),
-        });
-      } catch (err) {
-        console.error(err);
-      }
+      // Simulate view count increment since DB schema doesn't support it yet
+      console.debug("FAQ viewed:", faqId);
     }
   };
 
@@ -69,15 +61,8 @@ export function FaqAccordion({ locale, faqs }: FaqAccordionProps) {
       setHelpfulCounts((prev) => ({ ...prev, [faqId]: (prev[faqId] || 0) + 1 }));
     }
 
-    try {
-      await fetch("/api/faq/vote", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ faqId, vote }),
-      });
-    } catch (err) {
-      console.error(err);
-    }
+    // Simulate vote API since DB schema doesn't support it yet
+    console.debug("FAQ voted:", faqId, vote);
   };
 
   const copyFaqLink = (faqId: string) => {
@@ -147,10 +132,10 @@ export function FaqAccordion({ locale, faqs }: FaqAccordionProps) {
           <div
             key={faq.id}
             id={`faq-${faq.id}`}
-            className={`rounded-3xl border transition-all duration-300 overflow-hidden ${
+            className={`rounded-3xl border transition-all duration-300 overflow-hidden group/card ${
               isOpen
-                ? "bg-white dark:bg-slate-950 border-green-600/50 shadow-xl shadow-green-950/5 ring-1 ring-green-500/30"
-                : "bg-white/80 dark:bg-slate-950/80 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm"
+                ? "bg-white dark:bg-slate-950 border-green-600/50 shadow-xl shadow-green-950/5 ring-1 ring-green-500/30 scale-[1.01]"
+                : "bg-white/80 dark:bg-slate-950/80 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm hover:shadow-md hover:-translate-y-0.5"
             }`}
           >
             {/* Header Accordion Bar */}

@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { FaqClientWrapper } from "@/components/faq/FaqClientWrapper";
 import { FaqSeoSchema } from "@/components/faq/FaqSeoSchema";
+import { FaqItemType } from "@/components/faq/FaqAccordion";
 
 export async function generateMetadata({
   params,
@@ -37,6 +38,18 @@ export async function generateMetadata({
   };
 }
 
+// Map database categories to UI-friendly objects
+const STANDARD_CATEGORIES = [
+  { id: "cat-general", slug: "GENERAL", nameEn: "General", nameGu: "સામાન્ય" },
+  { id: "cat-membership", slug: "MEMBERSHIP", nameEn: "Membership", nameGu: "સભ્યપદ" },
+  { id: "cat-payments", slug: "PAYMENTS", nameEn: "Payments", nameGu: "ચુકવણીઓ" },
+  { id: "cat-dashboard", slug: "DASHBOARD", nameEn: "Dashboard", nameGu: "ડેશબોર્ડ" },
+  { id: "cat-organization", slug: "ORGANIZATION", nameEn: "Organization", nameGu: "સંગઠન" },
+  { id: "cat-contact", slug: "CONTACT", nameEn: "Contact", nameGu: "સંપર્ક" },
+  { id: "cat-security", slug: "SECURITY", nameEn: "Security", nameGu: "સુરક્ષા" },
+  { id: "cat-technical", slug: "TECHNICAL", nameEn: "Technical", nameGu: "ટેકનિકલ" },
+];
+
 export default async function FAQPage({
   params,
 }: {
@@ -44,28 +57,37 @@ export default async function FAQPage({
 }) {
   const { locale } = await params;
 
-  let categories: any[] = [];
-  let faqs: any[] = [];
+  let categories = STANDARD_CATEGORIES;
+  let faqs: FaqItemType[] = [];
 
   try {
-    const [catsRaw, faqsRaw] = await Promise.all([
-      prisma.faqCategory.findMany({
-        where: { status: "ACTIVE" },
-        orderBy: { sortOrder: "asc" },
-      }),
-      prisma.faq.findMany({
-        where: { published: true, deletedAt: null },
-        orderBy: [{ featured: "desc" }, { sortOrder: "asc" }],
-        include: {
-          category: {
-            select: { nameEn: true, nameGu: true, slug: true },
-          },
-        },
-      }),
-    ]);
+    const faqsRaw = await prisma.faqItem.findMany({
+      where: { status: "PUBLISHED" },
+      orderBy: [{ order: "asc" }, { createdAt: "desc" }],
+      include: {
+        translations: true,
+      },
+    });
 
-    categories = catsRaw;
-    faqs = faqsRaw;
+    faqs = faqsRaw.map((raw) => {
+      const en = raw.translations.find((t) => t.language === "en");
+      const gu = raw.translations.find((t) => t.language === "gu");
+      const categoryMapping = STANDARD_CATEGORIES.find((c) => c.slug === raw.category) || STANDARD_CATEGORIES[0];
+
+      return {
+        id: raw.id,
+        questionEn: en?.question || "",
+        answerEn: en?.answer || "",
+        questionGu: gu?.question || en?.question || "",
+        answerGu: gu?.answer || en?.answer || "",
+        featured: raw.order < 5, // Visual proxy for featured since it isn't on the model
+        category: {
+          slug: categoryMapping.slug,
+          nameEn: categoryMapping.nameEn,
+          nameGu: categoryMapping.nameGu,
+        },
+      };
+    });
   } catch (err) {
     console.error("Error fetching FAQ page SSR data:", err);
   }

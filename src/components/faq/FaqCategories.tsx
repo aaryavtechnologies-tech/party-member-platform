@@ -61,17 +61,17 @@ export function FaqCategories({
   return (
     <div className="sticky top-16 z-30 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md py-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
       <div className="container mx-auto px-4 max-w-6xl">
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        <div className="flex items-center gap-3 overflow-x-auto pb-4 pt-2 px-1 snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {/* All Categories Tab */}
           <button
             onClick={() => onSelectCategory("all")}
-            className={`px-4 py-2.5 rounded-2xl font-extrabold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 shrink-0 ${
+            className={`px-5 py-3 rounded-2xl font-extrabold text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2.5 shrink-0 snap-start ${
               selectedCategory === "all"
-                ? "bg-green-700 text-white shadow-lg shadow-green-700/20"
-                : "bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800"
+                ? "bg-gradient-to-r from-green-700 to-green-600 text-white shadow-lg shadow-green-700/25 scale-[1.02]"
+                : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm hover:shadow hover:-translate-y-0.5"
             }`}
           >
-            <Grid className="w-4 h-4" />
+            <Grid className={`w-4 h-4 ${selectedCategory === "all" ? "text-green-100" : "text-slate-400 dark:text-slate-500"}`} />
             <span>{isGu ? "તમામ શ્રેણીઓ" : "All Categories"}</span>
           </button>
 
@@ -85,13 +85,13 @@ export function FaqCategories({
               <button
                 key={cat.id}
                 onClick={() => onSelectCategory(cat.slug)}
-                className={`px-4 py-2.5 rounded-2xl font-extrabold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 shrink-0 ${
+                className={`px-5 py-3 rounded-2xl font-extrabold text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2.5 shrink-0 snap-start ${
                   isSelected
-                    ? "bg-green-700 text-white shadow-lg shadow-green-700/20"
-                    : "bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800"
+                    ? "bg-gradient-to-r from-green-700 to-green-600 text-white shadow-lg shadow-green-700/25 scale-[1.02]"
+                    : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm hover:shadow hover:-translate-y-0.5"
                 }`}
               >
-                <IconComp className="w-4 h-4" />
+                <IconComp className={`w-4 h-4 ${isSelected ? "text-green-100" : "text-slate-400 dark:text-slate-500"}`} />
                 <span>{name}</span>
               </button>
             );
