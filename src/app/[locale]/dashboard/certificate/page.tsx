@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import CertificateClient from "./CertificateClient";
 import { FeatureLock } from "@/components/shared/FeatureLock";
 import { isMembershipActiveOrInGracePeriod } from "@/lib/membership-check";
+import { formatMemberId } from "@/lib/utils";
 
 export default async function CertificatePage() {
   const session = await auth.api.getSession({
@@ -39,7 +40,7 @@ export default async function CertificatePage() {
 
   const certData = {
     name: memberProfile.user.name,
-    memberId: memberProfile.memberId,
+    memberId: formatMemberId(memberProfile.memberId),
     membershipType: memberProfile.membershipType.replace("_", " "),
     issueDate: new Date(memberProfile.issueDate).toLocaleDateString("en-GB", {
       day: "2-digit",

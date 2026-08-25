@@ -42,12 +42,7 @@ const formSchema = z.object({
 
 type RegistrationData = z.infer<typeof formSchema>;
 
-function generateMemberId() {
-  // e.g. RAVP-2026-000001
-  const year = new Date().getFullYear();
-  const randomNum = Math.floor(100000 + Math.random() * 900000);
-  return `RAVP-${year}-${randomNum}`;
-}
+
 
 
 export async function registerMember(data: RegistrationData) {
@@ -76,8 +71,6 @@ export async function registerMember(data: RegistrationData) {
     }
 
     // 3. Create User and MemberProfile in a transaction
-    const memberId = generateMemberId();
-
     const newUser = await prisma.$transaction(async (tx) => {
       // Create Base User
       const fullName = [validatedData.firstName, validatedData.middleName, validatedData.lastName]
@@ -130,7 +123,7 @@ export async function registerMember(data: RegistrationData) {
       const profile = await tx.memberProfile.create({
         data: {
           userId: user.id,
-          memberId,
+
           referralCode,
           fatherName: fullFatherName,
           gender: validatedData.gender,
@@ -163,7 +156,7 @@ export async function registerMember(data: RegistrationData) {
       return { user, profile };
     });
 
-    return { success: true, memberId: newUser.profile.memberId };
+    return { success: true, memberId: String(newUser.profile.memberId) };
 
   } catch (error: any) {
     console.error("Registration Error:", error);

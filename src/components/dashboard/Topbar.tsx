@@ -4,9 +4,13 @@ import { Bell, Menu, Search, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
+import { useSession } from "@/lib/auth-client";
+import Image from "next/image";
 
 export function Topbar({ setIsOpen }: { setIsOpen: (val: boolean) => void }) {
   const t = useTranslations("dashboard.topbar");
+  const { data: session } = useSession();
+  
   return (
     <header className="h-20 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 flex items-center justify-between px-4 lg:px-8">
       <div className="flex items-center gap-4 flex-1">
@@ -36,9 +40,12 @@ export function Topbar({ setIsOpen }: { setIsOpen: (val: boolean) => void }) {
           <Bell className="w-5 h-5 text-slate-600 dark:text-slate-300" />
           <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-950" />
         </Button>
-        
         <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 border-2 border-primary/20 flex items-center justify-center overflow-hidden cursor-pointer">
-          <UserIcon className="w-5 h-5 text-slate-500" />
+          {session?.user?.image ? (
+            <img src={session.user.image} alt="User" className="w-full h-full object-cover" />
+          ) : (
+            <UserIcon className="w-5 h-5 text-slate-500" />
+          )}
         </div>
       </div>
     </header>

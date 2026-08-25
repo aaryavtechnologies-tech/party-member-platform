@@ -62,12 +62,10 @@ async function createUser(opts: {
 
   if (opts.withMemberProfile) {
     const existingMobile = await prisma.memberProfile.findUnique({ where: { mobile: "9876543210" } });
-    const existingMemberId = await prisma.memberProfile.findUnique({ where: { memberId: "RAVP-2026-000001" } });
 
     await prisma.memberProfile.create({
       data: {
         userId: user.id,
-        memberId: existingMemberId ? `RAVP-DEMO-${Date.now()}` : "RAVP-2026-000001",
         fatherName: "Rameshbhai Demo",
         gender: "Male",
         dob: new Date("1990-06-15"),

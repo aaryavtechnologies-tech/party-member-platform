@@ -8,6 +8,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { FeatureLock } from "@/components/shared/FeatureLock";
 import { isMembershipActiveOrInGracePeriod } from "@/lib/membership-check";
+import { formatMemberId } from "@/lib/utils";
 
 export default async function ReferralsPage({
   params
@@ -61,7 +62,7 @@ export default async function ReferralsPage({
   };
 
   const tableData: ReferralData[] = referrals.map(r => ({
-    id: r.memberId,
+    id: formatMemberId(r.memberId),
     name: r.user.name,
     date: new Date(r.createdAt).toLocaleDateString("en-GB", {
       day: "2-digit",

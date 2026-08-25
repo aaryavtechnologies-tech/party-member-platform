@@ -128,7 +128,7 @@ model MemberProfile {
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  memberId   String   @unique // e.g., RAVP000001
+  memberId   Int      @unique @default(autoincrement())
   fatherName String
   gender     String
   dob        DateTime

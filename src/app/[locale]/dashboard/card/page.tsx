@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import DigitalCardClient from "./DigitalCardClient";
 import { FeatureLock } from "@/components/shared/FeatureLock";
 import { isMembershipActiveOrInGracePeriod } from "@/lib/membership-check";
+import { formatMemberId } from "@/lib/utils";
 
 export default async function DigitalCardPage() {
   const session = await auth.api.getSession({
@@ -61,8 +62,8 @@ export default async function DigitalCardPage() {
     }) : "",
     mobile: memberProfile.mobile || "",
     address: memberProfile.fullAddress ? `${memberProfile.fullAddress}, ${memberProfile.pincode}` : "",
-    memberId: memberProfile.memberId,
-    photoUrl: memberProfile.user.image,
+    memberId: formatMemberId(memberProfile.memberId),
+    photoUrl: memberProfile.user.image || memberProfile.profilePic || "",
     issueDate: new Date(memberProfile.issueDate).toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "short",
@@ -73,8 +74,6 @@ export default async function DigitalCardPage() {
   };
 
   return (
-    <FeatureLock isPaidOrInGracePeriod={canAccess}>
-      <DigitalCardClient data={cardData} />
-    </FeatureLock>
+    <DigitalCardClient data={cardData} />
   );
 }

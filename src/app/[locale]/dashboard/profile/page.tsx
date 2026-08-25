@@ -31,7 +31,7 @@ export default async function ProfilePage() {
     mobile: user.memberProfile.mobile || "",
     address: user.memberProfile.fullAddress || "",
     pincode: user.memberProfile.pincode || "",
-    image: user.image || ""
+    image: user.image || user.memberProfile.profilePic || ""
   };
 
   return (

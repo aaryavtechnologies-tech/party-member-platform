@@ -62,13 +62,12 @@ export default async function AdminMemberDetailsPage({ params }: { params: Promi
           </div>
         </div>
 
-        {/* Quick Actions */}
         <div className="flex flex-wrap gap-2 w-full md:w-auto">
           <MemberStatusActions memberId={profile.id} currentStatus={profile.status} />
           
           <DeleteMemberButton
             profileId={profile.id}
-            memberId={profile.memberId}
+            memberId={String(profile.memberId)}
             memberName={profile.user.name}
             variant="button"
             redirectAfterDelete={true}

@@ -179,7 +179,7 @@ export default async function AdminMembersPage() {
                         </Link>
                         <DeleteMemberButton
                           profileId={profile.id}
-                          memberId={profile.memberId}
+                          memberId={String(profile.memberId)}
                           memberName={profile.user.name}
                           variant="icon"
                         />

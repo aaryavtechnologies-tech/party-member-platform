@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { formatMemberId } from "@/lib/utils";
 
 export default async function DashboardHome() {
   const t = await getTranslations("dashboard.home");
@@ -86,9 +87,11 @@ export default async function DashboardHome() {
             <span className="bg-slate-950 text-white px-4 py-2 rounded-full font-bold text-sm shadow-sm">
               {tMem(membershipTranslationKey as any)}
             </span>
-            <span className="bg-white/30 backdrop-blur-md text-slate-950 border border-white/40 px-4 py-2 rounded-full font-bold text-sm shadow-sm">
-              ID: {memberProfile.memberId}
-            </span>
+            <div className="mt-4 pt-4 border-t border-white/20">
+              <span className="text-xs font-medium uppercase tracking-wider text-white/70">
+                ID: {formatMemberId(memberProfile.memberId)}
+              </span>
+            </div>
           </div>
         </div>
         

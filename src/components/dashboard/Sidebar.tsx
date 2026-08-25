@@ -7,6 +7,8 @@ import {
   Users, LogOut, Shield, QrCode
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 import { useTranslations } from "next-intl";
 
@@ -15,6 +17,7 @@ import { useTranslations } from "next-intl";
 
 export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (val: boolean) => void }) {
   const pathname = usePathname();
+  const router = useRouter();
   const t = useTranslations("dashboard.sidebar");
 
   const NAV_ITEMS = [
@@ -76,7 +79,13 @@ export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (va
 
         {/* Bottom Actions */}
         <div className="p-4 border-t border-slate-200 dark:border-slate-800">
-          <button className="flex items-center gap-3 w-full px-4 py-3 rounded-xl font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors">
+          <button 
+            onClick={async () => {
+              await authClient.signOut();
+              router.push("/");
+            }}
+            className="flex items-center gap-3 w-full px-4 py-3 rounded-xl font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+          >
             <LogOut className="w-5 h-5" />
             {t("logout")}
           </button>

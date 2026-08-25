@@ -130,10 +130,10 @@ export async function searchMembers(query: string) {
         locationFilter,
         {
           OR: [
-            { memberId: { contains: query, mode: "insensitive" } },
+            isNaN(Number(query)) ? undefined : { memberId: Number(query) },
             { mobile: { contains: query } },
             { user: { is: { name: { contains: query, mode: "insensitive" } } } }
-          ]
+          ].filter(Boolean) as any
         }
       ]
     },
@@ -151,10 +151,6 @@ export async function createMemberByAdmin(data: any) {
   // Hash password
   const hashedPassword = await bcrypt.hash(validatedData.password, 10);
   
-  // Generate unique Member ID
-  const memberCount = await prisma.memberProfile.count();
-  const memberId = `RAVP-${new Date().getFullYear()}-${String(memberCount + 1).padStart(6, '0')}`;
-
   // SECURITY: Cryptographically secure referral code (LOW-005)
   const secureReferralCode = `REF-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
 
@@ -183,7 +179,6 @@ export async function createMemberByAdmin(data: any) {
     const profile = await tx.memberProfile.create({
       data: {
         userId: user.id,
-        memberId,
         fatherName: validatedData.fatherName || "",
         gender: validatedData.gender,
         dob: new Date(validatedData.dob),
