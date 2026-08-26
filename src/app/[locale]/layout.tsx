@@ -37,7 +37,7 @@ export async function generateMetadata({
     openGraph: {
       title: t("title"),
       description: "The official digital portal of Rashtriya Annadata Vikas Party (RAVP).",
-      url: "https://party-member.vercel.app",
+      url: "https://rashtriyaannadatavikasparty.org",
       siteName: "Rashtriya Annadata Vikas Party",
       images: [
         {
@@ -56,10 +56,10 @@ export async function generateMetadata({
       images: ["https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1200&h=630&fit=crop"],
     },
     alternates: {
-      canonical: "https://party-member.vercel.app",
+      canonical: "https://rashtriyaannadatavikasparty.org",
       languages: {
-        en: "https://party-member.vercel.app/en",
-        gu: "https://party-member.vercel.app/gu",
+        en: "https://rashtriyaannadatavikasparty.org/en",
+        gu: "https://rashtriyaannadatavikasparty.org/gu",
       },
     },
   };
@@ -103,8 +103,8 @@ export default async function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               "name": "Rashtriya Annadata Vikas Party",
-              "url": "https://party-member.vercel.app",
-              "logo": "https://party-member.vercel.app/logo.jpg",
+              "url": "https://rashtriyaannadatavikasparty.org",
+              "logo": "https://rashtriyaannadatavikasparty.org/logo.jpg",
               "sameAs": [
                 "https://facebook.com/ravp",
                 "https://twitter.com/ravp",

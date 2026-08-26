@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import QRCode from "react-qr-code";
 import { Copy, Check, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,15 @@ import { Button } from "@/components/ui/button";
 export function ReferralLinkGen({ referralCode }: { referralCode: string }) {
   const [copied, setCopied] = useState(false);
   
-  const referralUrl = `https://party-member.vercel.app/membership/register?ref=${referralCode}`;
+  const [origin, setOrigin] = useState("");
+  
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setOrigin(window.location.origin);
+    }
+  }, []);
+
+  const referralUrl = origin ? `${origin}/membership/register?ref=${referralCode}` : `https://rashtriyaannadatavikasparty.org/membership/register?ref=${referralCode}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referralUrl);

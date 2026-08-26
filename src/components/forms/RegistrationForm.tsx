@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
@@ -108,6 +108,16 @@ export function RegistrationForm() {
       profilePic: "",
     },
   });
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get("ref");
+      if (ref) {
+        form.setValue("referralCode", ref);
+      }
+    }
+  }, [form]);
 
   const relativeRelation = form.watch("relativeRelation");
 
