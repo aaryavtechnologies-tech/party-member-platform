@@ -813,7 +813,7 @@ export function RegistrationForm() {
             <ChevronLeft className="w-5 h-5 mr-2" /> Back
           </Button>
           
-          {step < 4 ? (
+          {step < 5 ? (
             <Button 
               type="button" 
               onClick={nextStep}
