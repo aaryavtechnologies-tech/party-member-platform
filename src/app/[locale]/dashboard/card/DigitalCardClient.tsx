@@ -190,7 +190,6 @@ export default function DigitalCardClient({ data }: { data: CardData }) {
                   <ul className="text-[10px] text-slate-700 font-semibold space-y-1.5 list-disc pl-3">
                     <li>This card is non-transferable and remains the property of RAVP.</li>
                     <li>If found, please return to the nearest RAVP office.</li>
-                    <li>Keep this card safe, as it serves as your official identity within the party.</li>
                   </ul>
                 </div>
 
@@ -200,7 +199,6 @@ export default function DigitalCardClient({ data }: { data: CardData }) {
                   <ul className="text-[10px] text-slate-700 font-semibold space-y-1.5 list-disc pl-3">
                     <li>આ કાર્ડ અન્ય કોઈને આપી શકાશે નહીં અને તે RAVP ની મિલકત છે.</li>
                     <li>જો આ કાર્ડ મળે, તો કૃપા કરીને નજીકના RAVP કાર્યાલય પર પરત કરો.</li>
-                    <li>આ કાર્ડને સુરક્ષિત રાખો, કારણ કે આ પક્ષમાં તમારી સત્તાવાર ઓળખ છે.</li>
                   </ul>
                 </div>
               </div>

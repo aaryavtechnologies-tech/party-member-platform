@@ -53,9 +53,32 @@ export async function getAdminMemberById(memberId: string) {
       ]
     },
     include: {
-      user: true,
+      user: {
+        include: {
+          payments: {
+            where: { status: "SUCCESS" }
+          }
+        }
+      },
       membershipHistory: {
         orderBy: { createdAt: 'desc' }
+      },
+      referralHistory: {
+        include: {
+          referrer: {
+            include: { user: true }
+          }
+        }
+      },
+      referralsMade: {
+        include: {
+          referredMember: {
+            include: { user: true }
+          }
+        }
+      },
+      officeBearers: {
+        include: { unit: true }
       }
     }
   });

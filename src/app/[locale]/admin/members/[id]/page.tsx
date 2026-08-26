@@ -8,7 +8,10 @@ import { Link } from "@/i18n/routing";
 import { DeleteMemberButton } from "@/components/admin/DeleteMemberButton";
 import { getAdminMemberById } from "@/actions/admin/members";
 import MemberStatusActions from "./MemberStatusActions";
-
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import DigitalCardClient from "@/app/[locale]/dashboard/card/DigitalCardClient";
+import CertificateClient from "@/app/[locale]/dashboard/certificate/CertificateClient";
+import { formatMemberId } from "@/lib/utils";
 export default async function AdminMemberDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   let profile;
@@ -26,6 +29,39 @@ export default async function AdminMemberDetailsPage({ params }: { params: Promi
       case "PENDING_VERIFICATION": return "text-orange-600 bg-orange-100 border-orange-200";
       default: return "text-slate-600 bg-slate-100 border-slate-200";
     }
+  };
+
+  const assignment = profile.officeBearers?.find((a: any) => a.status === "ACTIVE");
+  const stateDistrict = assignment 
+    ? `${assignment.unit.nameEn}` 
+    : profile.state 
+      ? `${profile.state || ''} / ${profile.district || ''}`
+      : "India";
+
+  const cardData = {
+    name: profile.user.name,
+    fatherName: profile.fatherName || "",
+    dob: profile.dob ? new Date(profile.dob).toLocaleDateString("en-GB", {
+      day: "2-digit", month: "2-digit", year: "numeric"
+    }) : "",
+    mobile: profile.mobile || "",
+    address: profile.fullAddress ? `${profile.fullAddress}, ${profile.pincode}` : "",
+    memberId: formatMemberId(profile.memberId),
+    photoUrl: profile.user.image || profile.profilePic || "",
+    issueDate: profile.issueDate ? new Date(profile.issueDate).toLocaleDateString("en-GB", {
+      day: "2-digit", month: "short", year: "numeric"
+    }) : "N/A",
+    location: stateDistrict,
+    membershipType: profile.membershipType.replace("_", " ") + " Member"
+  };
+
+  const certData = {
+    name: profile.user.name,
+    memberId: formatMemberId(profile.memberId),
+    membershipType: profile.membershipType.replace("_", " "),
+    issueDate: profile.issueDate ? new Date(profile.issueDate).toLocaleDateString("en-GB", {
+      day: "2-digit", month: "short", year: "numeric"
+    }) : "N/A"
   };
 
   return (
@@ -75,8 +111,16 @@ export default async function AdminMemberDetailsPage({ params }: { params: Promi
         </div>
       </div>
 
-      {/* Main Grid Layout */}
-      <div className="grid lg:grid-cols-3 gap-6">
+      {/* Main Layout Tabs */}
+      <Tabs defaultValue="details" className="w-full">
+        <TabsList className="mb-6 grid w-full grid-cols-3 max-w-[400px]">
+          <TabsTrigger value="details">Details</TabsTrigger>
+          <TabsTrigger value="idcard">ID Card</TabsTrigger>
+          <TabsTrigger value="certificate">Certificate</TabsTrigger>
+        </TabsList>
+        <TabsContent value="details">
+          {/* Main Grid Layout */}
+          <div className="grid lg:grid-cols-3 gap-6">
         
         {/* Left Column: Personal Info & Assignment */}
         <div className="lg:col-span-1 space-y-6">
@@ -101,9 +145,23 @@ export default async function AdminMemberDetailsPage({ params }: { params: Promi
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
+                  <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Aadhaar</p>
+                  <p className="text-sm font-medium text-slate-900 dark:text-white">{profile.aadhaar || "N/A"}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Voter ID</p>
+                  <p className="text-sm font-medium text-slate-900 dark:text-white">{profile.voterId || "N/A"}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
                   <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Occupation</p>
                   <p className="text-sm font-medium text-slate-900 dark:text-white">{profile.occupation || "N/A"}</p>
                 </div>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Full Address</p>
+                <p className="text-sm font-medium text-slate-900 dark:text-white">{profile.fullAddress || "N/A"}, {profile.pincode || ""}</p>
               </div>
             </div>
           </div>
@@ -184,9 +242,83 @@ export default async function AdminMemberDetailsPage({ params }: { params: Promi
               </div>
             </div>
           </div>
+
+          <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden mt-6">
+            <div className="p-6 border-b border-slate-100 dark:border-slate-800">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Share2 className="w-5 h-5 text-primary" /> Referral History
+              </h3>
+            </div>
+            <div className="p-6 space-y-6">
+              <div>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Referred By</p>
+                {profile.referralHistory && profile.referralHistory.length > 0 ? (
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center font-bold text-slate-500 text-xs">
+                      {profile.referralHistory[0].referrer.user.name.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-900 dark:text-white">
+                        {profile.referralHistory[0].referrer.user.name}
+                      </p>
+                      <p className="text-xs text-slate-500 font-mono">
+                        {profile.referralHistory[0].referrer.memberId}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-500">No referrer (Direct join)</p>
+                )}
+              </div>
+              
+              <div>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                  Members Referred ({profile.referralsMade?.length || 0})
+                </p>
+                {profile.referralsMade && profile.referralsMade.length > 0 ? (
+                  <div className="space-y-3">
+                    {profile.referralsMade.map((ref: any) => (
+                      <div key={ref.id} className="flex items-center justify-between p-3 rounded-lg border border-slate-100 dark:border-slate-800">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center font-bold text-slate-500 text-xs">
+                            {ref.referredMember.user.name.charAt(0)}
+                          </div>
+                          <div>
+                            <p className="text-sm font-bold text-slate-900 dark:text-white">
+                              {ref.referredMember.user.name}
+                            </p>
+                            <p className="text-xs text-slate-500 font-mono">
+                              {ref.referredMember.memberId}
+                            </p>
+                          </div>
+                        </div>
+                        <span className="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 rounded-full uppercase">
+                          {ref.status}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-500">This member has not referred anyone yet.</p>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>
+        </TabsContent>
+        <TabsContent value="idcard">
+          <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex justify-center overflow-x-auto">
+            <DigitalCardClient data={cardData} />
+          </div>
+        </TabsContent>
+        <TabsContent value="certificate">
+          <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex justify-center overflow-x-auto">
+            <CertificateClient data={certData} />
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

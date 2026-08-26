@@ -6,6 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatMemberId(id: number | string | undefined | null) {
-  if (!id) return "RAVP-2026-0000000000000000";
-  return `RAVP-2026-${String(id).padStart(16, '0')}`;
+  const currentYear = new Date().getFullYear();
+  if (!id) return `RAVP-${currentYear}-0000000000000000`;
+  return `RAVP-${currentYear}-${String(id).padStart(16, '0')}`;
 }

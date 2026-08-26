@@ -120,9 +120,23 @@ export async function registerMember(data: RegistrationData) {
 
       const fullFatherName = `${validatedData.relativeRelation}: ${validatedData.relativeFirstName} ${validatedData.relativeMiddleName ? validatedData.relativeMiddleName + ' ' : ''}${validatedData.relativeLastName}`.trim();
 
+      // Find lowest available gap in memberId
+      const missingIdResult: any = await tx.$queryRaw`
+        SELECT COALESCE(MIN(t1."memberId" + 1), 1) as "nextId"
+        FROM (
+          SELECT "memberId" FROM "MemberProfile"
+          UNION ALL SELECT 0
+        ) t1
+        WHERE NOT EXISTS (
+          SELECT 1 FROM "MemberProfile" t2 WHERE t2."memberId" = t1."memberId" + 1
+        )
+      `;
+      const nextMemberId = Number(missingIdResult[0].nextId);
+
       // Create MemberProfile
       const profile = await tx.memberProfile.create({
         data: {
+          memberId: nextMemberId,
           userId: user.id,
 
           referralCode,
