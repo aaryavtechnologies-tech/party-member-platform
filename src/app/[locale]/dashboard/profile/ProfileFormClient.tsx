@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import { User, Mail, Phone, MapPin, Calendar, Camera, Loader2 } from "lucide-react";
+import { User, Mail, Phone, MapPin, Calendar, Camera, Loader2, CreditCard, Briefcase, Hash, ShieldCheck, Ticket, CalendarDays, Flag, Building2, Landmark, Tent } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useRef } from "react";
 import { updateProfile } from "./actions";
@@ -18,7 +18,22 @@ const profileSchema = z.object({
   mobile: z.string().regex(/^[6-9]\d{9}$/, "Invalid mobile number"),
   address: z.string().min(5, "Address is required"),
   pincode: z.string().regex(/^[1-9][0-9]{5}$/, "Invalid PIN code"),
+  voterId: z.string().optional(),
+  aadhaar: z.string().optional(),
   image: z.string().optional(),
+  gender: z.string().optional(),
+  state: z.string().optional(),
+  district: z.string().optional(),
+  taluka: z.string().optional(),
+  village: z.string().optional(),
+  occupation: z.string().optional(),
+  
+  // read-only fields
+  memberId: z.string().optional(),
+  membershipType: z.string().optional(),
+  status: z.string().optional(),
+  referralCode: z.string().optional(),
+  issueDate: z.string().optional(),
 });
 
 export type ProfileData = z.infer<typeof profileSchema>;
@@ -157,9 +172,8 @@ export function ProfileFormClient({ defaultValues }: { defaultValues: ProfileDat
             <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Mobile Number</label>
             <div className="relative">
               <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-              <input {...form.register("mobile")} disabled className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 outline-none cursor-not-allowed opacity-70" />
+              <input {...form.register("mobile")} className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all" />
             </div>
-            <p className="text-xs text-slate-500">Mobile cannot be changed.</p>
           </div>
 
           <div className="space-y-2 md:col-span-2">
@@ -167,6 +181,120 @@ export function ProfileFormClient({ defaultValues }: { defaultValues: ProfileDat
             <div className="relative">
               <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
               <input {...form.register("address")} className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Voter ID (Optional)</label>
+            <div className="relative">
+              <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+              <input {...form.register("voterId")} className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all uppercase" placeholder="e.g. ABC1234567" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Aadhaar Number (Optional)</label>
+            <div className="relative">
+              <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+              <input {...form.register("aadhaar")} className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all tracking-widest" placeholder="e.g. 1234 5678 9012" maxLength={14} />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Gender</label>
+            <div className="relative">
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+              <select {...form.register("gender")} className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all appearance-none">
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Occupation</label>
+            <div className="relative">
+              <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+              <input {...form.register("occupation")} className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all" placeholder="Your occupation" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">State</label>
+            <div className="relative">
+              <Flag className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+              <input {...form.register("state")} className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">District</label>
+            <div className="relative">
+              <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+              <input {...form.register("district")} className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Taluka</label>
+            <div className="relative">
+              <Landmark className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+              <input {...form.register("taluka")} className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Village/City</label>
+            <div className="relative">
+              <Tent className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+              <input {...form.register("village")} className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all" />
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-8 border-t border-slate-100 dark:border-slate-800">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Membership Details</h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Member ID</label>
+              <div className="relative">
+                <Hash className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                <input {...form.register("memberId")} disabled className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 outline-none cursor-not-allowed opacity-70 font-mono" />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Membership Type</label>
+              <div className="relative">
+                <ShieldCheck className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                <input {...form.register("membershipType")} disabled className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 outline-none cursor-not-allowed opacity-70" />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Status</label>
+              <div className="relative">
+                <Ticket className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                <input {...form.register("status")} disabled className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 outline-none cursor-not-allowed opacity-70" />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Referral Code</label>
+              <div className="relative">
+                <Ticket className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                <input {...form.register("referralCode")} disabled className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 outline-none cursor-not-allowed opacity-70 font-mono" />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Join Date</label>
+              <div className="relative">
+                <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                <input {...form.register("issueDate")} disabled className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 outline-none cursor-not-allowed opacity-70" />
+              </div>
             </div>
           </div>
         </div>

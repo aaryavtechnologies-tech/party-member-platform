@@ -15,7 +15,7 @@ export async function updateProfile(data: any) {
       return { success: false, error: "Unauthorized" };
     }
 
-    const { fullName, fatherName, dob, address, pincode, image } = data;
+    const { fullName, fatherName, dob, address, pincode, image, voterId, aadhaar, mobile, gender, state, district, taluka, village, occupation } = data;
 
     // Update User
     await prisma.user.update({
@@ -34,7 +34,16 @@ export async function updateProfile(data: any) {
         dob: new Date(dob),
         fullAddress: address,
         pincode,
-        ...(image !== undefined && { profilePic: image })
+        mobile,
+        ...(voterId !== undefined && { voterId }),
+        ...(aadhaar !== undefined && { aadhaar }),
+        ...(image !== undefined && { profilePic: image }),
+        ...(gender !== undefined && { gender }),
+        ...(state !== undefined && { state }),
+        ...(district !== undefined && { district }),
+        ...(taluka !== undefined && { taluka }),
+        ...(village !== undefined && { village }),
+        ...(occupation !== undefined && { occupation })
       }
     });
 
