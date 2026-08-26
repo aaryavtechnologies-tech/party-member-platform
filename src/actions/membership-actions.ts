@@ -84,6 +84,7 @@ export async function registerMember(data: RegistrationData) {
           name: fullName,
           email: validatedData.email,
           emailVerified: true, // Auto-verified for this flow context
+          image: validatedData.profilePic,
           accounts: {
             create: {
               accountId: validatedData.email,

@@ -33,7 +33,8 @@ export async function updateProfile(data: any) {
         fatherName,
         dob: new Date(dob),
         fullAddress: address,
-        pincode
+        pincode,
+        ...(image !== undefined && { profilePic: image })
       }
     });
 
