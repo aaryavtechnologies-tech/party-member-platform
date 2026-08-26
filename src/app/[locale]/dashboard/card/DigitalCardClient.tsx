@@ -101,7 +101,7 @@ export default function DigitalCardClient({ data }: { data: CardData }) {
               <div className="flex flex-col w-[110px] items-center shrink-0">
                 <div className="w-[100px] h-[120px] bg-slate-100 border border-slate-300 shadow-sm overflow-hidden flex items-center justify-center mb-3 rounded bg-white shrink-0">
                   {data.photoUrl ? (
-                    <img src={data.photoUrl} alt="Photo" className="w-full h-full object-cover" crossOrigin="anonymous" />
+                    <img src={data.photoUrl} alt="Photo" className="w-full h-full object-cover" />
                   ) : (
                     <span className="text-slate-400 font-bold text-3xl">{data.name.charAt(0)}</span>
                   )}
@@ -126,10 +126,6 @@ export default function DigitalCardClient({ data }: { data: CardData }) {
                     <div className="flex-1">
                       <p className="text-[10px] text-slate-500 font-bold uppercase leading-none">Member Name</p>
                       <p className="font-bold text-slate-900 text-sm leading-tight">{data.name}</p>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <p className="text-[10px] text-slate-500 font-bold uppercase leading-none">Member ID</p>
-                      <p className="font-black text-orange-600 text-base leading-tight bg-orange-50 px-2 py-0.5 rounded border border-orange-200 whitespace-nowrap">{data.memberId}</p>
                     </div>
                   </div>
 
@@ -180,6 +176,13 @@ export default function DigitalCardClient({ data }: { data: CardData }) {
 
             <div className="p-5 flex flex-col justify-between h-[calc(100%-2.5rem)] relative">
               
+              <div className="flex justify-center mb-4">
+                <div className="bg-orange-50 px-4 py-1.5 rounded-md border border-orange-200 shadow-sm text-center inline-block">
+                  <p className="text-[10px] text-slate-500 font-bold uppercase leading-none mb-1">Member ID</p>
+                  <p className="font-black text-orange-600 text-lg leading-tight tracking-wider">{data.memberId}</p>
+                </div>
+              </div>
+
               <div className="grid grid-cols-2 gap-6">
                 {/* English Rules */}
                 <div>

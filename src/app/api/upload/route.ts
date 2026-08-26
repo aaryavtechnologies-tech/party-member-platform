@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
     const filePath = join(uploadDir, uniqueFileName);
     await writeFile(filePath, buffer);
 
-    const fileUrl = `/uploads/${uniqueFileName}`;
+    const fileUrl = `/api/file/${uniqueFileName}`;
 
     return NextResponse.json({
       success: true,
