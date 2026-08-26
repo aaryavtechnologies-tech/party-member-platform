@@ -107,7 +107,7 @@ export default async function DashboardHome() {
           value={
             <span className={`px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wider border ${
               memberProfile.status === "ACTIVE" ? "bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400 border-green-200 dark:border-green-800" :
-              memberProfile.status === "PENDING" ? "bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 border-amber-200 dark:border-amber-800" :
+              memberProfile.status === "PENDING_VERIFICATION" ? "bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 border-amber-200 dark:border-amber-800" :
               "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400 border-red-200 dark:border-red-800"
             }`}>
               {memberProfile.status}
