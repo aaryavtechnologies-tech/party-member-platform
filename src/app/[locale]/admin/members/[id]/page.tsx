@@ -276,27 +276,52 @@ export default async function AdminMemberDetailsPage({ params }: { params: Promi
                   Members Referred ({profile.referralsMade?.length || 0})
                 </p>
                 {profile.referralsMade && profile.referralsMade.length > 0 ? (
-                  <div className="space-y-3">
-                    {profile.referralsMade.map((ref: any) => (
-                      <div key={ref.id} className="flex items-center justify-between p-3 rounded-lg border border-slate-100 dark:border-slate-800">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center font-bold text-slate-500 text-xs">
-                            {ref.referredMember.user.name.charAt(0)}
-                          </div>
-                          <div>
-                            <p className="text-sm font-bold text-slate-900 dark:text-white">
-                              {ref.referredMember.user.name}
-                            </p>
-                            <p className="text-xs text-slate-500 font-mono">
-                              {ref.referredMember.memberId}
-                            </p>
-                          </div>
-                        </div>
-                        <span className="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 rounded-full uppercase">
-                          {ref.status}
-                        </span>
-                      </div>
-                    ))}
+                  <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden overflow-x-auto">
+                    <table className="w-full text-left text-sm whitespace-nowrap">
+                      <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
+                        <tr>
+                          <th className="px-4 py-3 font-semibold text-slate-600 dark:text-slate-300">Member</th>
+                          <th className="px-4 py-3 font-semibold text-slate-600 dark:text-slate-300">Date</th>
+                          <th className="px-4 py-3 font-semibold text-slate-600 dark:text-slate-300">Tier</th>
+                          <th className="px-4 py-3 font-semibold text-slate-600 dark:text-slate-300">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                        {profile.referralsMade.map((ref: any) => (
+                          <tr key={ref.id} className="bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors">
+                            <td className="px-4 py-3">
+                              <p className="text-sm font-bold text-slate-900 dark:text-white">
+                                {ref.referredMember.user.name}
+                              </p>
+                              <p className="text-xs text-slate-500 font-mono">
+                                {formatMemberId(ref.referredMember.memberId)}
+                              </p>
+                            </td>
+                            <td className="px-4 py-3 text-slate-600 dark:text-slate-400">
+                              {new Date(ref.createdAt).toLocaleDateString("en-GB", {
+                                day: "2-digit", month: "short", year: "numeric"
+                              })}
+                            </td>
+                            <td className="px-4 py-3">
+                              <span className="text-xs font-bold px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 uppercase shadow-sm">
+                                {ref.referredMember.membershipType?.replace("_", " ")}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3">
+                              <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-bold uppercase ${
+                                ref.referredMember.status === 'ACTIVE' 
+                                  ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
+                                  : ref.referredMember.status === 'PENDING'
+                                  ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                                  : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                              }`}>
+                                {ref.referredMember.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 ) : (
                   <p className="text-sm text-slate-500">This member has not referred anyone yet.</p>
