@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Download, Printer } from "lucide-react";
+import { Printer } from "lucide-react";
 import QRCode from "react-qr-code";
 
 interface CardData {
@@ -18,69 +18,10 @@ interface CardData {
   membershipType: string;
 }
 
-/** Convert an external image URL to a base64 data URI so html2canvas can render it without CORS issues */
-async function toDataUri(url: string): Promise<string> {
-  try {
-    const res = await fetch(url);
-    const blob = await res.blob();
-    return await new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-  } catch {
-    return url; // Fall back to the original URL
-  }
-}
+
 
 export default function DigitalCardClient({ data }: { data: CardData }) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [isDownloading, setIsDownloading] = useState(false);
-  // Store base64-encoded photo so html2canvas can render it without CORS issues
-  const [photoDataUri, setPhotoDataUri] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (data.photoUrl) {
-      toDataUri(data.photoUrl).then(setPhotoDataUri);
-    }
-  }, [data.photoUrl]);
-
-  const downloadCard = async () => {
-    if (isDownloading) return;
-    setIsDownloading(true);
-    try {
-      const { toast } = await import("sonner");
-      toast.info("Generating ID Card...");
-      
-      // Fix for html2canvas scrolling bug
-      window.scrollTo(0, 0);
-      
-      const html2canvas = (await import("html2canvas")).default;
-      if (cardRef.current) {
-        const canvas = await html2canvas(cardRef.current, { 
-          scale: 3, 
-          useCORS: true,
-          allowTaint: true,
-          logging: false,
-          backgroundColor: null
-        });
-        const link = document.createElement("a");
-        link.download = `RAVP_ID_${data.memberId}.png`;
-        link.href = canvas.toDataURL("image/png", 1.0);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        toast.success("ID Card downloaded successfully!");
-      }
-    } catch (error) {
-      console.error("Failed to generate ID card image", error);
-      const { toast } = await import("sonner");
-      toast.error("Failed to download ID card. Please try again.");
-    } finally {
-      setIsDownloading(false);
-    }
-  };
 
   const printCard = () => {
     window.print();
@@ -94,9 +35,6 @@ export default function DigitalCardClient({ data }: { data: CardData }) {
           <p className="text-slate-500">Your official digital membership card. Keep it handy.</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" className="rounded-full" onClick={downloadCard} disabled={isDownloading}>
-            <Download className="w-4 h-4 mr-2" /> {isDownloading ? "Processing..." : "Download"}
-          </Button>
           <Button variant="outline" className="rounded-full print:hidden" onClick={printCard}>
             <Printer className="w-4 h-4 mr-2" /> Print
           </Button>
@@ -126,9 +64,8 @@ export default function DigitalCardClient({ data }: { data: CardData }) {
               {/* Left Column: Photo & QR */}
               <div className="flex flex-col w-[110px] items-center shrink-0">
                 <div className="w-[100px] h-[120px] bg-slate-100 border border-slate-300 shadow-sm overflow-hidden flex items-center justify-center mb-3 rounded bg-white shrink-0">
-                  {(photoDataUri || data.photoUrl) ? (
-                    // Use the base64 data URI when available (required for html2canvas)
-                    <img src={photoDataUri ?? data.photoUrl ?? undefined} alt="Photo" className="w-full h-full object-cover" crossOrigin="anonymous" />
+                  {data.photoUrl ? (
+                    <img src={data.photoUrl} alt="Photo" className="w-full h-full object-cover" />
                   ) : (
                     <span className="text-slate-400 font-bold text-3xl">{data.name.charAt(0)}</span>
                   )}
