@@ -72,9 +72,9 @@ export default async function AdminMemberDetailsPage({ params }: { params: Promi
       <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm p-6 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
         <div className="flex items-center gap-6">
           <div className="w-24 h-24 rounded-full bg-slate-100 dark:bg-slate-900 border-4 border-white dark:border-slate-950 shadow-sm flex items-center justify-center shrink-0 overflow-hidden text-3xl font-black text-slate-400">
-            {profile.user.image ? (
+            {(profile.user.image || profile.profilePic) ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={profile.user.image} alt={profile.user.name} className="w-full h-full object-cover" />
+              <img src={profile.user.image || profile.profilePic!} alt={profile.user.name} className="w-full h-full object-cover" />
             ) : (
               profile.user.name.charAt(0)
             )}

@@ -122,8 +122,8 @@ export default async function AdminMembershipPlansPage({
                   <tr key={member.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        {member.user?.image ? (
-                          <img src={member.user.image} alt={member.user.name} className="w-10 h-10 rounded-full object-cover border border-slate-200" />
+                        {(member.user?.image || member.profilePic) ? (
+                          <img src={member.user?.image || member.profilePic!} alt={member.user?.name} className="w-10 h-10 rounded-full object-cover border border-slate-200" />
                         ) : (
                           <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold">
                             {member.user?.name.charAt(0) || "U"}

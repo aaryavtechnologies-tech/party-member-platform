@@ -91,9 +91,9 @@ export default async function OrganizationOverviewPage() {
               recentAssignments.map((assignment: any) => (
                 <div key={assignment.id} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
                   <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 shrink-0 overflow-hidden">
-                    {assignment.member.user.image ? (
+                    {(assignment.member.user.image || assignment.member.profilePic) ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={assignment.member.user.image} alt="Profile" className="w-full h-full object-cover" />
+                      <img src={assignment.member.user.image || assignment.member.profilePic} alt="Profile" className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-slate-500 font-bold">
                         {assignment.member.user.name?.charAt(0) || "U"}

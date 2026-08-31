@@ -136,9 +136,9 @@ export default async function AdminMembersPage() {
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center shrink-0 overflow-hidden text-lg font-bold text-slate-500">
-                          {profile.user.image ? (
+                          {(profile.user.image || profile.profilePic) ? (
                             // eslint-disable-next-line @next/next/no-img-element
-                            <img src={profile.user.image} alt={profile.user.name} className="w-full h-full object-cover" />
+                            <img src={profile.user.image || profile.profilePic!} alt={profile.user.name} className="w-full h-full object-cover" />
                           ) : (
                             profile.user.name.charAt(0)
                           )}

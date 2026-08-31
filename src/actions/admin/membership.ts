@@ -101,7 +101,8 @@ export async function getMemberships(params: {
               image: true
             }
           }
-        }
+        },
+        // profilePic is a top-level field on memberProfile — included automatically
       }),
       prisma.memberProfile.count({ where })
     ]);

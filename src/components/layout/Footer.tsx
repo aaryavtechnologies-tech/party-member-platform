@@ -199,6 +199,7 @@ export function Footer({ office, socialLinks = [] }: FooterProps) {
                 <Input 
                   placeholder={t("form.email")} 
                   className="bg-white/5 border-white/10 focus-visible:ring-primary text-white placeholder:text-slate-500 h-12" 
+                  suppressHydrationWarning
                   {...form.register("email")} 
                 />
                 {form.formState.errors.email && <p className="text-xs text-red-500 mt-1">{form.formState.errors.email.message}</p>}
@@ -275,7 +276,7 @@ export function Footer({ office, socialLinks = [] }: FooterProps) {
         </div>
         
         <div className="pt-8 border-t border-slate-800 text-center flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm">
+          <p className="text-sm" suppressHydrationWarning>
             {t("copyright", { year: new Date().getFullYear() })}
           </p>
           <div className="flex items-center gap-6 text-sm">
