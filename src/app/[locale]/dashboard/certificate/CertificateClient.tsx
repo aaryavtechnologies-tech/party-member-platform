@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Download, Printer, Share2 } from "lucide-react";
+import { Download, Printer } from "lucide-react";
 
 interface CertificateData {
   name: string;
@@ -36,7 +36,9 @@ export default function CertificateClient({ data }: { data: CertificateData }) {
         const link = document.createElement("a");
         link.download = `RAVP_Certificate_${data.memberId}.png`;
         link.href = canvas.toDataURL("image/png", 1.0);
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
         toast.success("Certificate downloaded successfully!");
       }
     } catch (error) {
@@ -59,11 +61,8 @@ export default function CertificateClient({ data }: { data: CertificateData }) {
           <Button variant="outline" className="rounded-full" onClick={downloadCert} disabled={isDownloading}>
             <Download className="w-4 h-4 mr-2" /> {isDownloading ? "Processing..." : "Download"}
           </Button>
-          <Button variant="outline" className="rounded-full">
+          <Button variant="outline" className="rounded-full" onClick={() => window.print()}>
             <Printer className="w-4 h-4 mr-2" /> Print
-          </Button>
-          <Button className="rounded-full bg-primary text-slate-950 hover:bg-primary/90">
-            <Share2 className="w-4 h-4 mr-2" /> Share
           </Button>
         </div>
       </div>

@@ -1,10 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Download, Printer, Share2 } from "lucide-react";
+import { Download, Printer } from "lucide-react";
 import QRCode from "react-qr-code";
-import Image from "next/image";
 
 interface CardData {
   name: string;
@@ -19,9 +18,33 @@ interface CardData {
   membershipType: string;
 }
 
+/** Convert an external image URL to a base64 data URI so html2canvas can render it without CORS issues */
+async function toDataUri(url: string): Promise<string> {
+  try {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    return await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  } catch {
+    return url; // Fall back to the original URL
+  }
+}
+
 export default function DigitalCardClient({ data }: { data: CardData }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
+  // Store base64-encoded photo so html2canvas can render it without CORS issues
+  const [photoDataUri, setPhotoDataUri] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (data.photoUrl) {
+      toDataUri(data.photoUrl).then(setPhotoDataUri);
+    }
+  }, [data.photoUrl]);
 
   const downloadCard = async () => {
     if (isDownloading) return;
@@ -39,12 +62,15 @@ export default function DigitalCardClient({ data }: { data: CardData }) {
           scale: 3, 
           useCORS: true,
           allowTaint: true,
+          logging: false,
           backgroundColor: null
         });
         const link = document.createElement("a");
         link.download = `RAVP_ID_${data.memberId}.png`;
         link.href = canvas.toDataURL("image/png", 1.0);
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
         toast.success("ID Card downloaded successfully!");
       }
     } catch (error) {
@@ -100,8 +126,9 @@ export default function DigitalCardClient({ data }: { data: CardData }) {
               {/* Left Column: Photo & QR */}
               <div className="flex flex-col w-[110px] items-center shrink-0">
                 <div className="w-[100px] h-[120px] bg-slate-100 border border-slate-300 shadow-sm overflow-hidden flex items-center justify-center mb-3 rounded bg-white shrink-0">
-                  {data.photoUrl ? (
-                    <img src={data.photoUrl} alt="Photo" className="w-full h-full object-cover" />
+                  {(photoDataUri || data.photoUrl) ? (
+                    // Use the base64 data URI when available (required for html2canvas)
+                    <img src={photoDataUri ?? data.photoUrl ?? undefined} alt="Photo" className="w-full h-full object-cover" crossOrigin="anonymous" />
                   ) : (
                     <span className="text-slate-400 font-bold text-3xl">{data.name.charAt(0)}</span>
                   )}
