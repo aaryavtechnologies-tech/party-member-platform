@@ -83,8 +83,8 @@ const nextConfig: NextConfig = {
             value: [
               // Default: block everything not explicitly allowed
               "default-src 'self'",
-              // Scripts: self + Razorpay checkout (required for payments)
-              `script-src 'self' 'unsafe-inline' ${process.env.NODE_ENV === 'production' ? '' : "'unsafe-eval'"} https://checkout.razorpay.com`,
+              // Scripts: self + Razorpay checkout + Razorpay CDN + Cloudflare Insights
+              `script-src 'self' 'unsafe-inline' ${process.env.NODE_ENV === 'production' ? '' : "'unsafe-eval'"} https://checkout.razorpay.com https://cdn.razorpay.com https://static.cloudflareinsights.com`,
               // Note: 'unsafe-inline' is required by Next.js for inline scripts.
               // If you can use nonces (custom server), remove unsafe-inline.
               // Styles: self + inline (required by Tailwind/Next.js) + Google Fonts
@@ -93,8 +93,8 @@ const nextConfig: NextConfig = {
               "font-src 'self' https://fonts.gstatic.com",
               // Images: self + data URIs (for QR codes) + HTTPS
               "img-src 'self' data: https:",
-              // Connections: self + Razorpay API + Resend (no client-side calls)
-              "connect-src 'self' https://api.razorpay.com https://lumberjack.razorpay.com",
+              // Connections: self + Razorpay API + Cloudflare Insights beacon
+              "connect-src 'self' https://api.razorpay.com https://lumberjack.razorpay.com https://cloudflareinsights.com",
               // Frames: Razorpay checkout iframe
               "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com",
               // Prevent framing by external sites (clickjacking protection)

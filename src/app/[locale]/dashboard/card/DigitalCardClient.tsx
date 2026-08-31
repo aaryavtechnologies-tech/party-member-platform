@@ -109,7 +109,7 @@ export default function DigitalCardClient({ data }: { data: CardData }) {
           
           {/* ================= FRONT SIDE ================= */}
           <div 
-            className="relative w-[480px] min-w-[480px] rounded-xl overflow-hidden bg-white shadow-2xl shadow-slate-900/10 border-2 border-slate-300 print:shadow-none print:border-black bg-[url('/noise.png')]"
+            className="relative w-[480px] min-w-[480px] rounded-xl overflow-hidden bg-white shadow-2xl shadow-slate-900/10 border-2 border-slate-300 print:shadow-none print:border-black"
             style={{ aspectRatio: "85/54" }} 
           >
             {/* Header */}
@@ -193,7 +193,7 @@ export default function DigitalCardClient({ data }: { data: CardData }) {
 
           {/* ================= BACK SIDE ================= */}
           <div 
-            className="relative w-[480px] min-w-[480px] rounded-xl overflow-hidden bg-white shadow-2xl shadow-slate-900/10 border-2 border-slate-300 print:shadow-none print:border-black bg-[url('/noise.png')]"
+            className="relative w-[480px] min-w-[480px] rounded-xl overflow-hidden bg-white shadow-2xl shadow-slate-900/10 border-2 border-slate-300 print:shadow-none print:border-black"
             style={{ aspectRatio: "85/54" }} 
           >
             {/* Header */}
