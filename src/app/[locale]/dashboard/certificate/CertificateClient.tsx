@@ -75,7 +75,7 @@ export default function CertificateClient({ data }: { data: CertificateData }) {
             className="w-full max-w-4xl bg-white border-[16px] border-primary/20 p-2 relative shadow-2xl"
             style={{ aspectRatio: "1.414 / 1" }} // A4 Landscape ratio
           >
-            <div className="w-full h-full border-4 border-primary/40 flex flex-col items-center justify-center p-12 text-center relative overflow-hidden bg-[url('/noise.png')]">
+            <div className="w-full h-full border-4 border-primary/40 flex flex-col items-center justify-center p-12 text-center relative overflow-hidden">
               
               {/* Decorative Corners */}
               <div className="absolute top-4 left-4 w-16 h-16 border-t-4 border-l-4 border-primary" />
